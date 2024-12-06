@@ -4,7 +4,7 @@
 **************************************************************************************/
 #pragma once
 #include <avr/io.h>
-#include <arduino.h>
+#include <Arduino.h>
 #include "Enotik_message_format.h"
 #include "parser.h"
 
