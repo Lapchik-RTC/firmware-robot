@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include"Motor.h"
-#include "Defines.h"
+#include "Poehali.h"
+#include "SLOVAR.h"
 MotorConnectParams mconp = {
     .INA = 39,
     .INB = 37,
