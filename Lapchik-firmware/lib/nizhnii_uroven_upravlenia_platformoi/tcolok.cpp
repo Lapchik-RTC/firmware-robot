@@ -2,7 +2,7 @@
 #include "tcokol.h"
 
 void motore() {
-    int vel = 100;
+    int vel = 200;
     digitalWrite(2, !(vel >= 0));
     digitalWrite(3, (vel > 0));
 

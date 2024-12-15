@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Poehali.h"
 #include "SLOVAR.h"
-#include "tcoloc.cpp"
+#include "tcolok.cpp"
 
 MotorConnectParams mconp = {
     .INA = 39,
@@ -42,5 +42,7 @@ void setup(){
 // }
 
 void loop () {
-    motore();
+    motore();    
+    delay(10);
+
 }
