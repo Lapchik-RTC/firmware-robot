@@ -42,7 +42,7 @@ void setup(){
 // }
 
 void loop () {
-    motore();    
+    motore(200);    
     delay(10);
 
 }
