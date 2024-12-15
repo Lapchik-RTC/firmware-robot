@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "Poehali.h"
 #include "SLOVAR.h"
+#include "tcoloc.cpp"
+
 MotorConnectParams mconp = {
     .INA = 39,
     .INB = 37,
@@ -27,14 +29,18 @@ void setup(){
     attachInterrupt(digitalPinToInterrupt(mconp.ENCA), [](){motor.encoder();}, FALLING);
     Serial.begin(9600);
 }
-void loop(){
-    static uint64_t timer = micros();
-    while(micros() - timer < Ts_us){
-        motor.write(1.0);
-    }
-    timer = micros();
-    //Serial.println(motor.enc);
-    /*digitalWrite(39, 1);
-    digitalWrite(37, 0);
-    analogWrite(7, 10);*/
+// void loop(){
+//     static uint64_t timer = micros();
+//     while(micros() - timer < Ts_us){
+//         motor.write(1.0);
+//     }
+//     timer = micros();
+//     //Serial.println(motor.enc);
+//     /*digitalWrite(39, 1);
+//     digitalWrite(37, 0);
+//     analogWrite(7, 10);*/
+// }
+
+void loop () {
+    motore();
 }
