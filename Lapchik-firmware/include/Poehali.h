@@ -35,7 +35,7 @@ class Motor: public MotorConnectParams, MotorControllerParams
     void applyU(float u);
     void write(float speed);
     int getEnc();
-    //void usePI(bool);
+    // void usePI(bool);
     volatile int enc = 0;
 
     private:
