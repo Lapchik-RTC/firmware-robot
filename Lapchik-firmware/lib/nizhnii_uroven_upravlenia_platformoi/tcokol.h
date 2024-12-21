@@ -1,5 +1,5 @@
 #pragma once
-
+#include<Arduino.h>
 // работа с энкодером:
 
 #define ENC_PIN_A 2
