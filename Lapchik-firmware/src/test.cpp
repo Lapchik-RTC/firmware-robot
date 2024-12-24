@@ -34,8 +34,9 @@ void setup() {
     motor_init();
   
     pinMode(A1, INPUT);
-    pinMode(2, 0);
-    pinMode(8, 0);
+    // pinMode(2, 0);
+    // pinMode(8, 0);
+
     // cli();
     // PCICR |= 0b00000101;  // Включить на порту D и B
     // PCMSK0 |= 0b00000001; // Включить пин PB0 (PCINT0), пин 8 на Arduino
@@ -48,12 +49,14 @@ void setup() {
 //#define Ts_s (Ts_us / 1000000.0) // Период квантования в [с]
 //обьявленно выше
 void loop(){
-    // static uint64_t timer = micros();
-    // while(micros() - timer < Ts_s)
-    // ;
-    // timer = micros();
-
-
+    static uint64_t timer = micros();
+    while(micros() - timer < Ts_s)
+    ;
+    timer = micros();
+    
+    tcocol(tcocol_rad() + 1);
+    tcocol_rad();
+    
     Serial.print(digitalRead(2));
     Serial.print("\t");
     Serial.print(digitalRead(8));

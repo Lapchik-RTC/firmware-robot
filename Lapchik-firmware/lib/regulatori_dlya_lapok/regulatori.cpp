@@ -1,4 +1,6 @@
-#include"regulatori.h"
+#include "regulatori.h"
+#include "SLOVAR.h"
+
 PIreg::PIreg(float kp, float ki, float maxI, float Ts){
     this->kp = kp;
     this->ki = ki;

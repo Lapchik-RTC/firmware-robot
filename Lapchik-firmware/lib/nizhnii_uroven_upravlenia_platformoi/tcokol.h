@@ -1,9 +1,9 @@
 #pragma once
 #include<Arduino.h>
-// работа с энкодером:
 
+// работа с энкодером:
 #define ENC_PIN_A 2
-#define ENC_PIN_B 3
+#define ENC_PIN_B 8
 
 #define ENC_PORT PIND
 #define ENC_MASK 0b00001100 // удобное для работы с таблицей обозначение положения,
@@ -88,7 +88,7 @@ void encoder_tick()
   tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
    
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  float t = 1; // я не понимаю, чему должно быть равно это время...
+  float t = 4000; // я не понимаю, чему должно быть равно это время...
   // типа какая-то константа, но чему она равна???
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -101,9 +101,11 @@ void encoder_tick()
 
 // работа с двигателем:
 
-#define MOTOR_IN 10    // пин, отвечающий за направление
-#define MOTOR_PWM 11    // пин ШИМ
-#define MOTOR_DIR 1    // что это? зачем?
+#define MOTOR_IN  4    // пин, отвечающий за направление
+#define MOTOR_PWM 5   // пин ШИМ
+#define MOTOR_DIR 1    // переменная, отвечающая за принудительное изменение направдения,
+// значение которой зависит от направления движения,
+// за определение которого отвечает таблица
 #define SUPPLY_VOLTAGE 12   // подаваемое напряжение
 
 void motor_init()
@@ -114,12 +116,10 @@ void motor_init()
 
 void motor_tick(float w)
 {
-  float wMax = KOLVO_ENC_TICK * GEAR_RATIO;   // наверное, надо ещё умножить на время,
-  // чтобы wMax не была равна просто количеству шагов за 1 полный оборот,
-  // но что это за время?
+  float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / 4000;
   float u = 0;
   u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // зачем MOTOR_DIR?
+  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // MOTOR_DIR?
 
   if (pwm >= 0)
   {
@@ -129,18 +129,16 @@ void motor_tick(float w)
   else
   {
     digitalWrite(MOTOR_IN, HIGH);
-    analogWrite(MOTOR_PWM, abs(pwm));   // тут почему-то подавалось (255 + pwm)?
+    analogWrite(MOTOR_PWM, abs(pwm));   // тут подавалось (255 + pwm)
   }
 }
 
 void motor_rad(float w)
 {
-  float wMax = tick_to_rad;   // наверное, надо ещё умножить на время,
-  // чтобы wMax не была равна просто количеству радиан за 1 полный оборот,
-  // но что это за время?
+  float wMax = tick_to_rad / 4000;
   float u = 0;
   u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // зачем MOTOR_DIR?
+  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // MOTOR_DIR?
 
   if (pwm >= 0)
   {
@@ -150,7 +148,7 @@ void motor_rad(float w)
   else
   {
     digitalWrite(MOTOR_IN, HIGH);
-    analogWrite(MOTOR_PWM, abs(pwm));   // тут почему-то подавалось (255 + pwm)?
+    analogWrite(MOTOR_PWM, abs(pwm));   // тут подавалось (255 + pwm)
   }
 }
 
