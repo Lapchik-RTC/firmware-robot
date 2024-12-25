@@ -102,7 +102,7 @@ void encoder_tick()
 // работа с двигателем:
 
 #define MOTOR_IN 10    // пин, отвечающий за направление
-#define MOTOR_PWM 11    // пин ШИМ
+#define MOTOR_PWM 6//11    // пин ШИМ
 #define MOTOR_DIR 1    // что это? зачем?
 #define SUPPLY_VOLTAGE 12   // подаваемое напряжение
 
