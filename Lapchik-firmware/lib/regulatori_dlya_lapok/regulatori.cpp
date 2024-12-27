@@ -13,24 +13,6 @@ float PIreg::tick(float err){
     return P + I;
 }
 
-float Lapka::getRealSpeed(){
-    static int count = 0;
-    static int32_t enc = 0;
-    static int32_t encCounter = 0;
-    static int32_t timer = millis();
-    timer = millis();
-    while (millis() - timer < 10) {
-        noInterrupts();
-        count = enc;
-        enc = 0;
-        interrupts();
-        encCounter += count;
-    }
-  realSpeed = 200.0 * M_PI * (encCounter * 1.0 / /*ENC_PPR*/450);  //скорость в тиках за 10 милисекунд
-  encCounter = 0.0;
-  timer = millis();
-  return realSpeed;
-}
 ///////////////////   RHex   ///////////////////
 
 sfix RHex::modc(sfix in, sfix modder){
@@ -76,4 +58,32 @@ inline sfix RHex::Ffull(sfix in, sfix ts, sfix tc, sfix phis, sfix phi0)
         out = Fr(in, ts, ((tc - ts)/2), (M_PI - (phis/2.0)), phis);
     }
     return out + phi0;
+}
+
+///////////////////   Обобщающий класс для лап   ///////////////////
+Lapka::Lapka(MotorRegulatorParams *mregp, LegRegParams *lrp):
+    MotorRegulatorParams(*mregp),
+    LegRegParams(*lrp),
+    piReg(mregp->kp, mregp->ki, mregp->maxI, mregp->Ts)
+    {
+
+    }
+    
+float Lapka::getRealSpeed(){
+    static int count = 0;
+    static int32_t enc = 0;
+    static int32_t encCounter = 0;
+    static int32_t timer = millis();
+    timer = millis();
+    while (millis() - timer < 10) {
+        noInterrupts();
+        count = enc;
+        enc = 0;
+        interrupts();
+        encCounter += count;
+    }
+  realSpeed = 200.0 * M_PI * (encCounter * 1.0 / /*ENC_PPR*/450);  //скорость в тиках за 10 милисекунд
+  encCounter = 0.0;
+  timer = millis();
+  return realSpeed;
 }
