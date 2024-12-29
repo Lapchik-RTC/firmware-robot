@@ -81,19 +81,15 @@ void encoder_tick()
   noInterrupts(); // приостанавливаем прерывания
   const int16_t counter_inc = counter; // запоминаем количество шагов, которое произошло за данную
   // итерацию
+  float t = 4000;
+  w_rad = ((counter*tick_to_rad)/t) * 2.5;
+  w_tick = (tick/t) * 2.5;
   counter = 0;    // обнуляем количество, которое мы получили за данную итерацию
   interrupts(); // возобновляем прерывания
 
   phi += counter_inc * tick_to_rad; 
   tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
-   
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  float t = 4000; // я не понимаю, чему должно быть равно это время...
-  // типа какая-то константа, но чему она равна???
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  w_rad = phi/t;
-  w_tick = tick/t;
 }
 
 
@@ -116,10 +112,10 @@ void motor_init()
 
 void motor_tick(float w)
 {
-  float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / 4000;
+  float wMax = ((KOLVO_ENC_TICK * GEAR_RATIO)/4000) * 2.5;
   float u = 0;
   u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // MOTOR_DIR?
+  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   
 
   if (pwm >= 0)
   {
@@ -135,10 +131,10 @@ void motor_tick(float w)
 
 void motor_rad(float w)
 {
-  float wMax = tick_to_rad / 4000;
+  float wMax = (tick_to_rad/4000) * 2.5;
   float u = 0;
   u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // MOTOR_DIR?
+  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;
 
   if (pwm >= 0)
   {

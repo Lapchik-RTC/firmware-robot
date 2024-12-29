@@ -1,5 +1,6 @@
+
+
 #include "regulatori.h"
-#include "SLOVAR.h"
 
 PIreg::PIreg(float kp, float ki, float maxI, float Ts){
     this->kp = kp;
@@ -28,7 +29,7 @@ float Lapka::getRealSpeed(){
         interrupts();
         encCounter += count;
   }
-  realSpeed = 200.0 * M_PI * (encCounter * 1.0 / ENC_PPR);  //скорость в тиках за 10 милисекунд
+  realSpeed = 200.0 * M_PI * (encCounter * 1.0 / 470);  //скорость в тиках за 10 милисекунд
   encCounter = 0.0;
   timer = millis();
   return realSpeed;
