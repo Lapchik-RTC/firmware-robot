@@ -39,7 +39,7 @@ struct MotorParams
     this->motor_pwm = motor_pwm;
     this->motor_dir = motor_dir;
   }
-};d
+};
 
 class Encoder : public EncoderParams {
   public:
