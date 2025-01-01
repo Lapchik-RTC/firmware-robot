@@ -48,19 +48,23 @@ void setup() {
 //#define Ts_s (Ts_us / 1000000.0) // Период квантования в [с]
 //обьявленно выше
 void loop(){
-    // static uint64_t timer = micros();
-    // while(micros() - timer < Ts_s)
-    // ;
-    // timer = micros();
+    static uint64_t timer = micros();
+    while(micros() - timer < Ts_s)
+    ;
+    timer = micros();
+    
 
-
-    Serial.print(digitalRead(2));
-    Serial.print("\t");
-    Serial.print(digitalRead(8));
-    Serial.print("\t");
-    Serial.println(counter);
 }
  
+
+
+
+
+    // Serial.print(digitalRead(2));
+    // Serial.print("\t");
+    // Serial.print(digitalRead(8));
+    // Serial.print("\t");
+    // Serial.println(counter);
 /*
 ISR(PCINT0_vect)
 {

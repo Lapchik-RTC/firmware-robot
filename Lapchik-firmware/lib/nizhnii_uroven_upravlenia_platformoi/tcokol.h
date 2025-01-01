@@ -152,6 +152,15 @@ float tcocol_w_moment_tick();
 
 
 
+<<<<<<< HEAD
+=======
+// работа с двигателем:
+
+#define MOTOR_IN 10    // пин, отвечающий за направление
+#define MOTOR_PWM 6//11    // пин ШИМ
+#define MOTOR_DIR 1    // что это? зачем?
+#define SUPPLY_VOLTAGE 12   // подаваемое напряжение
+>>>>>>> 349cd65d4364c43e95193210b24d0ef92a208e7f
 
 void motor_init()
 {

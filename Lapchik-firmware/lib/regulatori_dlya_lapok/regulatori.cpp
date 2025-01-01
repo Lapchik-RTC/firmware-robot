@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 #include "regulatori.h"
@@ -34,3 +35,5 @@ float Lapka::getRealSpeed(){
   timer = millis();
   return realSpeed;
 }
+=======
+>>>>>>> 349cd65d4364c43e95193210b24d0ef92a208e7f
