@@ -28,13 +28,13 @@ float tcocol_tick() {
 }
 
 // получение текущей скорости в радианах
-float tcocol_w_rad() {
-    return w_rad;
+float tcocol_w_moment_rad() {
+    return w_moment_rad;
 }
 
 // получение текущей скорости в тиках
-float tcocol_w_tick() {
-    return w_tick;
+float tcocol_w_moment_tick() {
+    return w_moment_tick;
 }
 
 
