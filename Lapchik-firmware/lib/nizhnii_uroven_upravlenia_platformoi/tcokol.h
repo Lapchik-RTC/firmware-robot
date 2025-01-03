@@ -7,24 +7,26 @@
 
 struct EncoderParams
 { 
-  uint16_t enc_pin_a;       // пин, отвечающий за направление
-  uint16_t enc_pin_b;       // пин, отвечающий за направление
+  uint16_t enc_pin_a;       // пин энкодера
+  uint16_t enc_pin_b;       // пин энкодера
+  char16_t enc_port;        // порт прерываний
+  uint8_t enc_mask;         // удобное для работы с таблицей обозначение положения,
+  // полученного с датчика холла
   uint16_t enc_shift;       // const, которая используется для получения двух чисел,
   // обозначающих нынешнее положение вала
   uint16_t enc_dir;         // условный указатель задавания положительного направления
   // вращения вала двигателя, то есть +-1
-  char16_t enc_port;        // порт прерываний
-  uint8_t enc_mask;         // удобное для работы с таблицей обозначение положения,
-  // полученного с датчика холла
   uint16_t vector_number;   // номер вектора прерывания
 
-  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_shift, uint16_t enc_dir, char16_t enc_port, uint8_t enc_mask, uint16_t vector_number){
+  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, char16_t enc_port, uint8_t enc_mask, uint16_t enc_shift, uint16_t enc_dir, uint16_t vector_number){
     this->enc_pin_a = enc_pin_a;
     this->enc_pin_b = enc_pin_b;
-    this->enc_shift = enc_shift;
-    this->enc_dir = enc_dir;
     this->enc_port = enc_port;
     this->enc_mask = enc_mask;
+    this->enc_shift = enc_shift;
+    this->enc_dir = enc_dir;
+
+
     this->vector_number = vector_number;
   }
 };
@@ -166,7 +168,7 @@ class Motor {
   }
 
   void motor_speed_rad(float w) {
-    float wMax = tick_to_rad / Ts_s_IN_SEC;
+    float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
     float u = 0;
     u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
     const int16_t pwm = 255.0 * constrain(u / motorParams.supply_voltage, -1.0, 1.0) * motorParams.motor_dir;

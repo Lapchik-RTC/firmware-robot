@@ -2,6 +2,7 @@
 //#include "Poehali.h"
 #include "SLOVAR.h"
 #include "tcokol.h"
+#include "tcokol.cpp"
 #include "regulatori.h"
 
 // MotorConnectParams mconp = {
@@ -30,18 +31,8 @@ volatile int value = 0;
 
 
 void setup() {
-    encoder_init();
-    motor_init();
-  
-    pinMode(A1, INPUT);
-    pinMode(2, 0);
-    pinMode(8, 0);
-    // cli();
-    // PCICR |= 0b00000101;  // Включить на порту D и B
-    // PCMSK0 |= 0b00000001; // Включить пин PB0 (PCINT0), пин 8 на Arduino
-    // PCMSK2 |= 0b00000100; // PCINT11
-    // sei();
-    //attachInterrupt(digitalPinToInterrupt(mconp.ENCA), [](){motor.encoder();}, FALLING);
+    dvigatels_init();
+    
     Serial.begin(9600);
 }
 //#define Ts_us 5000 // Период квантования в [мкс]
