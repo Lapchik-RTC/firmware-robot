@@ -56,10 +56,10 @@ class Motor : public MotorParameters {
 };
 
 float Motor::getSpeed_tick() {
-    return tcocol_w_tick();
+    return tcocol_w_moment_tick();
 }
 float Motor::getSpeed_rad() {
-    return tcocol_w_rad();
+    return tcocol_w_moment_rad();
 }
 
 float Motor::setSpeed_tick(float setKolvoSeconds) {

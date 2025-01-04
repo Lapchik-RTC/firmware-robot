@@ -1,70 +1,104 @@
 #pragma once
 #include<Arduino.h>
-// работа с энкодером:
+#include "HardwareSerial.h"
+#include "SLOVAR.h"
 
-#define ENC_PIN_A 2
-#define ENC_PIN_B 3
 
-#define ENC_PORT PIND
-#define ENC_MASK 0b00001100 // удобное для работы с таблицей обозначение положения,
-// полученного с датчика холла
-#define ENC_SHIFT 2 // const, которая используется для получения двух чисел,
-// обозначающих нынешнее положение вала
 
-#define ENC_DIR 1 // условный указатель направления вращения вала двигателя
-#define KOLVO_ENC_TICK 48 // количество тиков датчика холла за 1 полный оборот
-#define GEAR_RATIO 47   // передаточное отношение редуктора
+struct EncoderParams
+{ 
+  uint16_t enc_pin_a;       // пин энкодера
+  uint16_t enc_pin_b;       // пин энкодера
+  char16_t enc_port;        // порт прерываний
+  uint8_t enc_mask;         // удобное для работы с таблицей обозначение положения,
+  // полученного с датчика холла
+  uint16_t enc_shift;       // const, которая используется для получения двух чисел,
+  // обозначающих нынешнее положение вала
+  uint16_t enc_dir;         // условный указатель задавания положительного направления
+  // вращения вала двигателя, то есть +-1
+  uint16_t vector_number;   // номер вектора прерывания
 
-volatile int counter = 0; // количество тиков(шагов) энкодера
-float tick = 0; // угол поворота вала в тиках в данный момент, который, возможно,
-// не будет использоваться
-float tick_to_tick = 0; // коэффициент пересчёта в тики
-float w_tick = 0;  // текущая скорость в тики/c
-float phi = 0; // угол поворота вала в радианах в данный момент, который, возможно,
-// не будет использоваться
-float tick_to_rad = 0;  // коэффициент пересчёта в радианы
-float w_rad = 0;  // текущая скорость в рад/c
-int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
+  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, char16_t enc_port, uint8_t enc_mask, uint16_t enc_shift, uint16_t enc_dir, uint16_t vector_number){
+    this->enc_pin_a = enc_pin_a;
+    this->enc_pin_b = enc_pin_b;
+    this->enc_port = enc_port;
+    this->enc_mask = enc_mask;
+    this->enc_shift = enc_shift;
+    this->enc_dir = enc_dir;
 
-void tcocol(float w);
-float tcocol_rad();
-float tcocol_tick();
-float tcocol_w_rad();
-float tcocol_w_tick();
 
-void encoder_init()
-{
-  // Инициализация пинов энкодера
-  pinMode(ENC_PIN_A, INPUT);
-  pinMode(ENC_PIN_B, INPUT);
+    this->vector_number = vector_number;
+  }
+};
 
-  // Настройка прерываний энкодера
-  PCICR |= 0b00000100; // включаем прерывание на порту D
-  PCMSK2 |= 0b00001100; // включаем пины PD2 и PD3 (PCINT18 и PCINT19)
+struct MotorParams
+{ 
+  uint16_t motor_in_1;        // пин, отвечающий за направление
+  uint16_t motor_in_2;        // пин, отвечающий за направление
+  uint16_t motor_pwm;         // пин ШИМ
+  uint16_t motor_dir;         // условный указатель для управления направлением
+  // вращения вала двигателя, то есть +-1
+  uint16_t supply_voltage;    // подаваемое напряжение
 
-  // Настройка таблицы переходов
-  table[0b00][0b10] = ENC_DIR;
-  table[0b10][0b11] = ENC_DIR;
-  table[0b11][0b01] = ENC_DIR;
-  table[0b01][0b00] = ENC_DIR;
+  MotorParams(uint16_t motor_in_1, uint16_t motor_in_2, uint16_t motor_pwm, uint16_t motor_dir, uint16_t supply_voltage){
+    this->motor_in_1 = motor_in_1;
+    this->motor_in_2 = motor_in_2;
+    this->motor_pwm = motor_pwm;
+    this->motor_dir = motor_dir;
+    this->supply_voltage = supply_voltage;
+  }
+};
 
-  table[0b00][0b01] = -ENC_DIR;
-  table[0b01][0b11] = -ENC_DIR;
-  table[0b11][0b10] = -ENC_DIR;
-  table[0b10][0b00] = -ENC_DIR;
+class Encoder {
+  public:
+  EncoderParams encoderParams;
+  uint16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
+  float phi;                // угол поворота вала в радианах в данный момент
+  float tick;               // угол поворота вала в тиках в данный момент
+  float w_moment_rad;       // текущая скорость в рад/c
+  float w_moment_tick;      // текущая скорость в тики/c
+  int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
+  
+  public:
+  Encoder(EncoderParams  *encoderParams) { 
+    this->encoderParams = *encoderParams;
+    this->counter = 0;
+    this->phi = 0;
+    this->tick = 0;
+    this->w_moment_rad = 0;
+    this->w_moment_tick = 0;
 
-  // Расчет коэффициента пересчета
-  tick_to_rad = 2.0 * M_PI / (KOLVO_ENC_TICK * GEAR_RATIO); // будет нужно, если будем использовать угол,
-  // а не тики
-  tick_to_tick = 1;
+    encoder_init();
+  }
 
-  interrupts();
-}
+  void encoder_init() {
+    noInterrupts(); // приостанавливаем прерывания
+    // Инициализация пинов энкодера
+    pinMode(encoderParams.enc_pin_a, INPUT);
+    pinMode(encoderParams.enc_pin_b, INPUT);
 
-ISR(PCINT2_vect) // Порт D (PCINT16 - PCINT23)
-{
+    // Настройка прерываний энкодера
+    PCICR |= 0b00000001; // включаем прерывание на порту B
+    PCMSK0 |= 0b00000011; // включаем пины PB2 и PB3 (PCINT0 и PCINT1)
+
+    // Настройка таблицы переходов
+    table[0b00][0b10] = encoderParams.enc_dir;
+    table[0b10][0b11] = encoderParams.enc_dir;
+    table[0b11][0b01] = encoderParams.enc_dir;
+    table[0b01][0b00] = encoderParams.enc_dir;
+
+    table[0b00][0b01] = -encoderParams.enc_dir;
+    table[0b01][0b11] = -encoderParams.enc_dir;
+    table[0b11][0b10] = -encoderParams.enc_dir;
+    table[0b10][0b00] = -encoderParams.enc_dir;
+
+    interrupts();
+  }
+
+  ISR(_VECTOR(vector_number)) { // Порт
     static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации
-    const uint8_t enc = (ENC_PORT & ENC_MASK) >> ENC_SHIFT;
+    const uint8_t enc = (encoderParams.enc_port & encoderParams.enc_mask) >> encoderParams.enc_shift;
+    
     // вот, что происходит в предыдущей строке:
     //   xxxxABxx
     // & 00001100
@@ -72,85 +106,128 @@ ISR(PCINT2_vect) // Порт D (PCINT16 - PCINT23)
     // >>2
     //   000000AB
     
+    // Serial.print(enc_old);
+    // Serial.print("\t");
+    // Serial.print(enc);
+    // Serial.print("\t");
+    // Serial.println(table[enc_old][enc]);
+
     counter += table[enc_old][enc];
     enc_old = enc;
-}
-
-void encoder_tick()
-{
-  noInterrupts(); // приостанавливаем прерывания
-  const int16_t counter_inc = counter; // запоминаем количество шагов, которое произошло за данную
-  // итерацию
-  counter = 0;    // обнуляем количество, которое мы получили за данную итерацию
-  interrupts(); // возобновляем прерывания
-
-  phi += counter_inc * tick_to_rad; 
-  tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
-   
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  float t = 1; // я не понимаю, чему должно быть равно это время...
-  // типа какая-то константа, но чему она равна???
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  w_rad = phi/t;
-  w_tick = tick/t;
-}
-
-
-
-
-// работа с двигателем:
-
-#define MOTOR_IN 10    // пин, отвечающий за направление
-#define MOTOR_PWM 6//11    // пин ШИМ
-#define MOTOR_DIR 1    // что это? зачем?
-#define SUPPLY_VOLTAGE 12   // подаваемое напряжение
-
-void motor_init()
-{
-  pinMode(MOTOR_IN, OUTPUT);
-  pinMode(MOTOR_PWM, OUTPUT);
-}
-
-void motor_tick(float w)
-{
-  float wMax = KOLVO_ENC_TICK * GEAR_RATIO;   // наверное, надо ещё умножить на время,
-  // чтобы wMax не была равна просто количеству шагов за 1 полный оборот,
-  // но что это за время?
-  float u = 0;
-  u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // зачем MOTOR_DIR?
-
-  if (pwm >= 0)
-  {
-    digitalWrite(MOTOR_IN, LOW);
-    analogWrite(MOTOR_PWM, pwm);
   }
-  else
-  {
-    digitalWrite(MOTOR_IN, HIGH);
-    analogWrite(MOTOR_PWM, abs(pwm));   // тут почему-то подавалось (255 + pwm)?
-  }
-}
 
-void motor_rad(float w)
-{
-  float wMax = tick_to_rad;   // наверное, надо ещё умножить на время,
-  // чтобы wMax не была равна просто количеству радиан за 1 полный оборот,
-  // но что это за время?
-  float u = 0;
-  u = SUPPLY_VOLTAGE*constrain((w/wMax), -1.0, 1.0);
-  const int16_t pwm = 255.0 * constrain(u / SUPPLY_VOLTAGE, -1.0, 1.0) * MOTOR_DIR;   // зачем MOTOR_DIR?
+  void encoder_tick() {
+    noInterrupts(); // приостанавливаем прерывания
+    const int16_t counter_inc = counter; // запоминаем количество шагов, которое произошло за данную
+    // итерацию
+    counter = 0;    // обнуляем количество, которое мы получили за данную итерацию
+    interrupts(); // возобновляем прерывания
 
-  if (pwm >= 0)
-  {
-    digitalWrite(MOTOR_IN, LOW);
-    analogWrite(MOTOR_PWM, pwm);
+    phi += counter_inc * TICK_TO_RAD; 
+    tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
+    
+    w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
+    w_moment_tick = (counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO))/Ts_s_IN_SEC;
   }
-  else
-  {
-    digitalWrite(MOTOR_IN, HIGH);
-    analogWrite(MOTOR_PWM, abs(pwm));   // тут почему-то подавалось (255 + pwm)?
-  }
-}
+};
 
+class Motor {
+  public:
+  MotorParams motorParams;
+  uint16_t supply_voltage;
+  
+  Motor(MotorParams motorParams) {
+    this->encoderParams = encoderParams;
+    motor_init();
+  }
+  
+  void motor_init() {
+    pinMode(motorParams.motor_in_1, OUTPUT);
+    pinMode(motorParams.motor_in_2, OUTPUT);
+    pinMode(motorParams.motor_pwm,  OUTPUT);
+  }
+
+  void motor_speed_tick(float w) {
+    float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / Ts_s_IN_SEC;
+    float u = 0;
+    u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+    const int16_t pwm = 255.0 * constrain(u / motorParams.supply_voltage, -1.0, 1.0) * motorParams.motor_dir;
+
+    if (pwm >= 0)
+    {
+      digitalWrite(motorParams.motor_in_1, HIGH);
+      digitalWrite(motorParams.motor_in_2, LOW);
+      analogWrite(motorParams.motor_pwm, pwm);
+    }
+    else
+    {
+      digitalWrite(motorParams.motor_in_1, LOW);
+      digitalWrite(motorParams.motor_in_2, HIGH);
+      analogWrite(motorParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+    }
+  }
+
+  void motor_speed_rad(float w) {
+    float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
+    float u = 0;
+    u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+    const int16_t pwm = 255.0 * constrain(u / motorParams.supply_voltage, -1.0, 1.0) * motorParams.motor_dir;
+
+    if (pwm >= 0)
+    {
+      digitalWrite(motorParams.motor_in_1, HIGH);
+      digitalWrite(motorParams.motor_in_2, LOW);
+      analogWrite(motorParams.motor_pwm, pwm);
+    }
+    else
+    {
+      digitalWrite(motorParams.motor_in_1, LOW);
+      digitalWrite(motorParams.motor_in_2, HIGH);
+      analogWrite(motorParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+    }
+  }
+};
+
+class Dvigatel {
+  public:
+  Encoder encoder;
+  Motor motor;
+
+  public:
+  void update_speed_in_rad(float w);
+  void update_speed_in_tick(float w);
+  float get_rad();
+  float get_tick();
+  float get_w_moment_rad();
+  float get_w_moment_tick();
+
+  Dvigatel(Encoder encoder, Motor motor) {
+    this->encoder = encoder;
+    this->motor = motor;
+
+  }
+
+  void update_speed_in_rad(float w) {
+    motor.motor_speed_rad(w);
+  }
+
+  void update_speed_in_tick(float w) {
+    motor.motor_speed_tick(w);
+  }
+
+  float get_rad() {
+    return encoder.phi;
+  }
+
+  float get_tick() {
+    return encoder.tick;
+  }
+
+  float get_w_moment_rad() {
+    return encoder.w_moment_rad;
+  }
+
+  float get_w_moment_tick() {
+    return encoder.w_moment_tick;
+  }
+};
