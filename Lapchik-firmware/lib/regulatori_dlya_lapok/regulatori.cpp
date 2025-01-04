@@ -1,20 +1,15 @@
-<<<<<<< HEAD
+/*
 #include"regulatori.h"
 //////////////   Motor   //////////////
 Motor::Motor(MotorConnectParams *mconp, MotorControlParams *mctrlp):MotorConnectParams(*mconp), MotorControlParams (*mctrlp)
 {
     pinMode(INA, 1);
     pinMode(INB, 1);
-}
-
-Motor::PI
-=======
-<<<<<<< HEAD
-
+}*/
 
 #include "regulatori.h"
 
-PIreg::PIreg(float kp, float ki, float maxI, float Ts){
+PIreg::PIreg(float kp, float ki, float m1axI, float Ts){
     this->kp = kp;
     this->ki = ki;
     this->maxI = maxI;
@@ -46,6 +41,3 @@ float Lapka::getRealSpeed(){
   timer = millis();
   return realSpeed;
 }
-=======
->>>>>>> 349cd65d4364c43e95193210b24d0ef92a208e7f
->>>>>>> c4e6f0f2a1e64302919ba370cb46fc720d11dbe9
