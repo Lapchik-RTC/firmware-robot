@@ -1,13 +1,13 @@
-/*
+
 #include"regulatori.h"
 //////////////   Motor   //////////////
-Motor::Motor(MotorConnectParams *mconp, MotorControlParams *mctrlp):MotorConnectParams(*mconp), MotorControlParams (*mctrlp)
+Motor::Motor(MotorParams *mp, MotorControlParams *mctrlp)
+:MotorParams(*mp), MotorControlParams (*mctrlp)
 {
-    pinMode(INA, 1);
-    pinMode(INB, 1);
-}*/
+    
+}
 
-#include "regulatori.h"
+//#include "regulatori.h"
 
 PIreg::PIreg(float kp, float ki, float m1axI, float Ts){
     this->kp = kp;

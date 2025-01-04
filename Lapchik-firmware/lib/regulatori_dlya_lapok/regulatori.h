@@ -2,23 +2,17 @@
 #include<Arduino.h>
 #include"tcokol.h"
 
-struct MotorConnectParams
-{
-  byte INA;
-  byte INB;
-  byte PWM;
-};
-
 struct MotorControlParams
 {
   float ki;
   float kp;
 };
 
-class Motor: public MotorConnectParams, MotorControlParams
+class SpeedController: public MotorParams, MotorControlParams
 {
   public:
-  Motor(MotorConnectParams *mconp, MotorControlParams *mctrlp);
+
+  SpeedController(MotorParams *mp, MotorControlParams *mctrlp);
   void setGoalSpeed();
   int getGoalSpeed();
   int getRealSpeed();
