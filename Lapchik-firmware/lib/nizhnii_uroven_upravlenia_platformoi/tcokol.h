@@ -204,7 +204,6 @@ class Dvigatel {
   Dvigatel(Encoder encoder, Motor motor) {
     this->encoder = encoder;
     this->motor = motor;
-
   }
 
   void update_speed_in_rad(float w) {
