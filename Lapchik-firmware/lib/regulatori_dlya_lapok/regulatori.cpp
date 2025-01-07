@@ -1,12 +1,21 @@
 #include"regulatori.h"
 
-SpeedController::SpeedController(MotorParams *mp, MotorControlParams *mctrlp)
+ServoMotor::ServoMotor(MotorParams *mp, MotorControlParams *mctrlp)
 :MotorParams(*mp), MotorControlParams (*mctrlp)
 {
     
 }
 
+void writePwm(float pwm);
 
+float ServoMotor::PIreg(float err)
+{
+    static float P, I = 0;
+    P = err * kp;
+    I = I + err * ki * Ts_s;
+    if (I > maxI) { I = maxI; }
+    return P + I;
+}
 
 // float PIreg::tick(float err){
 //     P = err * kp;

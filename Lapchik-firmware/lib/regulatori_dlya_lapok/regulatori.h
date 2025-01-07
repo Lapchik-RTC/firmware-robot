@@ -36,35 +36,28 @@ void DvigatelK::motor(float vel)
     digitalWrite(INB, (vel>0)*-dir);
 }
 
-float DvigatelK::PIreg(float err)
-{
-    static float P, I = 0;
-    P = err * kp;
-    I = I + err * ki * Ts_s;
-    if (I > maxI) { I = maxI; }
-    return P + I;
-}
 ////////////////////////////////////////////////////
+// class SpeedController: public MotorConnectParams, MotorControlParams
+// {
+//   public:
 
-class SpeedController: public MotorConnectParams, MotorControlParams
-{
-  public:
-
-  SpeedController(MotorConnectParams *mp, MotorControlParams *mctrlp);
-  void setGoalSpeed();
-  int getGoalSpeed();
-  int getRealSpeed();
+//   SpeedController(MotorConnectParams *mp, MotorControlParams *mctrlp);
+//   void setGoalSpeed();
+//   int getGoalSpeed();
+//   int getRealSpeed();
   
-  private:
-  int PIreg();
-};
+//   private:
+//   int PIreg();
+// };
 
-class ServoMotor
+class ServoMotor: MotorConnectParams, MotorControlParams
 {
   public:
-  Motor motor;
+  ServoMotor(MotorConnectParams *mp, MotorControlParams *mconp);
 
   private:
+  void writePwm(float pwm);
+  float PIreg(float err);
 
 };
 
