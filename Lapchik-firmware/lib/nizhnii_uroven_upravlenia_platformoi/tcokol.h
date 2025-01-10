@@ -61,7 +61,7 @@ class Encoder {
   
   public:
   Encoder(EncoderParams  *encoderParams) { 
-    this->encoderParams = *encoderParams;
+    this->encoderParams = &encoderParams;
     this->counter = 0;
     this->phi = 0;
     this->tick = 0;
@@ -134,7 +134,6 @@ class Encoder {
 class Motor {
   public:
   MotorParams motorParams;
-  uint16_t supply_voltage;
   
   Motor(MotorParams motorParams) {
     this->encoderParams = encoderParams;
