@@ -60,8 +60,8 @@ class Encoder {
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
   
   public:
-  Encoder(EncoderParams  *encoderParams) { 
-    this->encoderParams = *encoderParams;
+  Encoder(EncoderParams encoderParams) { 
+    this->encoderParams = encoderParams;
     this->counter = 0;
     this->phi = 0;
     this->tick = 0;
@@ -94,6 +94,7 @@ class Encoder {
 
     interrupts();
   }
+
 
   ISR(_VECTOR(vector_number)) { // Порт
     static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации

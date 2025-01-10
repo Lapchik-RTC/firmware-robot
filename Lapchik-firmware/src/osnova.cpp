@@ -2,7 +2,6 @@
 //#include "Poehali.h"
 #include "SLOVAR.h"
 #include "tcokol.h"
-#include "tcokol.cpp"
 #include "regulatori.h"
 
 // MotorConnectParams mconp = {
