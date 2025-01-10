@@ -27,14 +27,27 @@ class DvigatelK: MotorParams
     }
     private:
     void motor(float vel);
-    float PIreg(float err);
 };
-
-void DvigatelK::motor(float vel)
+///////////////////////////////////////////////////////////////////////////////////////
+/*void DvigatelK::motor(float vel)
 {
     digitalWrite(INA, (vel>0)*dir);
     digitalWrite(INB, (vel>0)*-dir);
-}
+}*/
+
+class MotorController: MotorConnectParams, MotorControlParams
+{
+  public:
+  MotorController(MotorConnectParams *mp, MotorControlParams *mconp);
+
+  private:
+  float PIreg(float err);
+};
+
+class Lapki
+{
+  ServoMotor
+};
 
 ////////////////////////////////////////////////////
 // class SpeedController: public MotorConnectParams, MotorControlParams
@@ -49,19 +62,3 @@ void DvigatelK::motor(float vel)
 //   private:
 //   int PIreg();
 // };
-
-class ServoMotor: MotorConnectParams, MotorControlParams
-{
-  public:
-  ServoMotor(MotorConnectParams *mp, MotorControlParams *mconp);
-
-  private:
-  void writePwm(float pwm);
-  float PIreg(float err);
-
-};
-
-class Lapki
-{
-
-};

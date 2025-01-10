@@ -60,8 +60,13 @@ class Encoder {
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
   
   public:
+<<<<<<< HEAD
   Encoder(EncoderParams encoderParams) { 
     this->encoderParams = encoderParams;
+=======
+  Encoder(EncoderParams  *encoderParams) { 
+    this->encoderParams = &encoderParams;
+>>>>>>> a662328842c00963b47b44faabd704fec092e39a
     this->counter = 0;
     this->phi = 0;
     this->tick = 0;
@@ -135,7 +140,6 @@ class Encoder {
 class Motor {
   public:
   MotorParams motorParams;
-  uint16_t supply_voltage;
   
   Motor(MotorParams motorParams) {
     this->encoderParams = encoderParams;
