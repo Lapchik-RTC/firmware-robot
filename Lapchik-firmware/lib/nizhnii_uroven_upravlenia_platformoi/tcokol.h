@@ -9,25 +9,13 @@ struct EncoderParams
 { 
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
-  char16_t enc_port;        // порт прерываний
-  uint8_t enc_mask;         // удобное для работы с таблицей обозначение положения,
-  // полученного с датчика холла
-  uint16_t enc_shift;       // const, которая используется для получения двух чисел,
-  // обозначающих нынешнее положение вала
   uint16_t enc_dir;         // условный указатель задавания положительного направления
   // вращения вала двигателя, то есть +-1
-  uint16_t vector_number;   // номер вектора прерывания
 
   EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, char16_t enc_port, uint8_t enc_mask, uint16_t enc_shift, uint16_t enc_dir, uint16_t vector_number){
     this->enc_pin_a = enc_pin_a;
     this->enc_pin_b = enc_pin_b;
-    this->enc_port = enc_port;
-    this->enc_mask = enc_mask;
-    this->enc_shift = enc_shift;
     this->enc_dir = enc_dir;
-
-
-    this->vector_number = vector_number;
   }
 };
 
@@ -57,7 +45,6 @@ class Encoder {
   float tick;               // угол поворота вала в тиках в данный момент
   float w_moment_rad;       // текущая скорость в рад/c
   float w_moment_tick;      // текущая скорость в тики/c
-  int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
   
   public:
 <<<<<<< HEAD
@@ -190,48 +177,5 @@ class Motor {
       digitalWrite(motorParams.motor_in_2, HIGH);
       analogWrite(motorParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
     }
-  }
-};
-
-class Dvigatel {
-  public:
-  Encoder encoder;
-  Motor motor;
-
-  public:
-  void update_speed_in_rad(float w);
-  void update_speed_in_tick(float w);
-  float get_rad();
-  float get_tick();
-  float get_w_moment_rad();
-  float get_w_moment_tick();
-
-  Dvigatel(Encoder encoder, Motor motor) {
-    this->encoder = encoder;
-    this->motor = motor;
-  }
-
-  void update_speed_in_rad(float w) {
-    motor.motor_speed_rad(w);
-  }
-
-  void update_speed_in_tick(float w) {
-    motor.motor_speed_tick(w);
-  }
-
-  float get_rad() {
-    return encoder.phi;
-  }
-
-  float get_tick() {
-    return encoder.tick;
-  }
-
-  float get_w_moment_rad() {
-    return encoder.w_moment_rad;
-  }
-
-  float get_w_moment_tick() {
-    return encoder.w_moment_tick;
   }
 };
