@@ -39,7 +39,6 @@ struct MotorParams
     this->motor_dir = motor_dir;
     this->supply_voltage = supply_voltage;
   }
-  MotorParams(){}
 };
 
 class Encoder {
