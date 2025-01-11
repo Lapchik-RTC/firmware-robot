@@ -19,7 +19,7 @@ public:
     this->enc_pin_b = enc_pin_b;
     this->enc_dir = enc_dir;
   }
-  void get_AB();
+  uint8_t (*get_AB)();
       
 };
 
@@ -67,7 +67,7 @@ public:
     encoder_init();
   }
 
-  void Encoder::encoder_init() {
+  void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
     // Инициализация пинов энкодера
     pinMode(encoderParams.enc_pin_a, INPUT);
@@ -92,7 +92,7 @@ public:
     interrupts();
   }
 
-  void Encoder::isr_handler() {
+  void isr_handler() {
     static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации
     const uint8_t enc = encoderParams.get_AB();
 
@@ -100,7 +100,7 @@ public:
     enc_old = enc;
   }
   
-  void Encoder::enc_tick()
+  void enc_tick()
 {
     noInterrupts();
     int counter_inc = counter;
@@ -113,19 +113,19 @@ public:
     w_moment_tick = (counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO))/Ts_s_IN_SEC;
   }
 
-  float Encoder::get_phi(){
+  float get_phi(){
     return phi;
   }
 
-  float Encoder::get_tick(){
+  float get_tick(){
     return tick;
   }
 
-  float Encoder::get_w_moment_rad(){
+  float get_w_moment_rad(){
     return w_moment_rad;
   }
 
-  float Encoder::get_w_moment_tick(){
+  float get_w_moment_tick(){
     return w_moment_tick;
   }
 };
