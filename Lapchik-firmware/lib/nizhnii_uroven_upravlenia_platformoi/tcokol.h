@@ -23,7 +23,7 @@ public:
       
 };
 
-struct MotorParams
+struct DvigatelParams
 { 
   uint16_t motor_in_1;        // пин, отвечающий за направление
   uint16_t motor_in_2;        // пин, отвечающий за направление
@@ -32,7 +32,7 @@ struct MotorParams
   // вращения вала двигателя, то есть +-1
   uint16_t supply_voltage;    // подаваемое напряжение
 
-  MotorParams(uint16_t motor_in_1, uint16_t motor_in_2, uint16_t motor_pwm, uint16_t motor_dir, uint16_t supply_voltage){
+  DvigatelParams(uint16_t motor_in_1, uint16_t motor_in_2, uint16_t motor_pwm, uint16_t motor_dir, uint16_t supply_voltage){
     this->motor_in_1 = motor_in_1;
     this->motor_in_2 = motor_in_2;
     this->motor_pwm = motor_pwm;
@@ -131,58 +131,58 @@ public:
 
 class Dvigatel {
 private:
-  MotorParams motorParams;
+  DvigatelParams dvigatelParams;
   
 public:
-  Dvigatel(MotorParams *motorParams) : motorParams(*motorParams) {
-    this->motorParams = *motorParams;
-    motor_init();
+  Dvigatel(DvigatelParams *dvigatelParams) : dvigatelParams(*dvigatelParams) {
+    this->dvigatelParams = *dvigatelParams;
+    dvigatel_init();
   }
   
   
-  void motor_init() {
-    pinMode(motorParams.motor_in_1, OUTPUT);
-    pinMode(motorParams.motor_in_2, OUTPUT);
-    pinMode(motorParams.motor_pwm,  OUTPUT);
+  void dvigatel_init() {
+    pinMode(dvigatelParams.motor_in_1, OUTPUT);
+    pinMode(dvigatelParams.motor_in_2, OUTPUT);
+    pinMode(dvigatelParams.motor_pwm,  OUTPUT);
   }
 
   void update_speed_in_tick(float w) {
     float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / Ts_s_IN_SEC;
     float u = 0;
-    u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
-    const int16_t pwm = 255.0 * constrain(u / motorParams.supply_voltage, -1.0, 1.0) * motorParams.motor_dir;
+    u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+    const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
 
     if (pwm >= 0)
     {
-      digitalWrite(motorParams.motor_in_1, HIGH);
-      digitalWrite(motorParams.motor_in_2, LOW);
-      analogWrite(motorParams.motor_pwm, pwm);
+      digitalWrite(dvigatelParams.motor_in_1, HIGH);
+      digitalWrite(dvigatelParams.motor_in_2, LOW);
+      analogWrite(dvigatelParams.motor_pwm, pwm);
     }
     else
     {
-      digitalWrite(motorParams.motor_in_1, LOW);
-      digitalWrite(motorParams.motor_in_2, HIGH);
-      analogWrite(motorParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+      digitalWrite(dvigatelParams.motor_in_1, LOW);
+      digitalWrite(dvigatelParams.motor_in_2, HIGH);
+      analogWrite(dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
     }
   }
 
   void update_speed_in_rad(float w) {
     float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
     float u = 0;
-    u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
-    const int16_t pwm = 255.0 * constrain(u / motorParams.supply_voltage, -1.0, 1.0) * motorParams.motor_dir;
+    u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+    const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
 
     if (pwm >= 0)
     {
-      digitalWrite(motorParams.motor_in_1, HIGH);
-      digitalWrite(motorParams.motor_in_2, LOW);
-      analogWrite(motorParams.motor_pwm, pwm);
+      digitalWrite(dvigatelParams.motor_in_1, HIGH);
+      digitalWrite(dvigatelParams.motor_in_2, LOW);
+      analogWrite(dvigatelParams.motor_pwm, pwm);
     }
     else
     {
-      digitalWrite(motorParams.motor_in_1, LOW);
-      digitalWrite(motorParams.motor_in_2, HIGH);
-      analogWrite(motorParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+      digitalWrite(dvigatelParams.motor_in_1, LOW);
+      digitalWrite(dvigatelParams.motor_in_2, HIGH);
+      analogWrite(dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
     }
   }
 };

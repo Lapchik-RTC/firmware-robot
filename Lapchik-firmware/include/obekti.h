@@ -1,6 +1,8 @@
 #pragma once
 #include<Arduino.h>
 
+
+// Encoder
 EncoderParams enc_params_1 {
     .enc_pin_a = 62,    // A8
     .enc_pin_b = 63,    // A9
@@ -91,3 +93,58 @@ ISR(PCINT2_vect)
     enc5.isr_handler();
     enc6.isr_handler();
 }
+
+
+
+
+
+// Motor
+DvigatelParams dvigatel_params_1 {
+    .motor_in_1 = 34,
+    .motor_in_2 = 32,
+    .motor_pwm = 4,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+DvigatelParams dvigatel_params_2 {
+    .motor_in_1 = 33,
+    .motor_in_2 = 35,
+    .motor_pwm = 5,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+DvigatelParams dvigatel_params_3 {
+    .motor_in_1 = 36,
+    .motor_in_2 = 38,
+    .motor_pwm = 6,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+DvigatelParams dvigatel_params_4 {
+    .motor_in_1 = 37,
+    .motor_in_2 = 39,
+    .motor_pwm = 7,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+DvigatelParams dvigatel_params_5 {
+    .motor_in_1 = 40,
+    .motor_in_2 = 42,
+    .motor_pwm = 8,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+DvigatelParams dvigatel_params_6 {
+    .motor_in_1 = 41,
+    .motor_in_2 = 43,
+    .motor_pwm = 9,
+    .motor_dir = 1,
+    .supply_voltage = 12
+};
+
+Dvigatel dvigatel_1(dvigatel_params_1), dvigatel_2(dvigatel_params_2), dvigatel_3(dvigatel_params_3), dvigatel_4(dvigatel_params_4), dvigatel_5(dvigatel_params_5), dvigatel_6(dvigatel_params_6);
