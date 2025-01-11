@@ -37,7 +37,7 @@ void ENC::tick()
 
     angle += counter_buf * TICKS_TO_RAD;
 }
-
+`
 void ENC::isr_handler()
 {
     int8_t AB = (*en_par.get_AB)(); //...

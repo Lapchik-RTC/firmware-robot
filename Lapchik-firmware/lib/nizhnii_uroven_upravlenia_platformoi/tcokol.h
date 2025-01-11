@@ -7,16 +7,20 @@
 
 struct EncoderParams
 { 
+public:
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
   uint16_t enc_dir;         // условный указатель задавания положительного направления
   // вращения вала двигателя, то есть +-1
-
-  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, char16_t enc_port, uint8_t enc_mask, uint16_t enc_shift, uint16_t enc_dir, uint16_t vector_number){
+        
+public:
+  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
     this->enc_pin_a = enc_pin_a;
     this->enc_pin_b = enc_pin_b;
     this->enc_dir = enc_dir;
   }
+  void get_AB();
+      
 };
 
 struct MotorParams
@@ -35,25 +39,25 @@ struct MotorParams
     this->motor_dir = motor_dir;
     this->supply_voltage = supply_voltage;
   }
+  MotorParams(){}
 };
 
 class Encoder {
-  public:
+  private:
   EncoderParams encoderParams;
   uint16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
+  int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
+
+  
+public:
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
   float w_moment_rad;       // текущая скорость в рад/c
   float w_moment_tick;      // текущая скорость в тики/c
-  
-  public:
-<<<<<<< HEAD
-  Encoder(EncoderParams encoderParams) { 
-    this->encoderParams = encoderParams;
-=======
-  Encoder(EncoderParams  *encoderParams) { 
-    this->encoderParams = &encoderParams;
->>>>>>> a662328842c00963b47b44faabd704fec092e39a
+
+
+  Encoder(EncoderParams  *encoderParams) : encoderParams(*encoderParams) {
+    this->encoderParams = *encoderParams; 
     this->counter = 0;
     this->phi = 0;
     this->tick = 0;
@@ -63,15 +67,16 @@ class Encoder {
     encoder_init();
   }
 
-  void encoder_init() {
+  void Encoder::encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
     // Инициализация пинов энкодера
     pinMode(encoderParams.enc_pin_a, INPUT);
     pinMode(encoderParams.enc_pin_b, INPUT);
 
     // Настройка прерываний энкодера
-    PCICR |= 0b00000001; // включаем прерывание на порту B
-    PCMSK0 |= 0b00000011; // включаем пины PB2 и PB3 (PCINT0 и PCINT1)
+    PCICR |= 0b00000101; // включаем прерывание на порту B и С
+    PCMSK0 |= 0b11110000; // включаем пины PB6 -- PB9 (PCINT4 -- PCINT7)
+    PCMSK2 |= 0b11111111; // включаем пины (PCINT16 -- PCINT23)
 
     // Настройка таблицы переходов
     table[0b00][0b10] = encoderParams.enc_dir;
@@ -87,34 +92,19 @@ class Encoder {
     interrupts();
   }
 
-
-  ISR(_VECTOR(vector_number)) { // Порт
+  void Encoder::isr_handler() {
     static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации
-    const uint8_t enc = (encoderParams.enc_port & encoderParams.enc_mask) >> encoderParams.enc_shift;
-    
-    // вот, что происходит в предыдущей строке:
-    //   xxxxABxx
-    // & 00001100
-    //   0000AB00
-    // >>2
-    //   000000AB
-    
-    // Serial.print(enc_old);
-    // Serial.print("\t");
-    // Serial.print(enc);
-    // Serial.print("\t");
-    // Serial.println(table[enc_old][enc]);
+    const uint8_t enc = encoderParams.get_AB();
 
     counter += table[enc_old][enc];
     enc_old = enc;
   }
-
-  void encoder_tick() {
-    noInterrupts(); // приостанавливаем прерывания
-    const int16_t counter_inc = counter; // запоминаем количество шагов, которое произошло за данную
-    // итерацию
-    counter = 0;    // обнуляем количество, которое мы получили за данную итерацию
-    interrupts(); // возобновляем прерывания
+  
+  void Encoder::enc_tick()
+{
+    noInterrupts();
+    int counter_inc = counter;
+    interrupts();
 
     phi += counter_inc * TICK_TO_RAD; 
     tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
@@ -122,16 +112,34 @@ class Encoder {
     w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
     w_moment_tick = (counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO))/Ts_s_IN_SEC;
   }
+
+  float Encoder::get_phi(){
+    return phi;
+  }
+
+  float Encoder::get_tick(){
+    return tick;
+  }
+
+  float Encoder::get_w_moment_rad(){
+    return w_moment_rad;
+  }
+
+  float Encoder::get_w_moment_tick(){
+    return w_moment_tick;
+  }
 };
 
-class Motor {
-  public:
+class Dvigatel {
+private:
   MotorParams motorParams;
   
-  Motor(MotorParams motorParams) {
-    this->encoderParams = encoderParams;
+public:
+  Dvigatel(MotorParams *motorParams) : motorParams(*motorParams) {
+    this->motorParams = *motorParams;
     motor_init();
   }
+  
   
   void motor_init() {
     pinMode(motorParams.motor_in_1, OUTPUT);
@@ -139,7 +147,7 @@ class Motor {
     pinMode(motorParams.motor_pwm,  OUTPUT);
   }
 
-  void motor_speed_tick(float w) {
+  void update_speed_in_tick(float w) {
     float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / Ts_s_IN_SEC;
     float u = 0;
     u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
@@ -159,7 +167,7 @@ class Motor {
     }
   }
 
-  void motor_speed_rad(float w) {
+  void update_speed_in_rad(float w) {
     float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
     float u = 0;
     u = motorParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
