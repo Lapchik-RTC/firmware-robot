@@ -1,6 +1,7 @@
 #pragma once
 #include<Arduino.h>
-
+#include "encoder.h"
+#include "motor.h"
 
 // Encoder
 EncoderParams enc_params_1 {
