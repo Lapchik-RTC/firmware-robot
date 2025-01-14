@@ -37,12 +37,7 @@ int8_t get_AB_enc6()
 
 
 // Encoder
-EncoderParams enc_params_1 {
-    .enc_pin_a = 62,    // A8
-    .enc_pin_b = 63,    // A9
-    .enc_dir = 1,
-    .get_AB = get_AB_enc1
-};
+EncoderParams enc_params_1 (62, 63, 1, get_AB_enc1);
 
 EncoderParams enc_params_2 {
     .enc_pin_a = 64,    // A10
@@ -94,16 +89,16 @@ Encoder enc_1(enc_params_1), enc_2(enc_params_2), enc_3(enc_params_3), enc_4(enc
 
 ISR(PCINT0_vect)
 {
-    enc1.isr_handler();
-    enc2.isr_handler();
-    enc3.isr_handler();
-    enc4.isr_handler();
+    enc_1.isr_handler();
+    enc_2.isr_handler();
+    enc_3.isr_handler();
+    enc_4.isr_handler();
 }
 
 ISR(PCINT2_vect)
 {
-    enc5.isr_handler();
-    enc6.isr_handler();
+    enc_5.isr_handler();
+    enc_6.isr_handler();
 }
 
 

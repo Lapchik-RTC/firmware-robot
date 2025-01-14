@@ -1,5 +1,4 @@
-#ifndef ENCODER_H
-#define ENCODER_H
+#pragma once
 #include <Arduino.h>
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
@@ -7,6 +6,7 @@
 
 
 
+/// @brief 
 struct EncoderParams
 { 
 public:
@@ -14,14 +14,16 @@ public:
   uint16_t enc_pin_b;       // пин энкодера
   uint16_t enc_dir;         // условный указатель задавания положительного направления
   // вращения вала двигателя, то есть +-1
-        
-public:
-  EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
-    this->enc_pin_a = enc_pin_a;
-    this->enc_pin_b = enc_pin_b;
-    this->enc_dir = enc_dir;
-  }
-  uint8_t (*get_AB)();
+  
+  uint8_t (*get_AB)(void);      
+
+  EncoderParams(int a, int b, int dir, int8_t (*get_AB)()): enc_pin_a(a), enc_pin_b(b), enc_dir(dir), get_AB(get_AB) {}
+  // EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
+  //   this->enc_pin_a = enc_pin_a;
+  //   this->enc_pin_b = enc_pin_b;
+  //   this->enc_dir = enc_dir;
+  // }
+
       
 };
 
@@ -39,8 +41,8 @@ public:
   float w_moment_tick;      // текущая скорость в тики/c
 
 
-  Encoder(EncoderParams  &encoderParams) : encoderParams(*encoderParams) {
-    this->encoderParams = *encoderParams; 
+  Encoder(EncoderParams  &encoderParams) : encoderParams(encoderParams) {
+    this->encoderParams = encoderParams; 
     this->counter = 0;
     this->phi = 0;
     this->tick = 0;
@@ -112,4 +114,3 @@ public:
     return w_moment_tick;
   }
 };
-#endif
