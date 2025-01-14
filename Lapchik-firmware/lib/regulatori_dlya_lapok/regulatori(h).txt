@@ -71,3 +71,42 @@ class Lapka: public MotorRegulatorParams, public LegRegParams
   sfix forward_velocity, angular_velocity;
   void legPhaseUpd();
 };
+//////////////////////////////////////////////////////////////////
+
+////////////////////   KOSTYL   ////////////////////
+// class DvigatelK: MotorConnectParams
+// {
+//   public:
+//   DvigatelK(/*MotorConnectParams *mp*/)//:MotorConnectParams(*mp)
+//   {
+//       pinMode(mp->INA, 1);
+//       pinMode(mp->INB, 1);
+//   }
+//   private:
+//   void motor(float w)
+//   {
+//     float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
+//     float u = 0;
+//     u = 12*constrain((w/wMax), -1.0, 1.0);
+//     const int16_t pwm = 255.0 * constrain(u / 12, -1.0, 1.0) * mp->dir;
+
+//     if (pwm >= 0)
+//     {
+//       digitalWrite(mp.INA, HIGH);
+//       digitalWrite(mp.INB, LOW);
+//       analogWrite(mp.PWM, pwm);
+//     }
+//     else
+//     {
+//       digitalWrite(mp.INA, LOW);
+//       digitalWrite(mp.INB, HIGH);
+//       analogWrite(mp.PWM, abs(pwm));   // тут подавалось (255 + pwm)
+//     }
+//   }
+// };
+///////////////////////////////////////////////////////////////////////////////////////
+/*void DvigatelK::motor(float vel)
+{
+    digitalWrite(INA, (vel>0)*dir);
+    digitalWrite(INB, (vel>0)*-dir);
+}*/
