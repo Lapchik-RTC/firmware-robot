@@ -1,37 +1,43 @@
-#ifndef OBEKTI_H
-#define OBEKTI_H
+#pragma once
+
 #include<Arduino.h>
 #include "encoder.h"
 #include "motor.h"
 //#pragma once
 
-int8_t get_AB_enc1()
+uint8_t get_AB_enc1()
 {
+    Serial.println("enc_1");
     return (((PIND) & 0b00000011) >> 0);
 }
 
-int8_t get_AB_enc2()
+uint8_t get_AB_enc2()
 {
+    Serial.println("enc_2");
     return (((PIND) & 0b00001100) >> 2);
 }
 
-int8_t get_AB_enc3()
+uint8_t get_AB_enc3()
 {
+    Serial.println("enc_3");
     return (((PIND) & 0b00110000) >> 4);
 }
 
-int8_t get_AB_enc4()
+uint8_t get_AB_enc4()
 {
+    Serial.println("enc_4");
     return (((PIND) & 0b11000000) >> 6);
 }
 
-int8_t get_AB_enc5()
+uint8_t get_AB_enc5()
 {
+    Serial.println("enc_5");
     return (((PINB) & 0b00110000) >> 4);
 }
 
-int8_t get_AB_enc6()
+uint8_t get_AB_enc6()
 {
+    Serial.println("enc_6");
     return (((PINB) & 0b11000000) >> 6);
 }
 
@@ -155,4 +161,10 @@ DvigatelParams dvigatel_params_6 {
 };
 
 Dvigatel dvigatel_1(dvigatel_params_1), dvigatel_2(dvigatel_params_2), dvigatel_3(dvigatel_params_3), dvigatel_4(dvigatel_params_4), dvigatel_5(dvigatel_params_5), dvigatel_6(dvigatel_params_6);
-#endif
+
+/////////////////////////////////////////////////////////
+/*MotorControlParams mconp = 
+{
+    .Ts = Ts_s,
+    .ppr = 1
+};*/

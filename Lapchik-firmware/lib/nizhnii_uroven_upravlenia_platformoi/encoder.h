@@ -89,6 +89,7 @@ public:
 {
     noInterrupts();
     int counter_inc = counter;
+    counter = 0;
     interrupts();
 
     phi += counter_inc * TICK_TO_RAD; 
