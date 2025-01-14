@@ -15,22 +15,11 @@
 //     .ENC_DIR = 1
 // };
 
-MotorControlParams mcontp = 
-{
-    .Ts = Ts_s,
-    .kp = MOTORS_PI_KP,
-    .ki = MOTORS_PI_KI,
-    .maxI = MOTORS_PI_MAX_I,
-};
-
-
-
 volatile int value = 0;
 
 
 
 void setup() {
-    dvigatels_init();
     
     Serial.begin(9600);
 }
