@@ -2,6 +2,7 @@
 //#include "SLOVAR.h"
 //#include "tcokol.h"
 #include "regulatori.h"
+#include "encoder.h"
 #include "obekti.h"
 
 //volatile int value = 0;
@@ -18,12 +19,14 @@ void setup() {
 //обьявленно выше
 
 void loop(){
-    static uint64_t timer = micros();
-    while(micros() - timer < Ts_s)
-    ;
-    timer = micros();
-    enc_2.enc_tick();
-    Serial.println(enc_2.get_tick());
+    // static uint64_t timer = micros();
+    // while(micros() - timer < Ts_s)
+    // ;
+    // timer = micros();
+    enc_6.enc_tick();
+    // Serial.println(enc_6.get_tick());
+    // Serial.println(enc_6.get_tick());
+    Serial.println(enc_6.get_phi());
 
 }
 

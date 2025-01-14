@@ -7,43 +7,48 @@
 
 uint8_t get_AB_enc1()
 {
-    Serial.println("enc_1");
+    // Serial.println("enc_1");
     return (((PIND) & 0b00000011) >> 0);
 }
 
 uint8_t get_AB_enc2()
 {
-    Serial.println("enc_2");
+    // Serial.println("enc_2");
     return (((PIND) & 0b00001100) >> 2);
 }
 
 uint8_t get_AB_enc3()
 {
-    Serial.println("enc_3");
+    // Serial.println("enc_3");
     return (((PIND) & 0b00110000) >> 4);
 }
 
 uint8_t get_AB_enc4()
 {
-    Serial.println("enc_4");
+    // Serial.println("enc_4");
     return (((PIND) & 0b11000000) >> 6);
 }
 
 uint8_t get_AB_enc5()
 {
-    Serial.println("enc_5");
+    // Serial.println("enc_5");
     return (((PINB) & 0b00110000) >> 4);
 }
 
 uint8_t get_AB_enc6()
 {
-    Serial.println("enc_6");
-    return (((PINB) & 0b11000000) >> 6);
+    // Serial.println("enc_6");
+    return (((PINB) & 0b11111111) >> 4);
 }
 
 
 // Encoder
-EncoderParams enc_params_1 (62, 63, 1, get_AB_enc1);
+EncoderParams enc_params_1 {
+    .enc_pin_a = 62,    // A10
+    .enc_pin_b = 63,    // A11
+    .enc_dir = 1,
+    .get_AB = get_AB_enc1
+};
 
 EncoderParams enc_params_2 {
     .enc_pin_a = 64,    // A10
@@ -99,6 +104,8 @@ ISR(PCINT0_vect)
     enc_2.isr_handler();
     enc_3.isr_handler();
     enc_4.isr_handler();
+
+    enc_6.isr_handler();
 }
 
 ISR(PCINT2_vect)

@@ -6,7 +6,6 @@
 
 
 
-/// @brief 
 struct EncoderParams
 { 
 public:
@@ -30,11 +29,11 @@ public:
 class Encoder {
   private:
   EncoderParams encoderParams;
-  uint16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   
 public:
+  uint16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
   float w_moment_rad;       // текущая скорость в рад/c
@@ -69,10 +68,10 @@ public:
     table[0b11][0b01] = encoderParams.enc_dir;
     table[0b01][0b00] = encoderParams.enc_dir;
 
-    table[0b00][0b01] = -encoderParams.enc_dir;
-    table[0b01][0b11] = -encoderParams.enc_dir;
-    table[0b11][0b10] = -encoderParams.enc_dir;
-    table[0b10][0b00] = -encoderParams.enc_dir;
+    table[0b00][0b01] = encoderParams.enc_dir;
+    table[0b01][0b11] = encoderParams.enc_dir;
+    table[0b11][0b10] = encoderParams.enc_dir;
+    table[0b10][0b00] = encoderParams.enc_dir;
 
     interrupts();
   }
@@ -80,17 +79,17 @@ public:
   void isr_handler() {
     static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации
     const uint8_t enc = encoderParams.get_AB();
-
+    Serial.print(encoderParams.get_AB());
     counter += table[enc_old][enc];
     enc_old = enc;
   }
   
   void enc_tick()
 {
-    noInterrupts();
-    int counter_inc = counter;
+    // noInterrupts();
+    uint16_t counter_inc = counter;
     counter = 0;
-    interrupts();
+    // interrupts();
 
     phi += counter_inc * TICK_TO_RAD; 
     tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
