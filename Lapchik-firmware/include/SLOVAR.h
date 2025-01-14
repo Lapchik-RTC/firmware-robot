@@ -1,4 +1,6 @@
-#pragma once
+//#pragma once
+#ifndef SLOVO
+#define SLOVO
 #define MAX_SPEED         8.0
 #define MOTORS_KE         0.8   /*!< [V/rad/s] */
 #define Ts_s              4000.0
@@ -13,3 +15,4 @@
 // а не тики
 #define TICK_TO_TICK 1
 #define SUPPLY_VOLTAGE 12 // подаваемое напряжение
+#endif

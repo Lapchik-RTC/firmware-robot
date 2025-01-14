@@ -1,7 +1,9 @@
-#include <Arduino.h>
+#ifndef TCOKOL_CPP
+#define TCOKOL_CPP
+//#include <Arduino.h>
 #include "tcokol.h"
 
-#pragma once // полезная для оптимизации штука, но, когда напишем код полностью, надо будет понять, куда её написать
+//#pragma once // полезная для оптимизации штука, но, когда напишем код полностью, надо будет понять, куда её написать
 
 Dvigatel dvigatel_1;
 Dvigatel dvigatel_2;
@@ -49,3 +51,4 @@ void dvigatels_init() {
     Dvigatel dvigatel_6(encoder_6, motor_6);
 
 }
+#endif

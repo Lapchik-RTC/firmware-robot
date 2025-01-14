@@ -1,7 +1,9 @@
-#pragma once
-#include<Arduino.h>
+#ifndef ENCODER_H
+#define ENCODER_H
+#include <Arduino.h>
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
+//#pragma once
 
 
 
@@ -37,7 +39,7 @@ public:
   float w_moment_tick;      // текущая скорость в тики/c
 
 
-  Encoder(EncoderParams  *encoderParams) : encoderParams(*encoderParams) {
+  Encoder(EncoderParams  &encoderParams) : encoderParams(*encoderParams) {
     this->encoderParams = *encoderParams; 
     this->counter = 0;
     this->phi = 0;
@@ -110,3 +112,4 @@ public:
     return w_moment_tick;
   }
 };
+#endif

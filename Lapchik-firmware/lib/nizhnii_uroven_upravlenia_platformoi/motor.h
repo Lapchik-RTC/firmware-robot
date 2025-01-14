@@ -1,7 +1,9 @@
-#pragma once
+#ifndef MOTOR_H
+#define MOTOR_H
 #include<Arduino.h>
 #include "HardwareSerial.h"
-#include "SLOVAR.h"
+#include <SLOVAR.h>
+//#pragma once
 
 
 struct DvigatelParams
@@ -79,3 +81,4 @@ public:
     }
   }
 };
+#endif

@@ -1,7 +1,9 @@
-#pragma once
+#ifndef REGULATORI_H
+#define REGULATORI_H
 #include<Arduino.h>
 //#include<SLOVAR>
 #include"tcokol.h"
+//#pragma once
 struct MotorControlParams
 {
   float Ts;
@@ -106,3 +108,4 @@ float ServoPrivod::getRealSpeed(){
   timer = millis();
   return realSpeed;
 }
+#endif

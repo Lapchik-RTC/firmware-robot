@@ -1,8 +1,8 @@
 #include <Arduino.h>
-//#include "Poehali.h"
-#include "SLOVAR.h"
-#include "tcokol.h"
+//#include "SLOVAR.h"
+//#include "tcokol.h"
 #include "regulatori.h"
+#include "obekti.h"
 
 // MotorConnectParams mconp = {
 //     .INA = 39,
@@ -15,7 +15,7 @@
 //     .ENC_DIR = 1
 // };
 
-MotorRegulatorParams mcontp = 
+MotorControlParams mcontp = 
 {
     .Ts = Ts_s,
     .kp = MOTORS_PI_KP,

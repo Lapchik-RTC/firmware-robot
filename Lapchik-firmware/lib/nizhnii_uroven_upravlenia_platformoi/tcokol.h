@@ -1,7 +1,9 @@
-#pragma once
+//#pragma once
+#ifndef TCOKOL_H
+#define TCOKOL_H
 #include<Arduino.h>
 #include "HardwareSerial.h"
-#include "SLOVAR.h"
+#include <SLOVAR.h>
 
 
 
@@ -186,3 +188,4 @@ public:
     }
   }
 };
+#endif
