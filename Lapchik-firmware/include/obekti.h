@@ -38,7 +38,7 @@ uint8_t get_AB_enc5()
 uint8_t get_AB_enc6()
 {
     // Serial.println("enc_6");
-    return (((PINB) & 0b11111111) >> 4);
+    return (((PINB) & 0b11000000) >> 6);
 }
 
 
@@ -100,18 +100,16 @@ Encoder enc_1(enc_params_1), enc_2(enc_params_2), enc_3(enc_params_3), enc_4(enc
 
 ISR(PCINT0_vect)
 {
-    enc_1.isr_handler();
-    enc_2.isr_handler();
-    enc_3.isr_handler();
-    enc_4.isr_handler();
-
+    enc_5.isr_handler();
     enc_6.isr_handler();
 }
 
 ISR(PCINT2_vect)
 {
-    enc_5.isr_handler();
-    enc_6.isr_handler();
+    enc_1.isr_handler();
+    enc_2.isr_handler();
+    enc_3.isr_handler();
+    enc_4.isr_handler();  
 }
 
 
