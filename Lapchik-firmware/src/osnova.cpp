@@ -9,7 +9,7 @@
 
 
 
-void setup() {    
+void setup() {
     
     Serial.begin(9600);
 }
@@ -19,14 +19,14 @@ void setup() {
 //обьявленно выше
 
 void loop(){
-    // static uint64_t timer = micros();
-    // while(micros() - timer < Ts_s)
-    // ;
-    // timer = micros();
+    static uint64_t timer = micros();
+    while(micros() - timer < Ts_s)
+    ;
+    timer = micros();
     enc_6.enc_tick();
     // Serial.println(enc_6.get_tick());
     // Serial.println(enc_6.get_tick());
-    Serial.println(enc_6.get_phi());
+    Serial.println(enc_6.get_tick());
 
 }
 
