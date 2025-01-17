@@ -1,9 +1,8 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#pragma once
+
 #include<Arduino.h>
 #include "HardwareSerial.h"
 #include <SLOVAR.h>
-//#pragma once
 
 
 struct DvigatelParams
@@ -41,28 +40,28 @@ public:
     pinMode(dvigatelParams.motor_pwm,  OUTPUT);
   }
 
-  void update_speed_in_tick(float w) {
-    float wMax = (KOLVO_ENC_TICK * GEAR_RATIO) / Ts_s_IN_SEC;
-    float u = 0;
-    u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
-    const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
+  // void update_speed_in_tick(float w) {
+  //   float wMax = 1 / Ts_s_IN_SEC;
+  //   float u = 0;
+  //   u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+  //   const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
 
-    if (pwm >= 0)
-    {
-      digitalWrite(dvigatelParams.motor_in_1, HIGH);
-      digitalWrite(dvigatelParams.motor_in_2, LOW);
-      analogWrite(dvigatelParams.motor_pwm, pwm);
-    }
-    else
-    {
-      digitalWrite(dvigatelParams.motor_in_1, LOW);
-      digitalWrite(dvigatelParams.motor_in_2, HIGH);
-      analogWrite(dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
-    }
-  }
+  //   if (pwm >= 0)
+  //   {
+  //     digitalWrite(dvigatelParams.motor_in_1, HIGH);
+  //     digitalWrite(dvigatelParams.motor_in_2, LOW);
+  //     analogWrite(dvigatelParams.motor_pwm, pwm);
+  //   }
+  //   else
+  //   {
+  //     digitalWrite(dvigatelParams.motor_in_1, LOW);
+  //     digitalWrite(dvigatelParams.motor_in_2, HIGH);
+  //     analogWrite(dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+  //   }
+  // }
 
   void update_speed_in_rad(float w) {
-    float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
+    float wMax = (6.2831853071*7,33333333333333333) / Ts_s_IN_SEC;
     float u = 0;
     u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
     const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
@@ -81,4 +80,3 @@ public:
     }
   }
 };
-#endif
