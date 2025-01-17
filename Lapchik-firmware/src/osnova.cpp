@@ -31,7 +31,7 @@ void loop(){
     enc_6.enc_tick();
     // Serial.println(enc_6.get_tick());
     // Serial.println(enc_6.get_tick());
-    Serial.print(enc_1.get_phi());
+    Serial.print(enc_1.get_tick());
     Serial.print("\t");
     Serial.print(enc_2.get_phi());
     Serial.print("\t");

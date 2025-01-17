@@ -99,7 +99,7 @@ public:
     interrupts();
 
     phi += counter_inc * TICK_TO_RAD; 
-    tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
+    tick += counter_inc; //* (KOLVO_ENC_TICK * GEAR_RATIO);  
     
     w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
     w_moment_tick = counter_inc / ((KOLVO_ENC_TICK * GEAR_RATIO) * Ts_s_IN_SEC);
