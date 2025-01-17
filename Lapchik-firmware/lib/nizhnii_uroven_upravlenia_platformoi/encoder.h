@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
-//#pragma once
 
 
 
@@ -33,16 +32,17 @@ class Encoder {
 
   
 public:
-  uint16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
+  int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
+  uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
   float w_moment_rad;       // текущая скорость в рад/c
   float w_moment_tick;      // текущая скорость в тики/c
 
-
   Encoder(EncoderParams  &encoderParams) : encoderParams(encoderParams) {
     this->encoderParams = encoderParams; 
     this->counter = 0;
+    this->enc_old = 0;
     this->phi = 0;
     this->tick = 0;
     this->w_moment_rad = 0;
@@ -68,39 +68,44 @@ public:
     table[0b11][0b01] = encoderParams.enc_dir;
     table[0b01][0b00] = encoderParams.enc_dir;
 
-    table[0b00][0b01] = encoderParams.enc_dir;
-    table[0b01][0b11] = encoderParams.enc_dir;
-    table[0b11][0b10] = encoderParams.enc_dir;
-    table[0b10][0b00] = encoderParams.enc_dir;
+    table[0b00][0b01] = -encoderParams.enc_dir;
+    table[0b01][0b11] = -encoderParams.enc_dir;
+    table[0b11][0b10] = -encoderParams.enc_dir;
+    table[0b10][0b00] = -encoderParams.enc_dir;
 
     interrupts();
   }
 
   void isr_handler() {
-    static uint8_t enc_old = 0; // хранит значение энкодера в предыдущей итерации
-    const uint8_t enc = encoderParams.get_AB();
-    Serial.print(encoderParams.get_AB());
-    counter += table[enc_old][enc];
-    enc_old = enc;
-  }
-  
-  void enc_tick()
-{
-    // noInterrupts();
-    uint16_t counter_inc = counter;
-    counter = 0;
-    // interrupts();
-
-    phi += counter_inc * TICK_TO_RAD; 
-    tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
+    noInterrupts();
+    const uint16_t enc = encoderParams.get_AB();
     
-    w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
-    w_moment_tick = (counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO))/Ts_s_IN_SEC;
+    counter += table[enc_old][enc];
+    // Serial.println(counter);
+    enc_old = enc;
+    interrupts();
   }
 
   float get_phi(){
     return phi;
   }
+
+  void enc_tick()
+{
+    noInterrupts();
+    int16_t counter_inc = counter;
+    counter = 0;
+    // Serial.println(counter_inc);
+    interrupts();
+
+    phi += counter_inc * TICK_TO_RAD; 
+    tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
+    
+    w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
+    w_moment_tick = counter_inc / ((KOLVO_ENC_TICK * GEAR_RATIO) * Ts_s_IN_SEC);
+  }
+
+  
 
   float get_tick(){
     return tick;

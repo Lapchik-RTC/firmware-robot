@@ -23,10 +23,25 @@ void loop(){
     while(micros() - timer < Ts_s)
     ;
     timer = micros();
+    enc_1.enc_tick();
+    enc_2.enc_tick();
+    enc_3.enc_tick();
+    enc_4.enc_tick();
+    enc_5.enc_tick();
     enc_6.enc_tick();
     // Serial.println(enc_6.get_tick());
     // Serial.println(enc_6.get_tick());
-    Serial.println(enc_6.get_tick());
+    Serial.print(enc_1.get_phi());
+    Serial.print("\t");
+    Serial.print(enc_2.get_phi());
+    Serial.print("\t");
+    Serial.print(enc_3.get_phi());
+    Serial.print("\t");
+    Serial.print(enc_4.get_phi());
+    Serial.print("\t");
+    Serial.print(enc_5.get_phi());
+    Serial.print("\t");
+    Serial.println(enc_6.get_phi());
 
 }
 
