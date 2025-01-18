@@ -3,6 +3,7 @@
 #include<Arduino.h>
 #include "encoder.h"
 #include "motor.h"
+#include "regulatori.h"
 //#pragma once
 
 uint8_t get_AB_enc1()
@@ -173,3 +174,14 @@ Dvigatel dvigatel_1(dvigatel_params_1), dvigatel_2(dvigatel_params_2), dvigatel_
     .Ts = Ts_s,
     .ppr = 1
 };*/
+MotorControlParams mctrlp//структура общая
+{
+  .Ts = Ts_s,
+  .kpPI = 0.0001,
+  .ki = 0.00001,
+  .maxI = 480,
+  .kpP = 0.2,
+  .kalibrSpeed = 1
+};
+
+ServoPrivod serv(mctrlp, dvigatel_4, enc_4);

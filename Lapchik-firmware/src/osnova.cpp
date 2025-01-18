@@ -23,7 +23,10 @@ void loop(){
     while(micros() - timer < Ts_s)
     ;
     timer = micros();
-    enc_1.enc_tick();
+    //serv.setGoalSpeed(4);
+    enc_4.enc_tick();
+    Serial.println(enc_4.get_tick());
+    /*enc_1.enc_tick();
     enc_2.enc_tick();
     enc_3.enc_tick();
     enc_4.enc_tick();
@@ -41,7 +44,8 @@ void loop(){
     Serial.print("\t");
     Serial.print(enc_5.get_phi());
     Serial.print("\t");
-    Serial.println(enc_6.get_phi());
+    Serial.println(enc_6.get_phi());*/
+
 
 }
 
