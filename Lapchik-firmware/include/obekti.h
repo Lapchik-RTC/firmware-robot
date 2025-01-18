@@ -184,4 +184,4 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
-ServoPrivod serv(mctrlp, dvigatel_4, enc_4);
+ServoPrivod serv(&mctrlp, dvigatel_4, enc_4);

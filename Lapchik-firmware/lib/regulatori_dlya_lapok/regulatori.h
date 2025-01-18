@@ -26,14 +26,6 @@ struct MotorControlParams//структура общая
 ///////////////////////   ServoPrivod   ///////////////////////
 class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
 {
-  public:
-  ServoPrivod(MotorControlParams *mconp, /*MotorConRegParams *mcrp, */Dvigatel &motor, Encoder &enc);
-  
-  void setAngle(float goalAngle);//rad
-  inline void setGoalSpeed(float goalSpeed);//rad/s
-  float getRealSpeed();
-  float getRealAngle();
-
   private:
   float realSpeed, realAngle;
   Dvigatel &motor;
@@ -44,19 +36,28 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   float PIreg(float err);
   inline float Preg(float err);
   //float modc(float in, float modder);
+
+  public:
+  void setAngle(float goalAngle);//rad
+  inline void setGoalSpeed(float goalSpeed);//rad/s
+  float getRealSpeed();
+  float getRealAngle();
+  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc) : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
+    this->motor = motor;
+    this->enc = enc;
+//  this->globalEnc = enc;mconp
+//  kalibrovka();
+  }
+
+  
 };
 
-ServoPrivod::ServoPrivod(MotorControlParams *mconp,/* MotorConRegParams *mcrp,*/ Dvigatel &motor, Encoder &enc)
-:MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc)
+// ServoPrivod(MotorControlParams &mconp, Dvigatel &motor, Encoder &enc)
+// :MotorControlParams(&mconp), Dvigatel(motor), Encoder(enc)
 
 //,
 //MotorConRegParams(*mcrp)
-{
- //this->motor = motor;
- //this->enc = enc;
- //this->globalEnc = enc;
- //kalibrovka();
-}
+
 
 ///////////////// kalibrovka /////////////////
 /*void ServoPrivod::kalibrovka()
