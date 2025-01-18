@@ -23,9 +23,38 @@ void loop(){
     while(micros() - timer < Ts_s)
     ;
     timer = micros();
-    //serv.setGoalSpeed(4);
+    //dvigatel_4.update_speed_in_rad(1);
+    //   digitalWrite(37, HIGH);
+    //   digitalWrite(39, LOW);
+    //   analogWrite(7, 70);
+    enc_1.enc_tick();
+    enc_2.enc_tick();
+    enc_3.enc_tick();
     enc_4.enc_tick();
-    Serial.println(enc_4.get_tick());
+    enc_5.enc_tick();
+    enc_6.enc_tick();
+
+    Serial.print(enc_1.get_tick());
+    Serial.print('\t');
+    Serial.print(enc_2.get_tick());
+    Serial.print('\t');
+    Serial.print(enc_3.get_tick());
+    Serial.print('\t');
+    Serial.print(enc_4.get_tick());
+    Serial.print('\t');
+    Serial.print(enc_5.get_tick());
+    Serial.print('\t');
+    Serial.print(enc_6.get_tick());
+    //serv1.setGoalSpeed(0.0);
+    //serv2.setGoalSpeed(0.0);
+    //serv3.setGoalSpeed(0.0);
+    //serv4.setGoalSpeed(0.0);
+    //serv5.setGoalSpeed(0.0);
+    //serv6.setGoalSpeed(0.0);
+    
+    Serial.println();
+    
+    
     /*enc_1.enc_tick();
     enc_2.enc_tick();
     enc_3.enc_tick();

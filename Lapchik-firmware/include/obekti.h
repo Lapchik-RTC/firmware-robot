@@ -183,5 +183,9 @@ MotorControlParams mctrlp//структура общая
   .kpP = 0.2,
   .kalibrSpeed = 1
 };
-
-ServoPrivod serv(&mctrlp, dvigatel_4, enc_4);
+ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1);
+ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2);
+ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3);
+ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4);
+ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5);
+ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6);

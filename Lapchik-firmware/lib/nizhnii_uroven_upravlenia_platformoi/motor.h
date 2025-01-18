@@ -61,11 +61,11 @@ public:
   // }
 
   void update_speed_in_rad(float w) {
-    float wMax = (6.2831853071*7,33333333333333333) / Ts_s_IN_SEC;
+    float wMax = (6.2831853071*7,33333333333333333) / Ts_s_IN_SEC*100000;
     float u = 0;
-    u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);
+    u = dvigatelParams.supply_voltage*constrain((w/8.0), -1.0, 1.0);
     const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
-
+    //Serial.println(pwm);
     if (pwm >= 0)
     {
       digitalWrite(dvigatelParams.motor_in_1, HIGH);

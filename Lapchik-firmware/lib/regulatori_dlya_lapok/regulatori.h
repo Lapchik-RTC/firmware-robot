@@ -31,7 +31,7 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   Dvigatel &motor;
   Encoder &enc;
   //int32_t *globalEnc;
-  float ppr = 440.0;
+  float ppr = 1896.0;
   //void kalibrovka();
   float PIreg(float err);
   inline float Preg(float err);
@@ -105,6 +105,8 @@ inline void ServoPrivod::setGoalSpeed(float goalSpeed)
 {
   float u = PIreg(goalSpeed - enc.get_w_moment_rad()/*getRealSpeed()*/);
   motor.update_speed_in_rad(u);
+  Serial.print(u);
+  Serial.print('\t');
 }
 
 void ServoPrivod::setAngle(float goalAng)
