@@ -10,12 +10,11 @@ struct EncoderParams
 public:
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
-  uint16_t enc_dir;         // условный указатель задавания положительного направления
-  // вращения вала двигателя, то есть +-1
-  
-  uint8_t (*get_AB)(void);      
+  uint16_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
+  float tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
+  uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
 
-  EncoderParams(int a, int b, int dir, int8_t (*get_AB)()): enc_pin_a(a), enc_pin_b(b), enc_dir(dir), get_AB(get_AB) {}
+  EncoderParams(int a, int b, int dir, float tick_to_rad, int8_t (*get_AB)()) : enc_pin_a(a), enc_pin_b(b), enc_dir(dir), tick_to_rad(tick_to_rad), get_AB(get_AB) {}
   // EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
   //   this->enc_pin_a = enc_pin_a;
   //   this->enc_pin_b = enc_pin_b;
@@ -78,7 +77,7 @@ public:
 
   void isr_handler() {
     noInterrupts();
-    const uint16_t enc = encoderParams.get_AB();
+    uint16_t enc = encoderParams.get_AB();
     
     counter += table[enc_old][enc];
     // Serial.println(counter);
@@ -90,19 +89,18 @@ public:
     return phi;
   }
 
-  void enc_tick()
-{
+  void enc_tick() {
     noInterrupts();
     int16_t counter_inc = counter;
     counter = 0;
     // Serial.println(counter_inc);
     interrupts();
 
-    phi += counter_inc * TICK_TO_RAD; 
-    tick += counter_inc; //* (KOLVO_ENC_TICK * GEAR_RATIO);  
+    phi += counter_inc * encoderParams.tick_to_rad; 
+    tick += counter_inc;   
     
-    w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
-    w_moment_tick = counter_inc / ((KOLVO_ENC_TICK * GEAR_RATIO) * Ts_s_IN_SEC);
+    w_moment_rad = (counter_inc * encoderParams.tick_to_rad) / Ts_s_IN_SEC;
+    w_moment_tick = counter_inc / Ts_s_IN_SEC;
   }
 
   
