@@ -62,7 +62,7 @@ public:
 
   void update_speed_in_rad(float w) {
     float u = 0;
-    u = dvigatelParams.supply_voltage * constrain((w/8.0), -1.0, 1.0);
+    u = dvigatelParams.supply_voltage * constrain((w/W_MAX), -1.0, 1.0);
     const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
     //Serial.println(pwm);
     if (pwm >= 0)
