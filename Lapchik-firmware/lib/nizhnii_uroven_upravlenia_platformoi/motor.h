@@ -3,18 +3,18 @@
 #include<Arduino.h>
 #include "HardwareSerial.h"
 #include <SLOVAR.h>
-
+float Imas[6] = { 0, 0, 0, 0, 0, 0 };
 
 struct DvigatelParams
 { 
   uint16_t motor_in_1;        // пин, отвечающий за направление
   uint16_t motor_in_2;        // пин, отвечающий за направление
   uint16_t motor_pwm;         // пин ШИМ
-  uint16_t motor_dir;         // условный указатель для управления направлением
+  int16_t motor_dir;         // условный указатель для управления направлением
   // вращения вала двигателя, то есть +-1
   uint16_t supply_voltage;    // подаваемое напряжение
 
-  DvigatelParams(uint16_t motor_in_1, uint16_t motor_in_2, uint16_t motor_pwm, uint16_t motor_dir, uint16_t supply_voltage){
+  DvigatelParams(uint16_t motor_in_1, uint16_t motor_in_2, uint16_t motor_pwm, int16_t motor_dir, uint16_t supply_voltage){
     this->motor_in_1 = motor_in_1;
     this->motor_in_2 = motor_in_2;
     this->motor_pwm = motor_pwm;
@@ -29,15 +29,15 @@ private:
   
 public:
   Dvigatel(DvigatelParams &dvigatelParams) : dvigatelParams(dvigatelParams) {
-    this->dvigatelParams = dvigatelParams;
+    //this->dvigatelParams = dvigatelParams;
     dvigatel_init();
   }
   
   
   void dvigatel_init() {
-    pinMode(dvigatelParams.motor_in_1, OUTPUT);
-    pinMode(dvigatelParams.motor_in_2, OUTPUT);
-    pinMode(dvigatelParams.motor_pwm,  OUTPUT);
+    pinMode(this->dvigatelParams.motor_in_1, OUTPUT);
+    pinMode(this->dvigatelParams.motor_in_2, OUTPUT);
+    pinMode(this->dvigatelParams.motor_pwm,  OUTPUT);
   }
 
   // void update_speed_in_tick(float w) {
@@ -62,20 +62,24 @@ public:
 
   void update_speed_in_rad(float w) {
     float u = 0;
-    u = dvigatelParams.supply_voltage * constrain((w/W_MAX), -1.0, 1.0);
-    const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
-    //Serial.println(pwm);
+    //u = dvigatelParams.supply_voltage * constrain((w/ 8.0/*W_MAX*/), -1.0, 1.0);
+    u = constrain(w, -8.0, 8.0);
+    //const int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
+    /*const*/ int16_t pwm = 255.0 * (u / 0.8/*dvigatelParams.supply_voltage*/) * this->dvigatelParams.motor_dir;
+    //Serial.print("pwm: ");
+    //Serial.print(pwm);
+    //Serial.print('\t');
     if (pwm >= 0)
     {
-      digitalWrite(dvigatelParams.motor_in_1, HIGH);
-      digitalWrite(dvigatelParams.motor_in_2, LOW);
-      analogWrite(dvigatelParams.motor_pwm, pwm);
+      digitalWrite(this->dvigatelParams.motor_in_1, HIGH);
+      digitalWrite(this->dvigatelParams.motor_in_2, LOW);
+      analogWrite(this->dvigatelParams.motor_pwm, pwm);
     }
     else
     {
-      digitalWrite(dvigatelParams.motor_in_1, LOW);
-      digitalWrite(dvigatelParams.motor_in_2, HIGH);
-      analogWrite(dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
+      digitalWrite(this->dvigatelParams.motor_in_1, LOW);
+      digitalWrite(this->dvigatelParams.motor_in_2, HIGH);
+      analogWrite(this->dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
     }
   }
 };

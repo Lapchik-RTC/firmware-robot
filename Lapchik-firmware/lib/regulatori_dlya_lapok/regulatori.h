@@ -12,7 +12,6 @@
 //   int ppr;
 // };
 
-
 struct MotorControlParams//структура общая
 {
   float Ts;
@@ -31,25 +30,25 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   Dvigatel &motor;
   Encoder &enc;
   //int32_t *globalEnc;
-  float ppr = 1896.0;
+  //float ppr = 1;
   //void kalibrovka();
+  int16_t ImasNum;
   float PIreg(float err);
-  inline float Preg(float err);
+  //inline float Preg(float err);
   //float modc(float in, float modder);
 
   public:
-  void setAngle(float goalAngle);//rad
-  inline void setGoalSpeed(float goalSpeed);//rad/s
-  float getRealSpeed();
-  float getRealAngle();
-  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc) : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
+  //void setAngle(float goalAngle);//rad
+  //float getRealSpeed();
+  //float getRealAngle();
+  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t ImasNum) 
+  : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
     this->motor = motor;
     this->enc = enc;
 //  this->globalEnc = enc;mconp
 //  kalibrovka();
   }
-
-  
+  inline void setGoalSpeed(float goalSpeed);//rad/s
 };
 
 // ServoPrivod(MotorControlParams &mconp, Dvigatel &motor, Encoder &enc)
@@ -78,17 +77,21 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
 ///////////////// REGULATORI /////////////////
 float ServoPrivod::PIreg(float err)
 {
-    static float P, I = 0;
+    float P;
     P = err * kpPI;
-    I = I + err * ki * Ts;
-    if (I > maxI) { I = maxI; }
-    return P + I;
+    Imas[ImasNum] = Imas[ImasNum] + err * ki * Ts;
+    if (Imas[ImasNum] > maxI) { Imas[ImasNum] = maxI; }
+    return P + Imas[ImasNum];
+    Serial.print('\t');
+    Serial.print("I: ");
+    Serial.print(Imas[ImasNum]);
+    Serial.print('\t');
 }
 
-inline float ServoPrivod::Preg(float err)
+/*inline float ServoPrivod::Preg(float err)
 {
   return err * kpP;
-}
+}*/
 /*
 float modc(float in, float modder)
 {
@@ -105,18 +108,25 @@ inline void ServoPrivod::setGoalSpeed(float goalSpeed)
 {
   float u = PIreg(goalSpeed - enc.get_w_moment_rad()/*getRealSpeed()*/);
   motor.update_speed_in_rad(u);
+
+  Serial.print('\t');
+  Serial.print("w_rad: ");
+  Serial.print(enc.get_w_moment_rad());
+  Serial.print('\t');
+
+  Serial.print("u: ");
   Serial.print(u);
   Serial.print('\t');
 }
 
-void ServoPrivod::setAngle(float goalAng)
+/*void ServoPrivod::setAngle(float goalAng)
 {
   //realSpeed = getRealSpeed();
   //if(enc->get_tick() % ppr == 0){enc = 0;}
   //realAngle = (enc->get_tick() / ppr) * 2 * M_PI;
   float u = Preg(goalAng - enc.get_phi());
   setGoalSpeed(u);  
-}
+}*/
 
 ///////////////// GET /////////////////
 // float ServoPrivod::getRealSpeed()

@@ -44,20 +44,20 @@ uint8_t get_AB_enc6()
 
 
 // Encoder
+EncoderParams enc_params_2 {
+    .enc_pin_a = 64,    //8 // A10
+    .enc_pin_b = 65,    //9 // A11
+    .enc_dir = -1,
+    .tick_to_rad = TICK_TO_RAD_2,
+    .get_AB = get_AB_enc2
+};
+
 EncoderParams enc_params_1 {
     .enc_pin_a = 62,    // A10
     .enc_pin_b = 63,    // A11
-    .enc_dir = 1,
+    .enc_dir = -1,
     .tick_to_rad = TICK_TO_RAD_1,
     .get_AB = get_AB_enc1
-};
-
-EncoderParams enc_params_2 {
-    .enc_pin_a = 64,    // A10
-    .enc_pin_b = 65,    // A11
-    .enc_dir = 1,
-    .tick_to_rad = TICK_TO_RAD_2,
-    .get_AB = get_AB_enc2
 };
 
 EncoderParams enc_params_3 {
@@ -125,14 +125,6 @@ ISR(PCINT2_vect)
 
 // Motor
 DvigatelParams dvigatel_params_1 {
-    .motor_in_1 = 34,
-    .motor_in_2 = 32,
-    .motor_pwm = 4,
-    .motor_dir = 1,
-    .supply_voltage = 12
-};
-
-DvigatelParams dvigatel_params_2 {
     .motor_in_1 = 33,
     .motor_in_2 = 35,
     .motor_pwm = 5,
@@ -140,11 +132,19 @@ DvigatelParams dvigatel_params_2 {
     .supply_voltage = 12
 };
 
+DvigatelParams dvigatel_params_2 {
+    .motor_in_1 = 34,
+    .motor_in_2 = 32,
+    .motor_pwm = 4,
+    .motor_dir = -1,
+    .supply_voltage = 12
+};
+
 DvigatelParams dvigatel_params_3 {
     .motor_in_1 = 36,
     .motor_in_2 = 38,
     .motor_pwm = 6,
-    .motor_dir = 1,
+    .motor_dir = -1,
     .supply_voltage = 12
 };
 
@@ -183,15 +183,16 @@ Dvigatel dvigatel_1(dvigatel_params_1), dvigatel_2(dvigatel_params_2), dvigatel_
 MotorControlParams mctrlp//структура общая
 {
   .Ts = Ts_s,
-  .kpPI = 0.0001,
-  .ki = 0.00001,
-  .maxI = 480,
-  .kpP = 0.2,
+  .kpPI = 0.05,//0.0001,
+  .ki = 0.000001,//0.00001,
+  .maxI = 1700,//480,
+  .kpP = 1.0,
   .kalibrSpeed = 1
 };
-ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1);
-ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2);
-ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3);
-ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4);
-ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5);
-ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6);
+
+ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, 0);
+ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, 1);
+ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3, 2);
+ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4, 3);
+ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5, 4);
+ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6, 5);

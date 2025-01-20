@@ -1,8 +1,10 @@
 #include <Arduino.h>
 //#include "SLOVAR.h"
 //#include "tcokol.h"
+
 #include "regulatori.h"
 #include "encoder.h"
+//#include "motor.h"
 #include "obekti.h"
 
 //volatile int value = 0;
@@ -27,34 +29,53 @@ void loop(){
     //   digitalWrite(37, HIGH);
     //   digitalWrite(39, LOW);
     //   analogWrite(7, 70);
-    enc_1.enc_tick();
-    enc_2.enc_tick();
+    //enc_1.enc_tick();
+    // enc_2.enc_tick();
     enc_3.enc_tick();
-    enc_4.enc_tick();
-    enc_5.enc_tick();
-    enc_6.enc_tick();
+    // enc_4.enc_tick();
+    // enc_5.enc_tick();
+    // enc_6.enc_tick();
 
-    Serial.print(enc_1.get_tick());
-    Serial.print('\t');
-    Serial.print(enc_2.get_tick());
-    Serial.print('\t');
-    Serial.print(enc_3.get_tick());
-    Serial.print('\t');
-    Serial.print(enc_4.get_tick());
-    Serial.print('\t');
-    Serial.print(enc_5.get_tick());
-    Serial.print('\t');
-    Serial.print(enc_6.get_tick());
-    //serv1.setGoalSpeed(0.0);
-    //serv2.setGoalSpeed(0.0);
-    //serv3.setGoalSpeed(0.0);
-    //serv4.setGoalSpeed(0.0);
-    //serv5.setGoalSpeed(0.0);
-    //serv6.setGoalSpeed(0.0);
-    
+    // Serial.print(enc_1.get_tick());
+    // Serial.print('\t');
+    // Serial.print(enc_2.get_tick());
+    // Serial.print('\t');
+    //Serial.print(/*enc_3.get_tick()*/"a");
+    // Serial.print('\t');
+    // Serial.print(enc_4.get_tick());
+    // Serial.print('\t');
+    // Serial.print(enc_5.get_tick());
+    // Serial.print('\t');
+    // Serial.print(enc_6.get_tick());
+    ///dvigatel_2.update_speed_in_rad(0);
+    serv1.setGoalSpeed(0.0);
+    serv2.setGoalSpeed(0.0);
+    serv3.setGoalSpeed(1.0);
+    serv4.setGoalSpeed(0.0);
+    serv5.setGoalSpeed(0.0);
+    serv6.setGoalSpeed(0.0);
+    // Serial.print("enc: ");
+    // Serial.print(enc_1.get_tick());
+    // Serial.print('\t');
     Serial.println();
     
     
+
+
+}
+
+
+/*
+ISR(PCINT0_vect)
+{
+    value++;
+}
+
+ISR(PCINT2_vect)
+{
+    value--;
+}*/
+
     /*enc_1.enc_tick();
     enc_2.enc_tick();
     enc_3.enc_tick();
@@ -74,18 +95,3 @@ void loop(){
     Serial.print(enc_5.get_phi());
     Serial.print("\t");
     Serial.println(enc_6.get_phi());*/
-
-
-}
-
-
-/*
-ISR(PCINT0_vect)
-{
-    value++;
-}
-
-ISR(PCINT2_vect)
-{
-    value--;
-}*/
