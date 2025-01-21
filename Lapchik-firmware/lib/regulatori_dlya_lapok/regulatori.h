@@ -55,9 +55,12 @@ float ServoPrivod::PIreg(float err)
 {
     float P;
     P = err * kpPI;
-    Imas[this->ImasNum] = Imas[this->ImasNum] + err * ki * Ts;
-    if (Imas[this->ImasNum] > maxI) { Imas[this->ImasNum] = maxI; }
-    return P + Imas[this->ImasNum];
+    // Imas[this->ImasNum] += err * ki * Ts;
+    // if (Imas[this->ImasNum] > maxI) { Imas[this->ImasNum] = maxI; }
+    
+    return P ;//+ Imas[this->ImasNum];
+    
+    
     /*Serial.print('\t');
     Serial.print("I: ");
     Serial.print(Imas[this->ImasNum]);
@@ -67,15 +70,18 @@ float ServoPrivod::PIreg(float err)
 ///////////////// SET /////////////////
 void ServoPrivod::setGoalSpeed(float goalSpeed)
 {
+  //enc.enc_tick();
   float u = PIreg(goalSpeed - enc.get_w_moment_rad()/*getRealSpeed()*/);
   motor.update_speed_in_rad(u);
-
-  Serial.print('\t');
-  Serial.print("w_rad: ");
-  //enc.enc_tick();
+  Serial.print("\terr: ");
   Serial.print(enc.get_w_moment_rad());
-  Serial.print('\t');
-///*/
+  Serial.print('\n');
+  // Serial.print('\t');
+  // Serial.print("w_rad: ");
+  // //enc.enc_tick();
+  // Serial.print(enc.get_w_moment_rad());
+  // Serial.print('\t');
+
   // Serial.print("u: ");
   // Serial.print(u);
   // Serial.print('\t');

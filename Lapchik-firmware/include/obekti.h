@@ -178,7 +178,12 @@ DvigatelParams dvigatel_params_6 {
     .supply_voltage = 12
 };
 
-Dvigatel dvigatel_1(dvigatel_params_2), dvigatel_2(dvigatel_params_1), dvigatel_3(dvigatel_params_3), dvigatel_4(dvigatel_params_4), dvigatel_5(dvigatel_params_5), dvigatel_6(dvigatel_params_6);
+Dvigatel dvigatel_1(dvigatel_params_2), 
+dvigatel_2(dvigatel_params_1), 
+dvigatel_3(dvigatel_params_3), 
+dvigatel_4(dvigatel_params_4), 
+dvigatel_5(dvigatel_params_5), 
+dvigatel_6(dvigatel_params_6);
 
 /////////////////////////////////////////////////////////
 /*MotorControlParams mconp = 
@@ -189,7 +194,7 @@ Dvigatel dvigatel_1(dvigatel_params_2), dvigatel_2(dvigatel_params_1), dvigatel_
 MotorControlParams mctrlp//структура общая
 {
   .Ts = Ts_s,
-  .kpPI = 0.001,//0.0001,
+  .kpPI = 0.1,//0.0001,
   .ki = 0.000001,//0.00001,
   .maxI = 480,
   .kpP = 1.0,
