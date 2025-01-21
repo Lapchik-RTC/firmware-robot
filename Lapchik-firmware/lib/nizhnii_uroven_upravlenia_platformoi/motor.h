@@ -84,15 +84,15 @@ public:
     Serial.print(num);
     if (pwm >= 0)
     {
-      digitalWrite(37/*this->dvigatelParams.motor_in_1*/, HIGH);
-      digitalWrite(39/*this->dvigatelParams.motor_in_2*/, LOW);
-      analogWrite(7/*this->dvigatelParams.motor_pwm*/, pwm);
+      digitalWrite(this->dvigatelParams.motor_in_1, HIGH);
+      digitalWrite(this->dvigatelParams.motor_in_2, LOW);
+      analogWrite(this->dvigatelParams.motor_pwm, pwm);
     }
     else
     {
-      digitalWrite(37/*this->dvigatelParams.motor_in_1*/, LOW);
-      digitalWrite(39/*this->dvigatelParams.motor_in_2*/, HIGH);
-      analogWrite(9/*this->dvigatelParams.motor_pwm*/, abs(pwm));   // тут подавалось (255 + pwm)
+      digitalWrite(this->dvigatelParams.motor_in_1, LOW);
+      digitalWrite(this->dvigatelParams.motor_in_2, HIGH);
+      analogWrite(this->dvigatelParams.motor_pwm, abs(pwm));   // тут подавалось (255 + pwm)
     }
   }
 };
