@@ -1,10 +1,9 @@
 #include <Arduino.h>
-//#include "SLOVAR.h"
-//#include "tcokol.h"
+
 
 #include "regulatori.h"
 #include "encoder.h"
-//#include "motor.h"
+
 #include "obekti.h"
 
 //volatile int value = 0;
@@ -22,46 +21,17 @@ void setup() {
 
 void loop(){
     static uint64_t timer = micros();
-    while(micros() - timer < Ts_s)
-    ;
+    while(micros() - timer < Ts_s);
     timer = micros();
-    //dvigatel_4.update_speed_in_rad(1);
-    //   digitalWrite(37, HIGH);
-    //   digitalWrite(39, LOW);
-    //   analogWrite(7, 70);
-    //enc_1.enc_tick();
-    // enc_2.enc_tick();
-    enc_3.enc_tick();
-    // enc_4.enc_tick();
-    // enc_5.enc_tick();
-    // enc_6.enc_tick();
 
-    // Serial.print(enc_1.get_tick());
-    // Serial.print('\t');
-    // Serial.print(enc_2.get_tick());
-    // Serial.print('\t');
-    //Serial.print(/*enc_3.get_tick()*/"a");
-    // Serial.print('\t');
-    // Serial.print(enc_4.get_tick());
-    // Serial.print('\t');
-    // Serial.print(enc_5.get_tick());
-    // Serial.print('\t');
-    // Serial.print(enc_6.get_tick());
-    ///dvigatel_2.update_speed_in_rad(0);
-    serv1.setGoalSpeed(0.0);
-    serv2.setGoalSpeed(0.0);
-    serv3.setGoalSpeed(1.0);
-    serv4.setGoalSpeed(0.0);
-    serv5.setGoalSpeed(0.0);
-    serv6.setGoalSpeed(0.0);
-    // Serial.print("enc: ");
-    // Serial.print(enc_1.get_tick());
-    // Serial.print('\t');
+    enc_5.enc_tick();
+    Serial.print('\t');
+    Serial.print("enc: ");
+    Serial.print(enc_5.get_tick());
+    Serial.print("rad: ");
+    Serial.print(enc_5.get_w_moment_rad());
+    serv5.setGoalSpeed(1);
     Serial.println();
-    
-    
-
-
 }
 
 

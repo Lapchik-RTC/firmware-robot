@@ -11,10 +11,12 @@ public:
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
   uint16_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
+  uint16_t ppr;
   float tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
   uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
 
-  EncoderParams(int a, int b, int dir, float tick_to_rad, int8_t (*get_AB)()) : enc_pin_a(a), enc_pin_b(b), enc_dir(dir), tick_to_rad(tick_to_rad), get_AB(get_AB) {}
+  EncoderParams(int a, int b, int dir, uint16_t ppr, float tick_to_rad, int8_t (*get_AB)())
+  : enc_pin_a(a), enc_pin_b(b), enc_dir(dir), ppr(ppr), tick_to_rad(tick_to_rad), get_AB(get_AB) {}
   // EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
   //   this->enc_pin_a = enc_pin_a;
   //   this->enc_pin_b = enc_pin_b;
@@ -35,8 +37,10 @@ public:
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
+  float tickOld = 0; 
   float w_moment_rad;       // текущая скорость в рад/c
   float w_moment_tick;      // текущая скорость в тики/c
+  //uint16_t ppr;
 
   Encoder(EncoderParams  &encoderParams) : encoderParams(encoderParams) {
     this->encoderParams = encoderParams; 
@@ -89,18 +93,51 @@ public:
     return phi;
   }
 
-  void enc_tick() {
-    noInterrupts();
-    int16_t counter_inc = counter;
-    counter = 0;
-    // Serial.println(counter_inc);
-    interrupts();
 
-    phi += counter_inc * encoderParams.tick_to_rad; 
-    tick += counter_inc;   
+  int32_t globTick = 0;
+
+
+  /// @brief Функция обновления текущих параметров мотора: скорость, угол
+  void enc_tick() {
+    // int32_t timer = millis();
     
-    w_moment_rad = (counter_inc * encoderParams.tick_to_rad) / Ts_s_IN_SEC;
-    w_moment_tick = counter_inc / Ts_s_IN_SEC;
+    //int16_t counter_inc = 0;
+    //timer = millis();
+    /*while ((millis() - timer) < 10) {
+      noInterrupts();
+      counter_inc = counter;
+      counter = 0;
+
+      
+      interrupts();
+      phi += counter_inc * encoderParams.tick_to_rad; 
+    }
+*/
+    w_moment_rad = 2.0 * M_PI * 25.0 * (/*(tick-tickOld)*/ counter * 1.0 / 1860.0);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
+    // tickOld = tick;
+    // globTick += tick;
+      tick += counter;   
+    counter = 0;
+      // Serial.print("\t");
+      // Serial.print(w_moment_rad);
+      // Serial.print("\n");
+    //encCounter = 0.0;
+    // timer = millis();
+    //w_moment_rad = (counter_inc * encoderParams.tick_to_rad) / Ts_s_IN_SEC;
+    //////////////////////////////
+    
+
+    
+    //   noInterrupts();
+    //   count = tick;
+    //   tick = 0;
+    //   interrupts();
+    //   encCounter += count;
+
+   
+    //return realSpeed;
+    //////////////////////////////
+    //w_moment_tick = counter_inc / Ts_s_IN_SEC;
   }
 
   
@@ -110,6 +147,7 @@ public:
   }
 
   float get_w_moment_rad(){
+    //enc_tick();
     return w_moment_rad;
   }
 

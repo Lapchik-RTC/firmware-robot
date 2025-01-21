@@ -1,3 +1,160 @@
+#pragma once
+#include<Arduino.h>
+//#include<SLOVAR>
+#include"motor.h"
+#include"encoder.h"
+//#pragma once
+// struct MotorConRegParams//структура для каждого
+// {
+//   byte csPin;
+//   int csKalibr;
+//   int *enc;
+//   int ppr;
+// };
+
+struct MotorControlParams//структура общая
+{
+  float Ts;
+  float kpPI;
+  float ki;
+  float maxI;
+  float kpP;
+  float kalibrSpeed;
+};
+
+///////////////////////   ServoPrivod   ///////////////////////
+class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
+{
+  private:
+  float realSpeed, realAngle;
+  Dvigatel &motor;
+  Encoder &enc;
+  //int32_t *globalEnc;
+  //float ppr = 1;
+  //void kalibrovka();
+  int16_t ImasNum;
+  float PIreg(float err);
+  //inline float Preg(float err);
+  //float modc(float in, float modder);
+
+  public:
+  //void setAngle(float goalAngle);//rad
+  //float getRealSpeed();
+  //float getRealAngle();
+  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t ImasNum) 
+  : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
+    this->motor = motor;
+    this->enc = enc;
+//  this->globalEnc = enc;mconp
+//  kalibrovka();
+  }
+  inline void setGoalSpeed(float goalSpeed);//rad/s
+};
+
+// ServoPrivod(MotorControlParams &mconp, Dvigatel &motor, Encoder &enc)
+// :MotorControlParams(&mconp), Dvigatel(motor), Encoder(enc)
+
+//,
+//MotorConRegParams(*mcrp)
+
+
+///////////////// kalibrovka /////////////////
+/*void ServoPrivod::kalibrovka()
+{
+  while (analogRead(csPin) < csEdge)
+  {
+    setGoalSpeed(-kalibrSpeed);
+  }
+  for(int i = 0; i < kalibrSpeed; i + 0.2)
+  {
+    setGoalSpeed(-i);
+  }
+  setGoalSpeed(0);
+  enc->tick = 0;
+  this->realAngle = 0;
+}
+*/
+///////////////// REGULATORI /////////////////
+float ServoPrivod::PIreg(float err)
+{
+    float P;
+    P = err * kpPI;
+    Imas[ImasNum] = Imas[ImasNum] + err * ki * Ts;
+    if (Imas[ImasNum] > maxI) { Imas[ImasNum] = maxI; }
+    return P + Imas[ImasNum];
+    Serial.print('\t');
+    Serial.print("I: ");
+    Serial.print(Imas[ImasNum]);
+    Serial.print('\t');
+}
+
+/*inline float ServoPrivod::Preg(float err)
+{
+  return err * kpP;
+}*/
+/*
+float modc(float in, float modder)
+{
+    in = in + modder;
+    while(in > modder * 0.5)
+    {
+        in = in - modder;
+    }
+    return in;
+}
+*/
+///////////////// SET /////////////////
+inline void ServoPrivod::setGoalSpeed(float goalSpeed)
+{
+  float u = PIreg(goalSpeed - enc.get_w_moment_rad()/*getRealSpeed()*/);
+  motor.update_speed_in_rad(u);
+
+  Serial.print('\t');
+  Serial.print("w_rad: ");
+  Serial.print(enc.get_w_moment_rad());
+  Serial.print('\t');
+
+  Serial.print("u: ");
+  Serial.print(u);
+  Serial.print('\t');
+}
+
+/*void ServoPrivod::setAngle(float goalAng)
+{
+  //realSpeed = getRealSpeed();
+  //if(enc->get_tick() % ppr == 0){enc = 0;}
+  //realAngle = (enc->get_tick() / ppr) * 2 * M_PI;
+  float u = Preg(goalAng - enc.get_phi());
+  setGoalSpeed(u);  
+}*/
+
+///////////////// GET /////////////////
+// float ServoPrivod::getRealSpeed()
+// {
+//   static int count = 0;
+//   static int32_t encCounter = 0;
+//   static int32_t timer = millis();
+  
+//   timer = millis();
+//   while (millis() - timer < 10) {
+//     noInterrupts();
+//     count = enc.get_tick();
+//     enc.get_tick = 0;
+//     interrupts();
+//     encCounter += count;
+//   }
+//   realSpeed = 200.0 * M_PI * (encCounter * 1.0 / ppr);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
+//  // enc += encCounter;
+//   encCounter = 0.0;
+//   timer = millis();
+//   return realSpeed;
+// }
+
+// float ServoPrivod::getRealAngle()
+// {
+  
+// }
+//////////////////////////////////////////////////////////////////////////
 #include<Arduino.h>
 #include"tcokol.h"
 
