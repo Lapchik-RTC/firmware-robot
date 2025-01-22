@@ -194,8 +194,8 @@ dvigatel_6(dvigatel_params_6);
 MotorControlParams mctrlp//структура общая
 {
   .Ts = Ts_s,
-  .kpPI = 0.003,//0.0001,
-  .ki = 0.00007,//0.000065,//0.00001,
+  .kpPI = 0.01,//0.0001,
+  .ki = 0.0,//00079,//0.00001,
   .maxI = 480,
   .kpP = 1.0,
   .kalibrSpeed = 1

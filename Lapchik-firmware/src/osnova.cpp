@@ -24,9 +24,9 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    enc_4.enc_tick();
+    enc_5.enc_tick();
     //Serial.println(enc_1.get_tick());
-    dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(4, enc_4.get_w_moment_rad()));
+    dvigatel_5.update_speed_in_rad(serv5.setGoalSpeed(4, enc_5.get_w_moment_rad()));
 
     
     // digitalWrite(38, 1);

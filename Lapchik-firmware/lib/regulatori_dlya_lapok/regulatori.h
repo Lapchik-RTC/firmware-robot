@@ -39,13 +39,13 @@ float ServoPrivod::PIreg(float err)
 {
     float P;
     P = err * kpPI;
-    I += err*ki*Ts;
+    I += err * ki*Ts;
     I = min(I, maxI);
-    Serial.println(I);
+    Serial.println(P);
     // Imas[this->ImasNum] += err * ki * Ts;
     // if (Imas[this->ImasNum] > maxI) { Imas[this->ImasNum] = maxI; }
     
-    return P+I;//+ Imas[this->ImasNum];
+    return P;//+ Imas[this->ImasNum];
 }
 
 float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
