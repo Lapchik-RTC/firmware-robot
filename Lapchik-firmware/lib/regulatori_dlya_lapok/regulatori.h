@@ -3,6 +3,7 @@
 //#include<SLOVAR>
 #include"motor.h"
 #include"encoder.h"
+
 //#pragma once
 // struct MotorConRegParams//структура для каждого
 // {
@@ -29,22 +30,13 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   float realSpeed, realAngle;
   Dvigatel &motor;
   Encoder &enc;
-  //int32_t *globalEnc;
-  //float ppr = 1;
-  //void kalibrovka();
   int16_t ImasNum;
   float PIreg(float err);
   //inline float Preg(float err);
-  //float modc(float in, float modder);
 
   public:
-  //void setAngle(float goalAngle);//rad
-  //float getRealSpeed();
-  //float getRealAngle();
   ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t ImasNum) 
   : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
-    // this->motor = motor;
-    // this->enc = enc;
     this->ImasNum = ImasNum;
   }
   void setGoalSpeed(float goalSpeed);//rad/s
@@ -67,25 +59,7 @@ float ServoPrivod::PIreg(float err)
     Serial.print('\t');//*/
 }
 
-///////////////// SET /////////////////
-void ServoPrivod::setGoalSpeed(float goalSpeed)
-{
-  //enc.enc_tick();
-  float u = PIreg(goalSpeed - enc.get_w_moment_rad()/*getRealSpeed()*/);
-  motor.update_speed_in_rad(u);
-  Serial.print("\terr: ");
-  Serial.print(enc.get_w_moment_rad());
-  Serial.print('\n');
-  // Serial.print('\t');
-  // Serial.print("w_rad: ");
-  // //enc.enc_tick();
-  // Serial.print(enc.get_w_moment_rad());
-  // Serial.print('\t');
 
-  // Serial.print("u: ");
-  // Serial.print(u);
-  // Serial.print('\t');
-}
 
 /*void ServoPrivod::setAngle(float goalAng)
 {

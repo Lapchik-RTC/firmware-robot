@@ -24,13 +24,13 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-     enc_5.enc_tick();
+    enc_5.enc_tick();
     // Serial.print('\t');
     // Serial.print("enc: ");
     // Serial.print(enc_5.get_tick());
     // Serial.print("rad: ");
     // Serial.print(enc_5.get_w_moment_rad());
-     serv5.setGoalSpeed(1.5);
+    serv5.setGoalSpeed(1.5);
     //Serial.println();
 }
 

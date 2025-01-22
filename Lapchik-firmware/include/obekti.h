@@ -201,6 +201,19 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
+///////////////// SET /////////////////
+void ServoPrivod::setGoalSpeed(float goalSpeed)
+{
+  //enc.enc_tick();
+  float u = PIreg(goalSpeed - enc_5.get_w_moment_rad()/*getRealSpeed()*/);
+  motor.update_speed_in_rad(u);
+
+  Serial.print("\t wMoment: ");
+  Serial.print(enc_5.get_w_moment_rad());
+  Serial.print('\n');
+}
+
+
 ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, 0);
 ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, 1);
 ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3, 2);
