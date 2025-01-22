@@ -4,14 +4,6 @@
 #include"motor.h"
 #include"encoder.h"
 
-//#pragma once
-// struct MotorConRegParams//структура для каждого
-// {
-//   byte csPin;
-//   int csKalibr;
-//   int *enc;
-//   int ppr;
-// };
 
 struct MotorControlParams//структура общая
 {
@@ -30,16 +22,16 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   float realSpeed, realAngle;
   Dvigatel &motor;
   Encoder &enc;
-  int16_t ImasNum;
+  int16_t &I;
   float PIreg(float err);
   //inline float Preg(float err);
 
   public:
-  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t ImasNum) 
-  : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc) {
-    this->ImasNum = ImasNum;
+  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t &I) 
+  : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc), I(I) {
+    
   }
-  void setGoalSpeed(float goalSpeed);//rad/s
+  float setGoalSpeed(float goalSpeed, float realSpd);//rad/s
 };
 
 ///////////////// REGULATORI /////////////////
@@ -47,47 +39,71 @@ float ServoPrivod::PIreg(float err)
 {
     float P;
     P = err * kpPI;
+    I += err*ki*Ts;
+    I = min(I, maxI);
+    Serial.println(I);
     // Imas[this->ImasNum] += err * ki * Ts;
     // if (Imas[this->ImasNum] > maxI) { Imas[this->ImasNum] = maxI; }
     
-    return P ;//+ Imas[this->ImasNum];
-    
-    
-    /*Serial.print('\t');
-    Serial.print("I: ");
-    Serial.print(Imas[this->ImasNum]);
-    Serial.print('\t');//*/
+    return P+I;//+ Imas[this->ImasNum];
+}
+
+float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
+{
+  float u = PIreg(goalSpd - realSpd);
+  return u;
 }
 
 
 
-/*void ServoPrivod::setAngle(float goalAng)
-{
-  //realSpeed = getRealSpeed();
-  //if(enc->get_tick() % ppr == 0){enc = 0;}
-  //realAngle = (enc->get_tick() / ppr) * 2 * M_PI;
-  float u = Preg(goalAng - enc.get_phi());
-  setGoalSpeed(u);  
-}*/
 
-///////////////// GET /////////////////
-// float ServoPrivod::getRealSpeed()
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// struct localSlovar{
+//   byte inA;
+//   byte inB;
+//   byte pwmPin;
+//   int ppr;
+//   int dir;
+// };
+// struct globalSlovar{
+//   float maxSpeed;
+//   float kp;
+//   float ki;
+//   float Ts;
+// };
+// /// @brief CLASS 2   ////////////////////////////////////////////////////////////
+// class Lapka: localSlovar, globalSlovar, Encoder
 // {
-//   static int count = 0;
-//   static int32_t encCounter = 0;
-//   static int32_t timer = millis();
-  
-//   timer = millis();
-//   while (millis() - timer < 10) {
-//     noInterrupts();
-//     count = enc.get_tick();
-//     enc.get_tick = 0;
-//     interrupts();
-//     encCounter += count;
+//   public:
+//   Lapka(localSlovar *ls, globalSlovar *gs, Encoder &enc)
+//   :localSlovar(*ls), globalSlovar(*gs), Encoder(enc)
+//   {
+//     pinMode(inA, 1);
+//     pinMode(inB, 1);
+//     this->enc = enc;
 //   }
-//   realSpeed = 200.0 * M_PI * (encCounter * 1.0 / ppr);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
-//  // enc += encCounter;
-//   encCounter = 0.0;
-//   timer = millis();
-//   return realSpeed;
+
+//   private:
+//   Encoder &enc;
+//   void power(float u);
+//   void serv(float err);
+
+// };
+
+// void Lapka::power(float u)
+// {
+//     float pwm = 255 * (u / maxSpeed)*dir;
+//     digitalWrite(inA, (pwm > 0));
+//     digitalWrite(inB, !(pwm > 0));
+//     analogWrite(pwmPin, min(abs(pwm), 255));
+// }
+
+// void Lapka::serv(float err)
+// {
+//   int p = err * kp;
+//   float u = p;
+//   return u
 // }

@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 
-#include "regulatori.h"
+//#include "regulatori.h"
 #include "encoder.h"
 
 #include "obekti.h"
@@ -24,14 +24,23 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    enc_5.enc_tick();
-    // Serial.print('\t');
-    // Serial.print("enc: ");
-    // Serial.print(enc_5.get_tick());
-    // Serial.print("rad: ");
-    // Serial.print(enc_5.get_w_moment_rad());
-    serv5.setGoalSpeed(1.5);
-    //Serial.println();
+    enc_4.enc_tick();
+    //Serial.println(enc_1.get_tick());
+    dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(4, enc_4.get_w_moment_rad()));
+
+    
+    // digitalWrite(38, 1);
+    // digitalWrite(36, 0);
+    // analogWrite(6, 40);
+
+    //serv2.setGoalSpeed(1);
+
+    // enc_2.enc_tick();
+    // enc_3.enc_tick();
+    // enc_4.enc_tick();
+    // enc_5.enc_tick();
+    // enc_6.enc_tick();
+    
 }
 
 

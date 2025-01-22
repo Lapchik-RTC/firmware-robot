@@ -53,7 +53,9 @@ public:
 
     encoder_init();
   }
-
+////////////////////////////////////////////////////////////////
+void encZero(){tick = 0;}
+////////////////////////////////////////////////////////////////
   void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
     // Инициализация пинов энкодера
@@ -94,12 +96,39 @@ public:
   }
 
 
-  int32_t globTick = 0;
-
-
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
   void enc_tick() {
-    // int32_t timer = millis();
+    
+    w_moment_rad = (1000000.0/2000.0)*2.0 * M_PI * (/*(tick-tickOld)*/ counter * 1.0 / 1860.0);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
+    // tickOld = tick;
+    // globTick += tick;
+    tick += counter;   
+    // Serial.print("  t:");
+    // Serial.print(tick);
+    // Serial.print(" wMoment:");
+    // Serial.print(get_w_moment_rad());
+    // Serial.println("  ");
+    counter = 0;
+  }
+
+  
+
+  float get_tick(){
+    return tick;
+  }
+
+  float get_w_moment_rad(){
+    //enc_tick();
+    return w_moment_rad;
+  }
+
+  float get_w_moment_tick(){
+    return w_moment_tick;
+  }
+};
+
+
+// int32_t timer = millis();
     
     //int16_t counter_inc = 0;
     //timer = millis();
@@ -113,12 +142,9 @@ public:
       phi += counter_inc * encoderParams.tick_to_rad; 
     }
 */
-    w_moment_rad = 2.0 * M_PI * 25.0 * (/*(tick-tickOld)*/ counter * 1.0 / 1860.0);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
-    // tickOld = tick;
-    // globTick += tick;
-      tick += counter;   
-    counter = 0;
-      // Serial.print("\t");
+
+
+// Serial.print("\t");
       // Serial.print(w_moment_rad);
       // Serial.print("\n");
     //encCounter = 0.0;
@@ -138,20 +164,3 @@ public:
     //return realSpeed;
     //////////////////////////////
     //w_moment_tick = counter_inc / Ts_s_IN_SEC;
-  }
-
-  
-
-  float get_tick(){
-    return tick;
-  }
-
-  float get_w_moment_rad(){
-    //enc_tick();
-    return w_moment_rad;
-  }
-
-  float get_w_moment_tick(){
-    return w_moment_tick;
-  }
-};

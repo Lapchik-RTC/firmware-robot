@@ -65,23 +65,28 @@ public:
     //u = dvigatelParams.supply_voltage * constrain((w/ 8.0/*W_MAX*/), -1.0, 1.0);
     //u =//constrain(w, -8.0, 8.0);
     // int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
-    int16_t pwm = 255.0 * (u / 8.0) * 1/*dvigatelParams.motor_dir*/;
+    int16_t pwm = 255.0 * (u / 8.0) * 1.0/*dvigatelParams.motor_dir*/;
     //Serial.print("pwm: ");
     //Serial.print(pwm);
     //Serial.print('\t');
    
-    if(dvigatelParams.motor_in_1 == 33 || dvigatelParams.motor_in_1 == 35) num = 1;
-    if(dvigatelParams.motor_in_1 == 32 || dvigatelParams.motor_in_1 == 34) num = 2;
-    if(dvigatelParams.motor_in_1 == 36 || dvigatelParams.motor_in_1 == 38) num = 3;
-    if(dvigatelParams.motor_in_1 == 39 || dvigatelParams.motor_in_1 == 37) num = 4;
-    if(dvigatelParams.motor_in_1 == 42 || dvigatelParams.motor_in_1 == 40) num = 5;
-    if(dvigatelParams.motor_in_1 == 41 || dvigatelParams.motor_in_1 == 43) num = 6;
-    Serial.print('\t');
-    Serial.print("pwm: ");
-    Serial.print(pwm);
-    Serial.print('\t');
-    Serial.print("num: ");
-    Serial.print(num);
+    // if(dvigatelParams.motor_in_1 == 33 || dvigatelParams.motor_in_1 == 35) num = 1;
+    // if(dvigatelParams.motor_in_1 == 32 || dvigatelParams.motor_in_1 == 34) num = 2;
+    // if(dvigatelParams.motor_in_1 == 36 || dvigatelParams.motor_in_1 == 38) num = 3;
+    // if(dvigatelParams.motor_in_1 == 39 || dvigatelParams.motor_in_1 == 37) num = 4;
+    // if(dvigatelParams.motor_in_1 == 42 || dvigatelParams.motor_in_1 == 40) num = 5;
+    // if(dvigatelParams.motor_in_1 == 41 || dvigatelParams.motor_in_1 == 43) num = 6;
+    
+    
+    // Serial.print('\t');
+    // Serial.print("pwm: ");
+    // Serial.print(pwm);
+    
+    
+    // Serial.print('\t');
+    // Serial.print(pwm);
+    // Serial.print("ON: ");
+    //Serial.print(num);
     if (pwm >= 0)
     {
       digitalWrite(this->dvigatelParams.motor_in_1, HIGH);

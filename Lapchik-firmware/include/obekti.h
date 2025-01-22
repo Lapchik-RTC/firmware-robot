@@ -194,29 +194,29 @@ dvigatel_6(dvigatel_params_6);
 MotorControlParams mctrlp//структура общая
 {
   .Ts = Ts_s,
-  .kpPI = 0.1,//0.0001,
-  .ki = 0.000001,//0.00001,
+  .kpPI = 0.003,//0.0001,
+  .ki = 0.00007,//0.000065,//0.00001,
   .maxI = 480,
   .kpP = 1.0,
   .kalibrSpeed = 1
 };
-
+int16_t I1, I2, I3, I4, I5, I6;
 ///////////////// SET /////////////////
-void ServoPrivod::setGoalSpeed(float goalSpeed)
-{
-  //enc.enc_tick();
-  float u = PIreg(goalSpeed - enc_5.get_w_moment_rad()/*getRealSpeed()*/);
-  motor.update_speed_in_rad(u);
+// void ServoPrivod::setGoalSpeed(float goalSpeed)
+// {
+//   //enc.enc_tick();
+//   float u = PIreg(goalSpeed - enc_5.get_w_moment_rad()/*getRealSpeed()*/);
+//   motor.update_speed_in_rad(u);
 
-  Serial.print("\t wMoment: ");
-  Serial.print(enc_5.get_w_moment_rad());
-  Serial.print('\n');
-}
+//   Serial.print("\t wMoment: ");
+//   Serial.print(enc_3.get_w_moment_rad());
+//   Serial.print('\t');
+// }
 
 
-ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, 0);
-ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, 1);
-ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3, 2);
-ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4, 3);
-ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5, 4);
-ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6, 5);
+ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, I1);
+ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, I2);
+ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3, I3);
+ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4, I4);
+ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5, I5);
+ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6, I6);
