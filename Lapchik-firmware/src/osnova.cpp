@@ -4,8 +4,9 @@
 //#include "regulatori.h"
 #include "encoder.h"
 
-#define KP_PI 0.075/*((0.8/(4.0*(Ts_s_IN_SEC*4.0)))*0.030)*/
-#define KI_PI 0.001/*0.07*///(0.8/(4.0*(Ts_s_IN_SEC*4.0)))
+#define KP_PI 0.08//0.075
+#define KI_PI 5//0.008//0.001
+#define KE 0.2
 #include "obekti.h"
 //volatile int value = 0;
 
@@ -25,14 +26,14 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    enc_5.enc_tick();
+    enc_4.enc_tick();
     //Serial.println(enc_1.get_tick());
-    dvigatel_5.update_speed_in_rad(serv5.setGoalSpeed(4.0, enc_5.get_w_moment_rad()*1.0));
+    dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(2.0, enc_4.get_w_moment_rad()*1.0));
     Serial.print("\tW: ");
-    Serial.print(enc_5.get_w_moment_rad());
+    Serial.print(enc_4.get_w_moment_rad());
 
     Serial.print("\tenc: ");
-    Serial.print(enc_5.get_tick());
+    Serial.print(enc_4.get_tick());
     Serial.println();
     // digitalWrite(38, 1); 
     // digitalWrite(36, 0);

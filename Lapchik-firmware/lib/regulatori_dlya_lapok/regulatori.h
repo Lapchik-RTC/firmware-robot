@@ -54,7 +54,7 @@ float ServoPrivod::PIreg(float err)
 float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
 {
   float u = PIreg(goalSpd - realSpd);
-  return u;
+  return u+(goalSpd*KE);
 }
 
 
