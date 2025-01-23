@@ -11,11 +11,11 @@ public:
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
   uint16_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
-  uint16_t ppr;
+  float ppr;
   float tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
   uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
 
-  EncoderParams(int a, int b, int dir, uint16_t ppr, float tick_to_rad, int8_t (*get_AB)())
+  EncoderParams(int a, int b, int dir, float ppr, float tick_to_rad, int8_t (*get_AB)())
   : enc_pin_a(a), enc_pin_b(b), enc_dir(dir), ppr(ppr), tick_to_rad(tick_to_rad), get_AB(get_AB) {}
   // EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
   //   this->enc_pin_a = enc_pin_a;
@@ -99,9 +99,11 @@ void encZero(){tick = 0;}
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
   void enc_tick() {
     
-    w_moment_rad = (1000000.0/2000.0)*2.0 * M_PI * (/*(tick-tickOld)*/ counter * 1.0 / 1860.0);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
+    w_moment_rad = 25.0*2.0 * M_PI * ((counter * 1.0) / encoderParams.ppr);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
     // tickOld = tick;
     // globTick += tick;
+    Serial.print("\tcount: ");
+    Serial.print(counter);
     tick += counter;   
     // Serial.print("  t:");
     // Serial.print(tick);

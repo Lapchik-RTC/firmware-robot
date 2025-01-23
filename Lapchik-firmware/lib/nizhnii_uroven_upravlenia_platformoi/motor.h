@@ -63,9 +63,10 @@ public:
   void update_speed_in_rad(float w) {
     float u = w;
     //u = dvigatelParams.supply_voltage * constrain((w/ 8.0/*W_MAX*/), -1.0, 1.0);
-    //u =//constrain(w, -8.0, 8.0);
+    //float u = constrain(w, -8.0, 8.0);
     // int16_t pwm = 255.0 * constrain(u / dvigatelParams.supply_voltage, -1.0, 1.0) * dvigatelParams.motor_dir;
     int16_t pwm = 255.0 * (u / 8.0) * 1.0/*dvigatelParams.motor_dir*/;
+    pwm = constrain(pwm, -255.0, 255.0);
     //Serial.print("pwm: ");
     //Serial.print(pwm);
     //Serial.print('\t');
@@ -83,9 +84,9 @@ public:
     // Serial.print(pwm);
     
     
-    // Serial.print('\t');
-    // Serial.print(pwm);
-    // Serial.print("ON: ");
+    Serial.print('\t');
+    Serial.print(pwm);
+    Serial.print('\t');
     //Serial.print(num);
     if (pwm >= 0)
     {

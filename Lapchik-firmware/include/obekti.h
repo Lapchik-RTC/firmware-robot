@@ -193,14 +193,14 @@ dvigatel_6(dvigatel_params_6);
 };*/
 MotorControlParams mctrlp//структура общая
 {
-  .Ts = Ts_s,
-  .kpPI = 0.01,//0.0001,
-  .ki = 0.0,//00079,//0.00001,
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI,//0.0001,
+  .ki = KI_PI,//00079,//0.00001,
   .maxI = 480,
   .kpP = 1.0,
   .kalibrSpeed = 1
 };
-int16_t I1, I2, I3, I4, I5, I6;
+float I1, I2, I3, I4, I5, I6;
 ///////////////// SET /////////////////
 // void ServoPrivod::setGoalSpeed(float goalSpeed)
 // {

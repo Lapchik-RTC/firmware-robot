@@ -7,7 +7,7 @@
 
 struct MotorControlParams//структура общая
 {
-  float Ts;
+  float Ts_sec;
   float kpPI;
   float ki;
   float maxI;
@@ -22,12 +22,12 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   float realSpeed, realAngle;
   Dvigatel &motor;
   Encoder &enc;
-  int16_t &I;
+  float &I;
   float PIreg(float err);
   //inline float Preg(float err);
 
   public:
-  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, int16_t &I) 
+  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, float &I) 
   : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc), I(I) {
     
   }
@@ -37,15 +37,18 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
 ///////////////// REGULATORI /////////////////
 float ServoPrivod::PIreg(float err)
 {
-    float P;
-    P = err * kpPI;
-    I += err * ki*Ts;
-    I = min(I, maxI);
-    Serial.println(P);
+    float P = err * kpPI;
+    I += err * 1.0 * Ts_sec*ki;
+    //I = I*ki;
+    I = min(I, maxI)*1.0;
     // Imas[this->ImasNum] += err * ki * Ts;
-    // if (Imas[this->ImasNum] > maxI) { Imas[this->ImasNum] = maxI; }
+    //if (I > maxI) { I = I/2.0; }
     
-    return P;//+ Imas[this->ImasNum];
+    Serial.print("\t err: ");
+    Serial.print(err);
+    Serial.print("\t P: ");
+    Serial.print(P+I);
+    return P + I;
 }
 
 float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
