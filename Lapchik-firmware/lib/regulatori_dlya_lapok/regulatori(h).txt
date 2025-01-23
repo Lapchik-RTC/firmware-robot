@@ -11,7 +11,7 @@
 //   int *enc;
 //   int ppr;
 // };
-
+ыыы
 struct MotorControlParams//структура общая
 {
   float Ts;
