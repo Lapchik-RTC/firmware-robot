@@ -102,9 +102,10 @@ void encZero(){tick = 0;}
     w_moment_rad = 25.0*2.0 * M_PI * ((counter * 1.0) / encoderParams.ppr);/*ENC_PPR450*/  //скорость в радиранах за 10 милисекунд
     // tickOld = tick;
     // globTick += tick;
-    Serial.print("\tcount: ");
-    Serial.print(counter);
-    tick += counter;   
+    // Serial.print("\tcount: ");
+    // Serial.print(counter);
+    tick += counter; 
+    phi += counter * encoderParams.tick_to_rad;
     // Serial.print("  t:");
     // Serial.print(tick);
     // Serial.print(" wMoment:");

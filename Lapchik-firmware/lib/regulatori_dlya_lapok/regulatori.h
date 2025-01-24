@@ -24,9 +24,9 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   Encoder &enc;
   float &I;
   float PIreg(float err);
-  //inline float Preg(float err);
-
+  inline float Preg(float err);
   public:
+  float setPoint(float goalPos_tick, float phi);
   ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, float &I) 
   : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc), I(I) {
     
@@ -57,10 +57,26 @@ float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
   return u+(goalSpd*KE);
 }
 
+inline float ServoPrivod::Preg(float err){
+  return err * kpP;
+}
 
+float ServoPrivod::setPoint(float phi0, float phi){
+  //int32_t realPos = 1;
+//  float gSpd = 1;
 
+  // Serial.print("\t err: ");
+  // Serial.print(goalPos_rad - phi);
+  // Serial.print('\n');
+  // return Preg(goalPos_rad - phi);
 
+  //float phi = getPhi();
+  float phi_err = phi0 - phi;
+  float w0_raw = Preg(phi_err);
+  float w0 = constrain(w0_raw,-8.0, 8.0/*-w_max, w_max*/);
+  return w0;
 
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

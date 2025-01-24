@@ -84,9 +84,9 @@ public:
     // Serial.print(pwm);
     
     
-    Serial.print('\t');
-    Serial.print(pwm);
-    Serial.print('\t');
+    // Serial.print('\t');
+    // Serial.print(pwm);
+    // Serial.print('\t');
     //Serial.print(num);
     if (pwm >= 0)
     {

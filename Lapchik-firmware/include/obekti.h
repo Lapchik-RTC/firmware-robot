@@ -197,7 +197,7 @@ MotorControlParams mctrlp//структура общая
   .kpPI = KP_PI,//0.0001,
   .ki = KI_PI,//00079,//0.00001,
   .maxI = 480,
-  .kpP = 1.0,
+  .kpP = KP_P,
   .kalibrSpeed = 1
 };
 float I1, I2, I3, I4, I5, I6;
