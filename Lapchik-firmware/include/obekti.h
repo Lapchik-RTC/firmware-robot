@@ -191,6 +191,9 @@ dvigatel_6(dvigatel_params_6);
     .Ts = Ts_s,
     .ppr = 1
 };*/
+#define KP_PI 0.08//0.075
+#define KI_PI 5//0.008//0.001
+#define KP_P 0.9
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,

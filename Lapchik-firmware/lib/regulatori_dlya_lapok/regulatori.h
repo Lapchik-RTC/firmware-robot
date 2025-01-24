@@ -4,7 +4,7 @@
 #include"motor.h"
 #include"encoder.h"
 
-
+#define KE 0.2
 struct MotorControlParams//структура общая
 {
   float Ts_sec;
@@ -74,6 +74,9 @@ float ServoPrivod::setPoint(float phi0, float phi){
   float phi_err = phi0 - phi;
   float w0_raw = Preg(phi_err);
   float w0 = constrain(w0_raw,-8.0, 8.0/*-w_max, w_max*/);
+  Serial.print("\t err: ");
+  Serial.print(phi0 - phi);
+  Serial.print('\t');
   return w0;
 
 }

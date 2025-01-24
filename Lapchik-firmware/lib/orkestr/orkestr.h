@@ -6,38 +6,39 @@
 class Orkestr
 {
   public:
-  void tripod(float forw, float ang);
+  void tripod(/*float forw, float ang*/);
   //void hexopod();
   void setParams(float t, float tc, float ts, float phiS, float phi0);
 
   private:
   float t_, tc_, ts_, phiS_, phi0_;
-  float modc(float in, float modder);
-  inline Fc(float, float);
-  inline Fr0(float, float);
-  inline Fcomp(float, float, float);
-  inline Fr(float, float, float, float);
-  inline Fl(float, float, float, float);
-  inline Ffull(float, float, float, float, float);
+//  float modc(float in, float modder);
+//   inline float Fc(float, float);
+//   inline float Fr0(float, float);
+//   inline float Fcomp(float, float, float);
+//   inline float Fr(float, float, float, float);
+//   inline float Fl(float, float, float, float);
+//   inline float Ffull(float, float, float, float, float);
 };
 void setParams(float t, float tc, float ts, float phiS, float phi0)
 {
     
 }
-void Orkestr::tripod(float forw, float ang)
+void Orkestr::tripod(/*float forw, float ang*/)
 {
-    float move = Ffull()
+    float move = 3.0/*Ffull()*/;
 
-    serv1.setAngle();
-    serv4.setAngle();
-    serv5.setAngle();
-
-    serv2.setAngle();
-    serv3.setAngle();
-    serv6.setAngle();
+    dvigatel_1.update_speed_in_rad(serv1.setGoalSpeed(serv1.setPoint(move, enc_1.get_phi()), enc_1.get_w_moment_rad()));
+    dvigatel_2.update_speed_in_rad(serv2.setGoalSpeed(serv2.setPoint(move, enc_2.get_phi()), enc_2.get_w_moment_rad()));
+    dvigatel_3.update_speed_in_rad(serv3.setGoalSpeed(serv3.setPoint(move, enc_3.get_phi()), enc_3.get_w_moment_rad()));
+    dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(serv4.setPoint(move, enc_4.get_phi()), enc_4.get_w_moment_rad()));
+    dvigatel_5.update_speed_in_rad(serv5.setGoalSpeed(serv5.setPoint(move, enc_5.get_phi()), enc_5.get_w_moment_rad()));
+    dvigatel_6.update_speed_in_rad(serv6.setGoalSpeed(serv6.setPoint(move, enc_6.get_phi()), enc_6.get_w_moment_rad()));
+    //Serial.println(enc_5.get_phi());
 }
 
 ///////////////////////////////////////////////////////////////
+/*
 inline float Orkestr::Fc(float t, float phiS_ts)
 {
     return t*phiS_ts;
@@ -92,4 +93,4 @@ float Orkestr::modc(float in, float modder)
         in = in - modder;
     }
     return in;
-}
+}*/

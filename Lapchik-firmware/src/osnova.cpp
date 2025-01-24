@@ -3,11 +3,10 @@
 
 //#include "regulatori.h"
 #include "encoder.h"
+#include "orkestr.h"
 
-#define KP_PI 0.08//0.075
-#define KI_PI 5//0.008//0.001
-#define KP_P 0.9
-#define KE 0.2
+
+
 #include "obekti.h"
 //volatile int value = 0;
 
@@ -28,11 +27,20 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    static uint64_t ti = millis();
     
+    
+    enc_1.enc_tick();
+    enc_2.enc_tick();
+    enc_3.enc_tick();
+    enc_4.enc_tick();
     enc_5.enc_tick();
-    dvigatel_5.update_speed_in_rad(serv5.setPoint(3.0, enc_5.get_phi())); 
-    Serial.println(serv5.setPoint(3.0, enc_5.get_phi()));
+    enc_6.enc_tick();
+
+    Orkestr t;
+    t.tripod();
+    Serial.print('\n');
+    // dvigatel_5.update_speed_in_rad(serv5.setPoint(3.0, enc_5.get_phi())); 
+    // Serial.println(serv5.setPoint(3.0, enc_5.get_phi()));
 
     // enc_4.enc_tick();
     // dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(enc_5.get_w_moment_rad()*1.0, enc_4.get_w_moment_rad()*1.0));
