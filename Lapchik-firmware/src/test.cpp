@@ -3,6 +3,7 @@
 // #include "SLOVAR.h"
 // #include "tcokol.h"
 // #include "regulatori.h"
+//f
 
 // // MotorConnectParams mconp = {
 // //     .INA = 39,
