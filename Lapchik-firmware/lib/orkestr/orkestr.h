@@ -28,13 +28,37 @@ void Orkestr::tripod(/*float forw, float ang*/)
 {
     float move = 3.0/*Ffull()*/;
 
-    dvigatel_1.update_speed_in_rad(serv1.setGoalSpeed(serv1.setPoint(move, enc_1.get_phi()), enc_1.get_w_moment_rad()));
-    dvigatel_2.update_speed_in_rad(serv2.setGoalSpeed(serv2.setPoint(move, enc_2.get_phi()), enc_2.get_w_moment_rad()));
-    dvigatel_3.update_speed_in_rad(serv3.setGoalSpeed(serv3.setPoint(move, enc_3.get_phi()), enc_3.get_w_moment_rad()));
-    dvigatel_4.update_speed_in_rad(serv4.setGoalSpeed(serv4.setPoint(move, enc_4.get_phi()), enc_4.get_w_moment_rad()));
-    dvigatel_5.update_speed_in_rad(serv5.setGoalSpeed(serv5.setPoint(move, enc_5.get_phi()), enc_5.get_w_moment_rad()));
-    dvigatel_6.update_speed_in_rad(serv6.setGoalSpeed(serv6.setPoint(move, enc_6.get_phi()), enc_6.get_w_moment_rad()));
-    //Serial.println(enc_5.get_phi());
+    dvigatel_1.update_speed_in_rad(
+        serv1.setGoalSpeed( 
+            serv1.setPoint( enc_3.get_phi(), enc_1.get_phi() ), enc_1.get_w_moment_rad()
+        )
+    );
+
+    dvigatel_2.update_speed_in_rad(
+        serv2.setGoalSpeed( 
+            serv2.setPoint( enc_3.get_phi(), enc_2.get_phi() ), enc_2.get_w_moment_rad()
+        )
+    );
+
+    dvigatel_4.update_speed_in_rad(
+        serv4.setGoalSpeed( 
+            serv4.setPoint( enc_3.get_phi(), enc_4.get_phi() ), enc_4.get_w_moment_rad()
+        )
+    );
+
+    dvigatel_5.update_speed_in_rad(
+        serv5.setGoalSpeed( 
+            serv5.setPoint( enc_3.get_phi(), enc_5.get_phi() ), enc_5.get_w_moment_rad()
+        )
+    );  
+
+    dvigatel_6.update_speed_in_rad(
+        serv6.setGoalSpeed( 
+            serv6.setPoint( enc_3.get_phi(), enc_6.get_phi() ), enc_6.get_w_moment_rad()
+        )
+    );
+    
+    Serial.println(enc_5.get_phi());
 }
 
 ///////////////////////////////////////////////////////////////

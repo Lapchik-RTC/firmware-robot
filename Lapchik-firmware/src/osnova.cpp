@@ -44,39 +44,10 @@ void loop(){
     //     serv4.setGoalSpeed( serv4.setPoint(enc_5.get_phi(), enc_4.get_phi()), enc_5.get_w_moment_rad())
     // );
 
-    dvigatel_1.update_speed_in_rad(
-        serv1.setGoalSpeed( 
-            serv1.setPoint( enc_3.get_phi(), enc_1.get_phi() ), enc_1.get_w_moment_rad()
-        )
-    );
-
-    dvigatel_2.update_speed_in_rad(
-        serv2.setGoalSpeed( 
-            serv2.setPoint( enc_3.get_phi(), enc_2.get_phi() ), enc_2.get_w_moment_rad()
-        )
-    );
-
-    dvigatel_4.update_speed_in_rad(
-        serv4.setGoalSpeed( 
-            serv4.setPoint( enc_3.get_phi(), enc_4.get_phi() ), enc_4.get_w_moment_rad()
-        )
-    );
-
-    dvigatel_5.update_speed_in_rad(
-        serv5.setGoalSpeed( 
-            serv5.setPoint( enc_3.get_phi(), enc_5.get_phi() ), enc_5.get_w_moment_rad()
-        )
-    );  
-
-    dvigatel_6.update_speed_in_rad(
-        serv6.setGoalSpeed( 
-            serv6.setPoint( enc_3.get_phi(), enc_6.get_phi() ), enc_6.get_w_moment_rad()
-        )
-    );
+    t.tripod();
     
-    
-    Serial.print('\t');
-    Serial.println();
+    // Serial.print('\t');
+    // Serial.println();
 
     //enc_4.enc_tick();
     // dvigatel_4.update_speed_in_rad(
