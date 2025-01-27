@@ -37,6 +37,11 @@ void loop(){
     enc_6.enc_tick();
 
     Orkestr t;
+    float tc = 2*M_PI;
+    float ts = 2*2/3.6*M_PI;
+    float phiS = 1.5;
+    float phi0 = -2.0;
+    t.Foo((enc_1.get_phi()/Ts_s)*1.0, tc, ts, phiS, phi0);
     // t.tripod();
     // Serial.print('\n');
 
@@ -44,7 +49,7 @@ void loop(){
     //     serv4.setGoalSpeed( serv4.setPoint(enc_5.get_phi(), enc_4.get_phi()), enc_5.get_w_moment_rad())
     // );
 
-    t.tripod();
+    //t.tripod();
     
     // Serial.print('\t');
     // Serial.println();
