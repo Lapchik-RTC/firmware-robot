@@ -17,7 +17,7 @@ private:
   DvigatelParams dvigatelParams;
   
 public:
-  Dvigatel(DvigatelParams &dvigatelParams) {
+  Dvigatel(DvigatelParams dvigatelParams) {
     this->dvigatelParams = dvigatelParams;
     dvigatel_init();
   }

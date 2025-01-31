@@ -42,7 +42,7 @@ public:
   float w_moment_tick;      // текущая скорость в тики/c
   //uint16_t ppr;
 
-  Encoder(EncoderParams  &encoderParams) : encoderParams(encoderParams) {
+  Encoder(EncoderParams encoderParams){
     this->encoderParams = encoderParams; 
     this->counter = 0;
     this->enc_old = 0;
@@ -53,9 +53,9 @@ public:
 
     encoder_init();
   }
-////////////////////////////////////////////////////////////////
-void encZero(){tick = 0;}
-////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
+  void encZero(){tick = 0;}
+  ////////////////////////////////////////////////////////////////
   void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
     // Инициализация пинов энкодера
@@ -122,41 +122,3 @@ void encZero(){tick = 0;}
     return w_moment_tick;
   }
 };
-
-
-// int32_t timer = millis();
-    
-    //int16_t counter_inc = 0;
-    //timer = millis();
-    /*while ((millis() - timer) < 10) {
-      noInterrupts();
-      counter_inc = counter;
-      counter = 0;
-
-      
-      interrupts();
-      phi += counter_inc * encoderParams.tick_to_rad; 
-    }
-*/
-
-
-// Serial.print("\t");
-      // Serial.print(w_moment_rad);
-      // Serial.print("\n");
-    //encCounter = 0.0;
-    // timer = millis();
-    //w_moment_rad = (counter_inc * encoderParams.tick_to_rad) / Ts_s_IN_SEC;
-    //////////////////////////////
-    
-
-    
-    //   noInterrupts();
-    //   count = tick;
-    //   tick = 0;
-    //   interrupts();
-    //   encCounter += count;
-
-   
-    //return realSpeed;
-    //////////////////////////////
-    //w_moment_tick = counter_inc / Ts_s_IN_SEC;
