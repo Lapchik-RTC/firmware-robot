@@ -53,7 +53,7 @@
 // public:
 //   float phi;                // угол поворота вала в радианах в данный момент
 //   float tick;               // угол поворота вала в тиках в данный момент
-//   float w_moment_rad;       // текущая скорость в рад/c
+//   float w_moment_rad_s;       // текущая скорость в рад/c
 //   float w_moment_tick;      // текущая скорость в тики/c
 
 
@@ -62,7 +62,7 @@
 //     this->counter = 0;
 //     this->phi = 0;
 //     this->tick = 0;
-//     this->w_moment_rad = 0;
+//     this->w_moment_rad_s = 0;
 //     this->w_moment_tick = 0;
 
 //     encoder_init();
@@ -110,7 +110,7 @@
 //     phi += counter_inc * TICK_TO_RAD; 
 //     tick += counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO);  
     
-//     w_moment_rad = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
+//     w_moment_rad_s = (counter_inc * TICK_TO_RAD)/Ts_s_IN_SEC;
 //     w_moment_tick = (counter_inc * (KOLVO_ENC_TICK * GEAR_RATIO))/Ts_s_IN_SEC;
 //   }
 
@@ -123,7 +123,7 @@
 //   }
 
 //   float get_w_moment_rad(){
-//     return w_moment_rad;
+//     return w_moment_rad_s;
 //   }
 
 //   float get_w_moment_tick(){

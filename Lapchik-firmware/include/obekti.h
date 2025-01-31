@@ -51,7 +51,9 @@ EncoderParams enc_params_2 {
     .enc_dir = -1,
     .ppr = KOLVO_ENC_TICK_2,
     .tick_to_rad = TICK_TO_RAD_2,
-    .get_AB = get_AB_enc2
+    .get_AB = get_AB_enc2,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 EncoderParams enc_params_1 {
@@ -60,7 +62,9 @@ EncoderParams enc_params_1 {
     .enc_dir = -1,
     .ppr = KOLVO_ENC_TICK_1,
     .tick_to_rad = TICK_TO_RAD_1,
-    .get_AB = get_AB_enc1
+    .get_AB = get_AB_enc1,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 EncoderParams enc_params_3 {
@@ -69,7 +73,9 @@ EncoderParams enc_params_3 {
     .enc_dir = 1,
     .ppr = KOLVO_ENC_TICK_3,
     .tick_to_rad = TICK_TO_RAD_3,
-    .get_AB = get_AB_enc3
+    .get_AB = get_AB_enc3,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 EncoderParams enc_params_4 {
@@ -78,7 +84,9 @@ EncoderParams enc_params_4 {
     .enc_dir = 1,
     .ppr = KOLVO_ENC_TICK_4,
     .tick_to_rad = TICK_TO_RAD_4,
-    .get_AB = get_AB_enc4
+    .get_AB = get_AB_enc4,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 EncoderParams enc_params_5 {
@@ -87,7 +95,9 @@ EncoderParams enc_params_5 {
     .enc_dir = 1,
     .ppr = KOLVO_ENC_TICK_5,
     .tick_to_rad = TICK_TO_RAD_5,
-    .get_AB = get_AB_enc5
+    .get_AB = get_AB_enc5,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 EncoderParams enc_params_6 {
@@ -96,7 +106,9 @@ EncoderParams enc_params_6 {
     .enc_dir = 1,
     .ppr = KOLVO_ENC_TICK_6,
     .tick_to_rad = TICK_TO_RAD_6,
-    .get_AB = get_AB_enc6
+    .get_AB = get_AB_enc6,
+    .Ts_sec = Ts_s_IN_SEC,
+    .T_sec = Ts_s_IN_SEC,
 };
 
 
@@ -183,32 +195,38 @@ dvigatel_5(dvigatel_params_5),
 dvigatel_6(dvigatel_params_6);
 
 /////////////////////////////////////////////////////////
-inline void encUpd()
-{
-    enc_1.enc_tick();
-    enc_2.enc_tick();
-    enc_3.enc_tick();
-    enc_4.enc_tick();
-    enc_5.enc_tick();
-    enc_6.enc_tick();
-}
+// inline void encUpd()
+// {
+//     enc_1.enc_tick();
+//     enc_2.enc_tick();
+//     enc_3.enc_tick();
+//     enc_4.enc_tick();
+//     enc_5.enc_tick();
+//     enc_6.enc_tick();
+// }
 
 
+
+#define KP_PI 1//0.06
+#define KI_PI 1//0.05//2.1//5
+#define KP_P 32
+#define KE 0.2
 
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,
   .kpPI = KP_PI,//0.0001,
   .ki = KI_PI,//00079,//0.00001,
-  .maxI = 480,
+  .maxU = SUPPLY_VOLTAGE/2,
   .kpP = KP_P,
+  .maxVel = 8.0,
   .kalibrSpeed = 1
 };
-float I1, I2, I3, I4, I5, I6;
 
-ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, I1);
-ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, I2);
-ServoPrivod serv3(&mctrlp, dvigatel_3, enc_3, I3);
-ServoPrivod serv4(&mctrlp, dvigatel_4, enc_4, I4);
-ServoPrivod serv5(&mctrlp, dvigatel_5, enc_5, I5);
-ServoPrivod serv6(&mctrlp, dvigatel_6, enc_6, I6);
+ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
+ServoPrivod serv2(mctrlp, &dvigatel_2, &enc_2);
+ServoPrivod serv3(mctrlp, &dvigatel_3, &enc_3);
+ServoPrivod serv4(mctrlp, &dvigatel_4, &enc_4);
+ServoPrivod serv5(mctrlp, &dvigatel_5, &enc_5);
+ServoPrivod serv6(mctrlp, &dvigatel_6, &enc_6);
+

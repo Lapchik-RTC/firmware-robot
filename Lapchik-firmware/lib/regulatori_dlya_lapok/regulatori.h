@@ -1,13 +1,7 @@
 #pragma once
 #include<Arduino.h>
-//#include<SLOVAR>
 #include"motor.h"
 #include"encoder.h"
-
-#define KP_PI 0.2//0.06
-#define KI_PI 0//0.05//2.1//5
-#define KP_P 1
-#define KE 0.2
 
 
 
@@ -16,67 +10,63 @@ struct MotorControlParams//структура общая
   float Ts_sec;
   float kpPI;
   float ki;
-  float maxI;
+  float maxU; // Максимальное напряжение на двигателе
   float kpP;
+  float maxVel; // Максимальная угловая скорость
   float kalibrSpeed;
 };
 
 ///////////////////////   ServoPrivod   ///////////////////////
-class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
+class ServoPrivod
 {
-  private:
+private:
   float realSpeed, realAngle;
-  Dvigatel &motor;
-  Encoder &enc;
-  float &I;
+  MotorControlParams params;
+  Dvigatel *motor;
+  Encoder *enc;
+  float I;
   float PIreg(float err);
-  inline float Preg(float err);
+  float Preg(float err);
   
-  public:
-  float setPoint(float goalPos_tick, float phi);
-  ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, float &I) 
-  : MotorControlParams(*mconp), Dvigatel(motor), Encoder(enc), I(I) {
-    
+public:
+  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc) {
+    this->params = mconp;
+    this->motor = motor;
+    this->enc = enc;
   }
-  float setGoalSpeed(float goalSpeed, float realSpd);//rad/s
+  void setGoalPos(float goalPos_tick);
+  void setGoalSpeed(float goalSpeed);//rad/s
 };
 
 ///////////////// REGULATORI /////////////////
 float ServoPrivod::PIreg(float err)
 {
-    float P = err * kpPI;
-    I += err * 1.0 * Ts_sec*ki;
-    //I = I*ki;
-    I = min(I, maxI)*1.0;
-    // Imas[this->ImasNum] += err * ki * Ts;
-    //if (I > maxI) { I = I/2.0; }
+    float P = err * params.kpPI;
     
-    // Serial.print("\t err: ");
-    // Serial.print(err);
-    // Serial.print("\t P: ");
-    // Serial.print(P+I);
-    return P + I;
+    float u = P + I;
+
+    if (u == constrain(u, -params.maxU, params.maxU) || (err * u) < 0)
+        I += err * params.Ts_sec * params.ki;
+
+    return constrain(u, -params.maxU, params.maxU);
 }
 
-float ServoPrivod::setGoalSpeed(float goalSpd, float realSpd)
+float ServoPrivod::Preg(float err){
+  return constrain(err * params.kpP, -params.maxVel, params.maxVel);
+}
+
+void ServoPrivod::setGoalSpeed(float goalSpd)
 {
+  enc->enc_tick();
+  float realSpd = enc->get_w_moment_rad();
   float u = PIreg(goalSpd - realSpd);
-  return u+(goalSpd*KE);
+  motor->update_voltage_in_V(u);
 }
 
-inline float ServoPrivod::Preg(float err){
-  return err * kpP;
-}
-
-float ServoPrivod::setPoint(float phi0, float phi){
+void ServoPrivod::setGoalPos(float phi0){
+  float phi = enc->get_phi();
   float phi_err = phi0 - phi;
-  float w0_raw = Preg(phi_err);
-  float w0 = constrain(w0_raw,-8.0, 8.0/*-w_max, w_max*/);
-  
-  Serial.print("\t err(setPoint): ");
-  Serial.print(w0);
-  Serial.print('\t');
-  
-  return w0;
+  float w0 = Preg(phi_err);
 
+  setGoalSpeed(w0);
 }

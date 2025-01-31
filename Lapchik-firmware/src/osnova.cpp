@@ -4,10 +4,10 @@
 #include "orkestr.h"
 #include "obekti.h"
 
-Orkestr robot;
+// Orkestr robot;
 
 void setup() {   
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 void loop(){
@@ -15,16 +15,26 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    encUpd();
+    // encUpd();
 
     float tc = 7.7;//2.0*M_PI;
     float ts = 5.0;//2.0*2.0/3.6*M_PI;
     float phiS = 2.5;//1.5;
     float phi0 = 2.0;
 
-    robot.Foo(((enc_4.get_w_moment_rad()+1.5)*Ts_s), tc, ts, phiS, phi0);
+    
+    // robot.Foo(((enc_4.get_w_moment_rad()+1.5)*Ts_s), tc, ts, phiS, phi0);
 
-     Serial.print('\n');
+    // enc_5.enc_tick();
+    // dvigatel_5.update_voltage_in_V(1);
+    // serv5.setGoalSpeed(1);
+    serv5.setGoalPos(10);
+
+    Serial.print(enc_5.get_phi());
+    Serial.print(" ");
+    Serial.print(enc_5.get_w_moment_rad());
+    Serial.print(" ");
+    Serial.print('\n');
 
 }
 
@@ -36,7 +46,7 @@ void loop(){
 //////////////////////////////////////////////////////////
 
     // dvigatel_4.update_voltage_in_V(
-    //     serv4.setGoalSpeed( serv4.setPoint(enc_5.get_phi(), enc_4.get_phi()), enc_5.get_w_moment_rad())
+    //     serv4.setGoalSpeed( serv4.setGoalPos(enc_5.get_phi(), enc_4.get_phi()), enc_5.get_w_moment_rad())
     // );
 
     //t.tripod();
