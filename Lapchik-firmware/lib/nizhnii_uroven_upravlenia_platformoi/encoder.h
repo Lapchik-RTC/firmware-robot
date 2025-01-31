@@ -10,20 +10,10 @@ struct EncoderParams
 public:
   uint16_t enc_pin_a;       // пин энкодера
   uint16_t enc_pin_b;       // пин энкодера
-  uint16_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
+  int8_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
   float ppr;
   float tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
   uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
-
-  EncoderParams(int a, int b, int dir, float ppr, float tick_to_rad, int8_t (*get_AB)())
-  : enc_pin_a(a), enc_pin_b(b), enc_dir(dir), ppr(ppr), tick_to_rad(tick_to_rad), get_AB(get_AB) {}
-  // EncoderParams(uint16_t enc_pin_a, uint16_t enc_pin_b, uint16_t enc_dir){
-  //   this->enc_pin_a = enc_pin_a;
-  //   this->enc_pin_b = enc_pin_b;
-  //   this->enc_dir = enc_dir;
-  // }
-
-      
 };
 
 class Encoder {
