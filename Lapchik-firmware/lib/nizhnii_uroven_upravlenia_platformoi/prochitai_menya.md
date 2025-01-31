@@ -9,7 +9,7 @@ tsokol должен возвращать:
 
 tsokol должен принимать:
     1. Желаемую угловую скорость
-        update_speed_in_rad(float w)
+        update_voltage_in_V(float w)
         update_speed_in_tick(float w)
 
 

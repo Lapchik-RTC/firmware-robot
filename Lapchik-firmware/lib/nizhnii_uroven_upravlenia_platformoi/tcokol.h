@@ -168,7 +168,7 @@
 //     }
 //   }
 
-//   void update_speed_in_rad(float w) {
+//   void update_voltage_in_V(float w) {
 //     float wMax = TICK_TO_RAD / Ts_s_IN_SEC;
 //     float u = 0;
 //     u = dvigatelParams.supply_voltage*constrain((w/wMax), -1.0, 1.0);

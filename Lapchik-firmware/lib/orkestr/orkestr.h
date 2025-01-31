@@ -12,7 +12,7 @@ class Orkestr
   void Foo(float t, float tc, float ts, float phiS, float phi0);
 
   void l1(float vel){
-    dvigatel_1.update_speed_in_rad( 
+    dvigatel_1.update_voltage_in_V( 
         serv1.setPoint( 
             serv1.setGoalSpeed(vel, enc_1.get_w_moment_rad()), 
             enc_1.get_phi() 
@@ -20,11 +20,11 @@ class Orkestr
         );
     };
 
-  void l2(float vel){dvigatel_2.update_speed_in_rad( serv2.setPoint( serv2.setGoalSpeed(vel, enc_2.get_w_moment_rad()), enc_2.get_phi() ));};
-  void l3(float vel){dvigatel_3.update_speed_in_rad( serv3.setPoint( serv3.setGoalSpeed(vel, enc_3.get_w_moment_rad()), enc_3.get_phi() ));};
-  void l4(float vel){dvigatel_4.update_speed_in_rad( serv4.setPoint( serv4.setGoalSpeed(vel, enc_4.get_w_moment_rad()), enc_4.get_phi() ));};
-  void l5(float vel){dvigatel_5.update_speed_in_rad( serv5.setPoint( serv5.setGoalSpeed(vel, enc_5.get_w_moment_rad()), enc_5.get_phi() ));};
-  void l6(float vel){dvigatel_6.update_speed_in_rad( serv6.setPoint( serv6.setGoalSpeed(vel, enc_6.get_w_moment_rad()), enc_6.get_phi() ));};
+  void l2(float vel){dvigatel_2.update_voltage_in_V( serv2.setPoint( serv2.setGoalSpeed(vel, enc_2.get_w_moment_rad()), enc_2.get_phi() ));};
+  void l3(float vel){dvigatel_3.update_voltage_in_V( serv3.setPoint( serv3.setGoalSpeed(vel, enc_3.get_w_moment_rad()), enc_3.get_phi() ));};
+  void l4(float vel){dvigatel_4.update_voltage_in_V( serv4.setPoint( serv4.setGoalSpeed(vel, enc_4.get_w_moment_rad()), enc_4.get_phi() ));};
+  void l5(float vel){dvigatel_5.update_voltage_in_V( serv5.setPoint( serv5.setGoalSpeed(vel, enc_5.get_w_moment_rad()), enc_5.get_phi() ));};
+  void l6(float vel){dvigatel_6.update_voltage_in_V( serv6.setPoint( serv6.setGoalSpeed(vel, enc_6.get_w_moment_rad()), enc_6.get_phi() ));};
 
   private:
   float t, tc, ts, phiS, phi0;
@@ -53,6 +53,7 @@ void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_
 void Orkestr::Foo(/*float vel,*/ float t_, float tc_, float ts_, float phiS_, float phi0_){
     setParams(t_, tc_, ts_, phiS_, phi0_);
     float dphi = Ffull(t_, tc_, ts_, phiS_, phi0_);
+    
     l4(dphi);
 
     Serial.print("\tdPhi: ");
@@ -65,29 +66,29 @@ void Orkestr::tripod(/*float forw, float ang*/)
 {
     float move = 3.0/*Ffull()*/;
 
-    dvigatel_1.update_speed_in_rad(
+    dvigatel_1.update_voltage_in_V(
         serv1.setPoint( serv1.setGoalSpeed(enc_3.get_phi(), enc_1.get_w_moment_rad()), enc_1.get_phi() )
     );
 
-    dvigatel_2.update_speed_in_rad(
+    dvigatel_2.update_voltage_in_V(
         serv2.setGoalSpeed( 
             serv2.setPoint( enc_3.get_phi(), enc_2.get_phi() ), enc_2.get_w_moment_rad()
         )
     );
 
-    dvigatel_4.update_speed_in_rad(
+    dvigatel_4.update_voltage_in_V(
         serv4.setGoalSpeed( 
             serv4.setPoint( enc_3.get_phi(), enc_4.get_phi() ), enc_4.get_w_moment_rad()
         )
     );
 
-    dvigatel_5.update_speed_in_rad(
+    dvigatel_5.update_voltage_in_V(
         serv5.setGoalSpeed( 
             serv5.setPoint( enc_3.get_phi(), enc_5.get_phi() ), enc_5.get_w_moment_rad()
         )
     );  
 
-    dvigatel_6.update_speed_in_rad(
+    dvigatel_6.update_voltage_in_V(
         serv6.setGoalSpeed( 
             serv6.setPoint( enc_3.get_phi(), enc_6.get_phi() ), enc_6.get_w_moment_rad()
         )

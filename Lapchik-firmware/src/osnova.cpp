@@ -35,7 +35,7 @@ void loop(){
 
 //////////////////////////////////////////////////////////
 
-    // dvigatel_4.update_speed_in_rad(
+    // dvigatel_4.update_voltage_in_V(
     //     serv4.setGoalSpeed( serv4.setPoint(enc_5.get_phi(), enc_4.get_phi()), enc_5.get_w_moment_rad())
     // );
 
@@ -45,7 +45,7 @@ void loop(){
     // Serial.println();
 
     //enc_4.enc_tick();
-    // dvigatel_4.update_speed_in_rad(
+    // dvigatel_4.update_voltage_in_V(
     //     serv4.setGoalSpeed(enc_5.get_w_moment_rad()*1.0, enc_4.get_w_moment_rad()*1.0)
     // );
     
