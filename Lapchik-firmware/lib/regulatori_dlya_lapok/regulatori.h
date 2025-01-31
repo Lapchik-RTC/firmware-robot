@@ -25,6 +25,7 @@ class ServoPrivod: public MotorControlParams, public Dvigatel, public Encoder
   float &I;
   float PIreg(float err);
   inline float Preg(float err);
+  
   public:
   float setPoint(float goalPos_tick, float phi);
   ServoPrivod(MotorControlParams *mconp, Dvigatel &motor, Encoder &enc, float &I) 

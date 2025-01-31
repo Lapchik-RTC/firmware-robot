@@ -40,8 +40,11 @@ void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_
 
 void Orkestr::Foo(/*float vel,*/ float t_, float tc_, float ts_, float phiS_, float phi0_){
     setParams(t_, tc_, ts_, phiS_, phi0_);
-    float vel = Ffull(t_, tc_, ts_, phiS_, phi0_);
-    l1(vel);
+    float dphi = Ffull(t_, tc_, ts_, phiS_, phi0_);
+    l4(dphi);
+    Serial.print('\t');
+    Serial.print(dphi);
+    Serial.print('\t');
 }
 
 void Orkestr::tripod(/*float forw, float ang*/)
@@ -109,22 +112,23 @@ inline float Orkestr::Fl(float t, float ts, float phiS_ts, float dxdy)
 inline float Orkestr::Ffull(float t, float tc, float ts, float phiS, float phi0)
 {
     t = modc(t, tc);
-    float out;
+    float out_;
     float phiS_ts = phiS/ts;
     if( t < -(ts*0.5))
     {
         float dxdy = (( 2*M_PI ) - phiS_ts) / (tc - ts);
-        out = Fl(t, ts, phiS_ts, dxdy);
+        out_ = Fl(t, ts, phiS_ts, dxdy);
     }
     else if( t < (ts*0.5))
     {
-        out = Fc(t, phiS_ts);
+        out_ = Fc(t, phiS_ts);
     }
     else
     {
         float dydx = (( 2*M_PI ) - phiS) / (tc - ts);
-        out = Fr(t, ts, phiS_ts, dydx);
+        out_ = Fr(t, ts, phiS_ts, dydx);
     }
+    return out_;
 }
 
 float Orkestr::modc(float in, float modder)
