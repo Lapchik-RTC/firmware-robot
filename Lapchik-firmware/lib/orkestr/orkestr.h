@@ -1,103 +1,80 @@
-// #pragma once
-// #include<Arduino.h>
-// #include "obekti.h"
-// /////////////////////   Orkestr   ///////////////////////
+#pragma once
+#include<Arduino.h>
+#include "obekti.h"
+#include "f.h"
+/////////////////////   Orkestr   ///////////////////////
 
-// class Orkestr
-// {
-//   public:
-//   void tripod(/*float forw, float ang*/);
-//   //void hexopod();
-//   void setParams(float t, float tc, float ts, float phiS, float phi0);
-//   void Foo(float t, float tc, float ts, float phiS, float phi0);
+class Orkestr
+{
+  public:
+  //void hexopod();
+  void setParams(float t, float tc, float ts, float phiS, float phi0);
+  void updatePhase(float t_);
+  void Foo(float vel);
 
-//   void l1(float vel){
-//     dvigatel_1.update_voltage_in_V( 
-//         serv1.setGoalPos( 
-//             serv1.setGoalSpeed(vel, enc_1.get_w_moment_rad()), 
-//             enc_1.get_phi() 
-//             )
-//         );
-//     };
+  void l1(float pos){serv1.setGoalPos(pos);};
+  void l2(float pos){serv2.setGoalPos(pos);};
+  void l3(float pos){serv3.setGoalPos(pos);};
+  void l4(float pos){serv4.setGoalPos(pos);};
+  void l5(float pos){serv5.setGoalPos(pos);};
+  void l6(float pos){serv6.setGoalPos(pos);};
 
-//   void l2(float vel){dvigatel_2.update_voltage_in_V( serv2.setGoalPos( serv2.setGoalSpeed(vel, enc_2.get_w_moment_rad()), enc_2.get_phi() ));};
-//   void l3(float vel){dvigatel_3.update_voltage_in_V( serv3.setGoalPos( serv3.setGoalSpeed(vel, enc_3.get_w_moment_rad()), enc_3.get_phi() ));};
-//   void l4(float vel){dvigatel_4.update_voltage_in_V( serv4.setGoalPos( serv4.setGoalSpeed(vel, enc_4.get_w_moment_rad()), enc_4.get_phi() ));};
-//   void l5(float vel){dvigatel_5.update_voltage_in_V( serv5.setGoalPos( serv5.setGoalSpeed(vel, enc_5.get_w_moment_rad()), enc_5.get_phi() ));};
-//   void l6(float vel){dvigatel_6.update_voltage_in_V( serv6.setGoalPos( serv6.setGoalSpeed(vel, enc_6.get_w_moment_rad()), enc_6.get_phi() ));};
-
-//   private:
-//   float t, tc, ts, phiS, phi0;
-//   float modc(float in, float modder);
-//   //////////
-//   inline float Fc(float, float);
-//   inline float Fr0(float, float);
-//   inline float Fcomp(float, float, float);
-//   inline float Fr(float, float, float, float);
-//   inline float Fl(float, float, float, float);
-//   inline float Ffull(float, float, float, float, float);
-// };
+  private:
+  float t, tc, ts, phiS, phi0;
+  //////////
+};
 
 
-// void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
-// {
-//     this->t = t_;
-//     this->t = t_;
-//     this->tc = tc_;
-//     this->ts = ts_;
-//     this->phiS = phiS_;
-//     this->phi0 = phi0_;
-// }
+void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
+{
+    this->t = t_;
+    this->tc = tc_;
+    this->ts = ts_;
+    this->phiS = phiS_;
+    this->phi0 = phi0_;
+}
+
+void Orkestr::updatePhase(float t_)
+{
+    this->t = t_;
+}
 
 
-// void Orkestr::Foo(/*float vel,*/ float t_, float tc_, float ts_, float phiS_, float phi0_){
-//     setParams(t_, tc_, ts_, phiS_, phi0_);
-//     float dphi = Ffull(t_, tc_, ts_, phiS_, phi0_);
+void Orkestr::Foo(float vel){
+    updatePhase(t + vel * Ts_s_IN_SEC);
+    float kount = int(t / tc) * tc;
+    float dphi1 = kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi2 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi3 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi4 = kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi5 = kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi6 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+
+    // if(t > tc)
+    // {
+    //     t = 0;
+    //     enc_1.encZero();
+    //     enc_2.encZero();
+    //     enc_3.encZero();
+    //     enc_4.encZero();
+    //     enc_5.encZero();
+    //     enc_6.encZero();
+    // }
+
+    Serial.print(t);
+    Serial.print(" ");
+    Serial.print(dphi5);
+    Serial.print(" ");
     
-//     l4(dphi);
+    l1(dphi1);
+    l2(dphi2);
+    l3(dphi3);
+    l4(dphi4);
+    l5(dphi5);
+    l6(dphi6);
+}
 
-//     Serial.print("\tdPhi: ");
-//     Serial.print(dphi);
-// }
-
-
-
-// void Orkestr::tripod(/*float forw, float ang*/)
-// {
-//     float move = 3.0/*Ffull()*/;
-
-//     dvigatel_1.update_voltage_in_V(
-//         serv1.setGoalPos( serv1.setGoalSpeed(enc_3.get_phi(), enc_1.get_w_moment_rad()), enc_1.get_phi() )
-//     );
-
-//     dvigatel_2.update_voltage_in_V(
-//         serv2.setGoalSpeed( 
-//             serv2.setGoalPos( enc_3.get_phi(), enc_2.get_phi() ), enc_2.get_w_moment_rad()
-//         )
-//     );
-
-//     dvigatel_4.update_voltage_in_V(
-//         serv4.setGoalSpeed( 
-//             serv4.setGoalPos( enc_3.get_phi(), enc_4.get_phi() ), enc_4.get_w_moment_rad()
-//         )
-//     );
-
-//     dvigatel_5.update_voltage_in_V(
-//         serv5.setGoalSpeed( 
-//             serv5.setGoalPos( enc_3.get_phi(), enc_5.get_phi() ), enc_5.get_w_moment_rad()
-//         )
-//     );  
-
-//     dvigatel_6.update_voltage_in_V(
-//         serv6.setGoalSpeed( 
-//             serv6.setGoalPos( enc_3.get_phi(), enc_6.get_phi() ), enc_6.get_w_moment_rad()
-//         )
-//     );
-    
-//     //Serial.println(enc_5.get_phi());
-// }
-
-// ///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 // inline float Orkestr::Fc(float t, float phiS_ts)
 // {
@@ -131,27 +108,22 @@
 //     float phiS_ts = phiS/ts;
 //     if( t < -(ts*0.5))
 //     {
-//         float dxdy = (( 2*M_PI ) - phiS_ts) / (tc - ts);
+//         float dxdy = (( 2*M_PI ) - phiS) / (tc - ts);
 //         out_ = Fl(t, ts, phiS_ts, dxdy);
+//         Serial.print(".");
 //     }
 //     else if( t < (ts*0.5))
 //     {
 //         out_ = Fc(t, phiS_ts);
+//         Serial.print(":");
 //     }
 //     else
 //     {
 //         float dydx = (( 2*M_PI ) - phiS) / (tc - ts);
 //         out_ = Fr(t, ts, phiS_ts, dydx);
+//         Serial.print(";");
 //     }
-//     return out_;
+//     return out_+phi0;
 // }
 
-// float Orkestr::modc(float in, float modder)
-// {
-//     in = in + modder;
-//     while(in > modder * 0.5)
-//     {
-//         in = in - modder;
-//     }
-//     return in;
-// }
+

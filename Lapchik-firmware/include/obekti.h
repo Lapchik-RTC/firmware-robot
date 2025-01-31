@@ -219,7 +219,7 @@ MotorControlParams mctrlp//структура общая
   .ki = KI_PI,//00079,//0.00001,
   .maxU = SUPPLY_VOLTAGE/2,
   .kpP = KP_P,
-  .maxVel = 8.0,
+  .maxVel = 16.0,
   .kalibrSpeed = 1
 };
 

@@ -4,10 +4,18 @@
 #include "orkestr.h"
 #include "obekti.h"
 
-// Orkestr robot;
+Orkestr robot;
 
 void setup() {   
     Serial.begin(115200);
+
+    float tc = 2.0*M_PI;
+    float ts = 2.0*2.0/3.6*M_PI;
+    float phiS = 1.5;
+    float phi0 = M_PI;
+
+    robot.setParams(0, tc, ts, phiS, phi0);
+
 }
 
 void loop(){
@@ -17,18 +25,18 @@ void loop(){
 
     // encUpd();
 
-    float tc = 7.7;//2.0*M_PI;
-    float ts = 5.0;//2.0*2.0/3.6*M_PI;
-    float phiS = 2.5;//1.5;
-    float phi0 = 2.0;
-
     
-    // robot.Foo(((enc_4.get_w_moment_rad()+1.5)*Ts_s), tc, ts, phiS, phi0);
+    robot.Foo(1);
 
     // enc_5.enc_tick();
     // dvigatel_5.update_voltage_in_V(1);
     // serv5.setGoalSpeed(1);
-    serv5.setGoalPos(10);
+    // serv1.setGoalPos(10);
+    // serv2.setGoalPos(-10);
+    // serv3.setGoalPos(10);
+    // serv4.setGoalPos(-10);
+    // serv5.setGoalPos(10);
+    // serv6.setGoalPos(-10);
 
     Serial.print(enc_5.get_phi());
     Serial.print(" ");
