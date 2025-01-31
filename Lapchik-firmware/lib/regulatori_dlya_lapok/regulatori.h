@@ -4,7 +4,13 @@
 #include"motor.h"
 #include"encoder.h"
 
+#define KP_PI 0.2//0.06
+#define KI_PI 0//0.05//2.1//5
+#define KP_P 1
 #define KE 0.2
+
+
+
 struct MotorControlParams//структура общая
 {
   float Ts_sec;
@@ -63,71 +69,14 @@ inline float ServoPrivod::Preg(float err){
 }
 
 float ServoPrivod::setPoint(float phi0, float phi){
-  //int32_t realPos = 1;
-//  float gSpd = 1;
-
-  // Serial.print("\t err: ");
-  // Serial.print(goalPos_rad - phi);
-  // Serial.print('\n');
-  // return Preg(goalPos_rad - phi);
-
-  //float phi = getPhi();
-  //phi0 += phi;
   float phi_err = phi0 - phi;
   float w0_raw = Preg(phi_err);
   float w0 = constrain(w0_raw,-8.0, 8.0/*-w_max, w_max*/);
-  Serial.print("\t err: ");
+  
+  Serial.print("\t err(setPoint): ");
   Serial.print(w0);
   Serial.print('\t');
+  
   return w0;
 
 }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// struct localSlovar{
-//   byte inA;
-//   byte inB;
-//   byte pwmPin;
-//   int ppr;
-//   int dir;
-// };
-// struct globalSlovar{
-//   float maxSpeed;
-//   float kp;
-//   float ki;
-//   float Ts;
-// };
-// /// @brief CLASS 2   ////////////////////////////////////////////////////////////
-// class Lapka: localSlovar, globalSlovar, Encoder
-// {
-//   public:
-//   Lapka(localSlovar *ls, globalSlovar *gs, Encoder &enc)
-//   :localSlovar(*ls), globalSlovar(*gs), Encoder(enc)
-//   {
-//     pinMode(inA, 1);
-//     pinMode(inB, 1);
-//     this->enc = enc;
-//   }
-
-//   private:
-//   Encoder &enc;
-//   void power(float u);
-//   void serv(float err);
-
-// };
-
-// void Lapka::power(float u)
-// {
-//     float pwm = 255 * (u / maxSpeed)*dir;
-//     digitalWrite(inA, (pwm > 0));
-//     digitalWrite(inB, !(pwm > 0));
-//     analogWrite(pwmPin, min(abs(pwm), 255));
-// }
-
-// void Lapka::serv(float err)
-// {
-//   int p = err * kp;
-//   float u = p;
-//   return u
-// }

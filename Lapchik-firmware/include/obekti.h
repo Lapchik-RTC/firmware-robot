@@ -1,10 +1,11 @@
 #pragma once
 
 #include<Arduino.h>
+//#include"SLOVAR.h"
 #include "encoder.h"
 #include "motor.h"
 #include "regulatori.h"
-//#pragma once
+
 
 uint8_t get_AB_enc1()
 {
@@ -98,17 +99,13 @@ EncoderParams enc_params_6 {
     .get_AB = get_AB_enc6
 };
 
-// EncoderParams enc_params_1 = {.get_AB = get_AB_enc1};
-// EncoderParams enc_params_2 = {.get_AB = get_AB_enc2};
-// EncoderParams enc_params_3 = {.get_AB = get_AB_enc3};
-// EncoderParams enc_params_4 = {.get_AB = get_AB_enc4};
-// EncoderParams enc_params_5 = {.get_AB = get_AB_enc5};
-// EncoderParams enc_params_6 = {.get_AB = get_AB_enc6};
 
-
-Encoder enc_1(enc_params_1), enc_2(enc_params_2), enc_3(enc_params_3), enc_4(enc_params_4), enc_5(enc_params_5), enc_6(enc_params_6);
-
-
+Encoder enc_1(enc_params_1),
+        enc_2(enc_params_2),
+        enc_3(enc_params_3),
+        enc_4(enc_params_4),
+        enc_5(enc_params_5),
+        enc_6(enc_params_6);
 
 
 ISR(PCINT0_vect)
@@ -186,14 +183,18 @@ dvigatel_5(dvigatel_params_5),
 dvigatel_6(dvigatel_params_6);
 
 /////////////////////////////////////////////////////////
-/*MotorControlParams mconp = 
+inline void encUpd()
 {
-    .Ts = Ts_s,
-    .ppr = 1
-};*/
-#define KP_PI 0.2//0.06
-#define KI_PI 0//0.05//2.1//5
-#define KP_P 1
+    enc_1.enc_tick();
+    enc_2.enc_tick();
+    enc_3.enc_tick();
+    enc_4.enc_tick();
+    enc_5.enc_tick();
+    enc_6.enc_tick();
+}
+
+
+
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,
@@ -204,18 +205,6 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 float I1, I2, I3, I4, I5, I6;
-///////////////// SET /////////////////
-// void ServoPrivod::setGoalSpeed(float goalSpeed)
-// {
-//   //enc.enc_tick();
-//   float u = PIreg(goalSpeed - enc_5.get_w_moment_rad()/*getRealSpeed()*/);
-//   motor.update_speed_in_rad(u);
-
-//   Serial.print("\t wMoment: ");
-//   Serial.print(enc_3.get_w_moment_rad());
-//   Serial.print('\t');
-// }
-
 
 ServoPrivod serv1(&mctrlp, dvigatel_1, enc_1, I1);
 ServoPrivod serv2(&mctrlp, dvigatel_2, enc_2, I2);

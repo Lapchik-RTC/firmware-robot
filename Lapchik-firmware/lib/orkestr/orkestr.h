@@ -10,7 +10,16 @@ class Orkestr
   //void hexopod();
   void setParams(float t, float tc, float ts, float phiS, float phi0);
   void Foo(float t, float tc, float ts, float phiS, float phi0);
-  void l1(float vel){dvigatel_1.update_speed_in_rad( serv1.setPoint( serv1.setGoalSpeed(vel, enc_1.get_w_moment_rad()), enc_1.get_phi() ));};
+
+  void l1(float vel){
+    dvigatel_1.update_speed_in_rad( 
+        serv1.setPoint( 
+            serv1.setGoalSpeed(vel, enc_1.get_w_moment_rad()), 
+            enc_1.get_phi() 
+            )
+        );
+    };
+
   void l2(float vel){dvigatel_2.update_speed_in_rad( serv2.setPoint( serv2.setGoalSpeed(vel, enc_2.get_w_moment_rad()), enc_2.get_phi() ));};
   void l3(float vel){dvigatel_3.update_speed_in_rad( serv3.setPoint( serv3.setGoalSpeed(vel, enc_3.get_w_moment_rad()), enc_3.get_phi() ));};
   void l4(float vel){dvigatel_4.update_speed_in_rad( serv4.setPoint( serv4.setGoalSpeed(vel, enc_4.get_w_moment_rad()), enc_4.get_phi() ));};
@@ -28,6 +37,8 @@ class Orkestr
   inline float Fl(float, float, float, float);
   inline float Ffull(float, float, float, float, float);
 };
+
+
 void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
 {
     this->t = t_;
@@ -38,14 +49,17 @@ void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_
     this->phi0 = phi0_;
 }
 
+
 void Orkestr::Foo(/*float vel,*/ float t_, float tc_, float ts_, float phiS_, float phi0_){
     setParams(t_, tc_, ts_, phiS_, phi0_);
     float dphi = Ffull(t_, tc_, ts_, phiS_, phi0_);
     l4(dphi);
-    Serial.print('\t');
+
+    Serial.print("\tdPhi: ");
     Serial.print(dphi);
-    Serial.print('\t');
 }
+
+
 
 void Orkestr::tripod(/*float forw, float ang*/)
 {
@@ -79,7 +93,7 @@ void Orkestr::tripod(/*float forw, float ang*/)
         )
     );
     
-    Serial.println(enc_5.get_phi());
+    //Serial.println(enc_5.get_phi());
 }
 
 ///////////////////////////////////////////////////////////////
@@ -139,4 +153,4 @@ float Orkestr::modc(float in, float modder)
         in = in - modder;
     }
     return in;
-}//*/
+}
