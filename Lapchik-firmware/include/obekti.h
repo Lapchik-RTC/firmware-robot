@@ -9,7 +9,6 @@
 
 uint8_t get_AB_enc1()
 {
-    // Serial.println("enc_1");
     return (((PINK) & 0b00000011) >> 0);
 }
 

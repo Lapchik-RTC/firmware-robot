@@ -9,10 +9,10 @@ Orkestr robot;
 void setup() {   
     Serial.begin(115200);
 
-    float tc = 2.0*M_PI;
-    float ts = 2.0*2.0/3.6*M_PI;
+    float tc = 8;//2.0*M_PI;
+    float ts = 4.6;//2.0*2.0/3.6*M_PI;
     float phiS = 1.5;
-    float phi0 = M_PI;
+    float phi0 = -M_PI;
 
     robot.setParams(0, tc, ts, phiS, phi0);
 
@@ -38,11 +38,11 @@ void loop(){
     // serv5.setGoalPos(10);
     // serv6.setGoalPos(-10);
 
-    Serial.print(enc_5.get_phi());
-    Serial.print(" ");
-    Serial.print(enc_5.get_w_moment_rad());
-    Serial.print(" ");
-    Serial.print('\n');
+    // Serial.print(enc_5.get_phi());
+    // Serial.print(" ");
+    // Serial.print(enc_5.get_w_moment_rad());
+    // Serial.print(" ");
+    // Serial.print('\n');
 
 }
 

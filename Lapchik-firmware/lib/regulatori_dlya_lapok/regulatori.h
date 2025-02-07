@@ -42,7 +42,7 @@ public:
 float ServoPrivod::PIreg(float err)
 {
     float P = err * params.kpPI;
-    
+     
     float u = P + I;
 
     if (u == constrain(u, -params.maxU, params.maxU) || (err * u) < 0)
