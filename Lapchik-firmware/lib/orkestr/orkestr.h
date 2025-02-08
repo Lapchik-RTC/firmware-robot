@@ -39,18 +39,21 @@ void Orkestr::updatePhase(float t_)
     this->t = t_;
 }
 
-
+float tc = 8.0;
+float ts = 4.6;
+float phis = 1.5;
+float phi0 = 0.0;
 void Orkestr::Foo(float vel){
-    if(t >= (tc/2)){
-        this->phi0 = 2*M_PI;
-    }
+    // if(t >= (tc/2)){
+    //     this->phi0 = 2*M_PI;
+    // }
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
     float dphi1 = 10;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi2 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi3 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi4 = 10;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi5 = kount + F_shtrih(t, tc, ts, phiS, phi0);
     float dphi6 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
 
     // if(t > tc)

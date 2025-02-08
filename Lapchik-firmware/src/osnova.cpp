@@ -4,6 +4,8 @@
 #include "orkestr.h"
 #include "obekti.h"
 
+#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
+
 Orkestr robot;
 
 void setup() {   
