@@ -53,8 +53,8 @@ void Orkestr::Foo(float vel){
     float dphi2 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi3 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi4 = 10;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = kount + F_shtrih(t, tc, ts, phiS, phi0);
-    float dphi6 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi5 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi6 = kount + F_shtrih(t, tc, ts, phiS, phi0);
 
     // if(t > tc)
     // {
@@ -69,14 +69,14 @@ void Orkestr::Foo(float vel){
 
     Serial.print(t);
     Serial.print(" ");
-    Serial.print(dphi5);
+    Serial.print(dphi6);
     Serial.print('\n');
     
     // l1(dphi1);
     // l2(dphi2);
     // l3(dphi3);
     // l4(dphi4);
-    l5(dphi5);
+    l6(dphi6);
     //l6(dphi6);
 }
 

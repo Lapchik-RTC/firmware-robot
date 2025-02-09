@@ -103,30 +103,28 @@ float modc(float in, float modder)
 float fc_(float t, float phists) {
     return t*phists;
 }
+float fr0_(float t, float dydx) {
+    return t*dydx;
+}
+float fr_(float t, float ts, float phists, float dydx) {
+    return fr0_(t, dydx) + (fc_(ts*float(0.5), phists) - fr0_(ts*float(0.5), dydx))/*Fcomp(ts, phists, dydx)*/;
+}
+float fl_(float t, float ts, float phists, float dydx) {
+    return -fr_(-t, ts, phists, dydx);
+}
+
+//////////////////////////////////////
 
 float Fc(float t, float tc, float phists, int i){
     return ( fc_(t - (tc*i), phists)+M_PI ); 
 }
-///////////////////////////////
-float fr0_(float t, float dydx) {
-    return t*dydx;
-}
 
-float Fr0(float t, float tc, float dydx, float i){
-    return ( fr0_(t - (tc*i), dydx)+M_PI );
-}
-////////////////////////////////
-float fr_(float t, float ts, float phists, float dydx) {
-    return fr0_(t, dydx) + (fc_(ts*float(0.5), phists) - fr0_(ts*float(0.5), dydx))/*Fcomp(ts, phists, dydx)*/;
-}
+// float Fr0(float t, float tc, float dydx, float i){
+//     return ( fr0_(t - (tc*i), dydx)+M_PI );
+// }
 
 float Fr( float t, float tc, float ts, float phists, float dydx, int i){
     return ( fr_(t - (tc*i), ts, phists, dydx) + M_PI );
-}
-////////////////////////////////
-
-float fl_(float t, float ts, float phists, float dydx) {
-    return -fr_(-t, ts, phists, dydx);
 }
 
 float Fl( float t, float tc, float ts, float phists, float dydx, int i){
@@ -138,8 +136,8 @@ float F_shtrih(int t, int tc, float ts, float phiS, float phi0)
     static int i = 0;
     static float ts_i = ts;
     static float tc_i = tc;
-    ts_i = ts_i - ((tc*i)+ts/2);
-    tc_i = tc_i - (tc*i);
+    ts_i = ts;//ts_i - ((tc*i)+ts/2);
+    tc_i = tc;//tc_i - (tc*i);
     i = (t / tc_i) - (t % (int)tc_i);
     float phists = phiS/ts_i;
     float dydx = (M_PI - (phiS/2)) / ((tc_i-ts_i)/2);
@@ -148,7 +146,7 @@ float F_shtrih(int t, int tc, float ts, float phiS, float phi0)
     else if(t < (ts_i * 0.5)) out = Fc(t, tc_i, phists, i);
     else if(t < (ts_i * 0.5)) out = Fr(t, tc_i, ts_i, phists, dydx, i);
     Serial.print("\ti: ");
-    Serial.print(tc);
+    Serial.print(i);
     Serial.print('\t');
     return out;
 }
