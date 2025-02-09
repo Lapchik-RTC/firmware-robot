@@ -66,6 +66,15 @@ void ServoPrivod::setGoalSpeed(float goalSpd)
 void ServoPrivod::setGoalPos(float phi0){
   float phi = enc->get_phi();
   float phi_err = phi0 - phi;
+  phi_err = fmod(phi_err, 2*M_PI);
+    if(phi_err > M_PI)
+    {
+      phi_err -= 2*M_PI;
+    }
+    else if(phi_err < M_PI)
+    {
+      phi_err += 2*M_PI;
+    }
   float w0 = Preg(phi_err);
 
   setGoalSpeed(w0);

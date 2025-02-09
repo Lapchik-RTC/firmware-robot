@@ -44,9 +44,6 @@ float ts = 4.6;
 float phis = 1.5;
 float phi0 = 0.0;
 void Orkestr::Foo(float vel){
-    // if(t >= (tc/2)){
-    //     this->phi0 = 2*M_PI;
-    // }
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
     float dphi1 = 10;//kount + Ffull(t, tc, ts, phiS, phi0);
@@ -54,8 +51,14 @@ void Orkestr::Foo(float vel){
     float dphi3 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi4 = 10;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi5 = 10;//kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi6 = kount + F_shtrih(t, tc, ts, phiS, phi0);
-
+    
+    float X = Ffull(t, tc, ts, phis, phi0);
+    //X = X - tc * floor( (X + (tc*0.5) ) / tc );
+    
+    
+    float dphi6 = X;//Ffull(X, tc, ts, phis, phi0);
+    
+    //float dphi6 = kount + F_shtrih(t, tc, ts, phiS, phi0);
     // if(t > tc)
     // {
     //     t = 0;
@@ -68,7 +71,7 @@ void Orkestr::Foo(float vel){
     // }
 
     Serial.print(t);
-    Serial.print(" ");
+    Serial.print("\tdphi6: ");
     Serial.print(dphi6);
     Serial.print('\n');
     
