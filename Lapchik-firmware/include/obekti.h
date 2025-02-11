@@ -207,7 +207,7 @@ dvigatel_6(dvigatel_params_6);
 
 
 #define KP_PI 1//0.06
-#define KI_PI 1//0.05//2.1//5
+#define KI_PI 0.01//0.05//2.1//5
 #define KP_P 32
 #define KE 0.2
 

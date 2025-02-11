@@ -38,28 +38,29 @@ void Orkestr::updatePhase(float t_)
     this->t = t_;
 }
 
-float tc = 8.0;
-float ts = 4.6;
-float phis = 1.5;
-float phi0 = 0.0;
+float tc = 6;//6.5;
+float ts = 2.5;//4.6;
+float phiS = 1.4;
+float phi0 = M_PI/2;
 void Orkestr::Foo(float vel){
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
-    float X = Ffull(t, tc, ts, phis, phi0);
-    float XPi = Ffull(t+M_PI, tc, ts, phis, phi0);
+    float X = Ffull(t, tc, ts, phiS, phi0);
+    float XPi = Ffull(t+M_PI, tc, ts, phiS, phi0);
     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = XPi;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi6 = X;
+    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi6 = XPi;
     //X = X - tc * floor( (X + (tc*0.5) ) / tc );
     
-    l1(dphi1);
-    l2(dphi2);
+    l1(/*(2*M_PI*6)+M_PI*/dphi1);
+    l4(/*(2*M_PI*6)+M_PI*/dphi4);
+    l5(/*(2*M_PI*6)+M_PI*/dphi5);
+     
+    l2(dphi2/*2*M_PI*6*/);
     l3(dphi3);
-    l4(dphi4);
-    l5(dphi5);
-    l6(dphi6);
+    l6(dphi6/*2*M_PI*6*/);
 }
 

@@ -4,17 +4,17 @@
 #include "orkestr.h"
 #include "obekti.h"
 
-#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
+//#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
 
 Orkestr robot;
 
 void setup() {   
     Serial.begin(115200);
 
-    float tc = 8;//2.0*M_PI;
-    float ts = 4.6;//2.0*2.0/3.6*M_PI;
-    float phiS = 1.5;
-    float phi0 = -M_PI;
+    // float tc = 8;//2.0*M_PI;
+    // float ts = 4.6;//2.0*2.0/3.6*M_PI;
+    // float phiS = 1.5;
+    // float phi0 = -M_PI;
 
     robot.setParams(0, tc, ts, phiS, phi0);
 
@@ -25,20 +25,32 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
 
-    // encUpd();
-
-    
-    robot.Foo(1);
-
+    //encUpd();
+    // enc_1.enc_tick();
+    // enc_2.enc_tick();
+    // enc_3.enc_tick();
+    // enc_4.enc_tick();
     // enc_5.enc_tick();
+    // enc_6.enc_tick();
+    
+    robot.Foo(2);
+    //dvigatel_3.update_voltage_in_V(5);
+
     // dvigatel_5.update_voltage_in_V(1);
-    // serv5.setGoalSpeed(1);
-    // serv1.setGoalPos(10);
-    // serv2.setGoalPos(-10);
-    // serv3.setGoalPos(10);
-    // serv4.setGoalPos(-10);
-    // serv5.setGoalPos(10);
-    // serv6.setGoalPos(-10);
+    
+    // Serial.print("\tenc1: ");
+    // Serial.print(enc_1.get_tick());
+    // Serial.print("\tenc2: ");
+    // Serial.print(enc_2.get_tick());
+    // Serial.print("\tenc3: ");
+    // Serial.print(enc_3.get_tick());
+    // Serial.print("\tenc4: ");
+    // Serial.print(enc_4.get_tick());
+    // Serial.print("\tenc5: ");
+    // Serial.print(enc_5.get_tick());
+    // Serial.print("\tenc6: ");
+    // Serial.print(enc_6.get_tick());
+    // Serial.print('\n');
 
     // Serial.print(enc_5.get_phi());
     // Serial.print(" ");
