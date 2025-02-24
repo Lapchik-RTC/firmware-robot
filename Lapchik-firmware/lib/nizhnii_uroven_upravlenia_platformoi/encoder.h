@@ -72,7 +72,7 @@ public:
     table[0b10][0b00] = -encoderParams.enc_dir;
 
     interrupts();
-  }
+    }
 
   void isr_handler() {
     noInterrupts();

@@ -21,7 +21,6 @@ class Orkestr
 
   private:
   float t, tc, ts, phiS, phi0;
-  //////////
 };
 
 
@@ -39,91 +38,29 @@ void Orkestr::updatePhase(float t_)
     this->t = t_;
 }
 
-
+float tc = 6;//6.5;
+float ts = 2.5;//4.6;
+float phiS = 1.4;
+float phi0 = M_PI/2;
 void Orkestr::Foo(float vel){
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
-    float dphi1 = kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi2 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi3 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi4 = kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi6 = kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-
-    // if(t > tc)
-    // {
-    //     t = 0;
-    //     enc_1.encZero();
-    //     enc_2.encZero();
-    //     enc_3.encZero();
-    //     enc_4.encZero();
-    //     enc_5.encZero();
-    //     enc_6.encZero();
-    // }
-
-    Serial.print(t);
-    Serial.print(" ");
-    Serial.print(dphi5);
-    Serial.print(" ");
+    float X = Ffull(t, tc, ts, phiS, phi0);
+    float XPi = Ffull(t+M_PI, tc, ts, phiS, phi0);
+    float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi6 = XPi;
+    //X = X - tc * floor( (X + (tc*0.5) ) / tc );
     
-    l1(dphi1);
-    l2(dphi2);
+    l1(/*(2*M_PI*6)+M_PI*/dphi1);
+    l4(/*(2*M_PI*6)+M_PI*/dphi4);
+    l5(/*(2*M_PI*6)+M_PI*/dphi5);
+     
+    l2(dphi2/*2*M_PI*6*/);
     l3(dphi3);
-    l4(dphi4);
-    l5(dphi5);
-    l6(dphi6);
+    l6(dphi6/*2*M_PI*6*/);
 }
-
-///////////////////////////////////////////////////////////////
-
-// inline float Orkestr::Fc(float t, float phiS_ts)
-// {
-//     return t*phiS_ts;
-// }
-
-// inline float Orkestr::Fr0(float t, float dxdy)
-// {
-//     return t*dxdy;
-// }
-
-// inline float Orkestr::Fcomp(float ts, float phiS_ts, float dxdy)
-// {
-//     return Fc(ts*0.5, phiS_ts) - Fr0(ts*0.5, dxdy);
-// }
-
-// inline float Orkestr::Fr(float t, float ts, float phiS_ts, float dxdy)
-// {
-//     return Fr0(t, dxdy) + Fcomp(ts, phiS_ts, dxdy);
-// }
-
-// inline float Orkestr::Fl(float t, float ts, float phiS_ts, float dxdy)
-// {
-//     return -Fr(t, ts, phiS_ts, dxdy);
-// }
-
-// inline float Orkestr::Ffull(float t, float tc, float ts, float phiS, float phi0)
-// {
-//     t = modc(t, tc);
-//     float out_;
-//     float phiS_ts = phiS/ts;
-//     if( t < -(ts*0.5))
-//     {
-//         float dxdy = (( 2*M_PI ) - phiS) / (tc - ts);
-//         out_ = Fl(t, ts, phiS_ts, dxdy);
-//         Serial.print(".");
-//     }
-//     else if( t < (ts*0.5))
-//     {
-//         out_ = Fc(t, phiS_ts);
-//         Serial.print(":");
-//     }
-//     else
-//     {
-//         float dydx = (( 2*M_PI ) - phiS) / (tc - ts);
-//         out_ = Fr(t, ts, phiS_ts, dydx);
-//         Serial.print(";");
-//     }
-//     return out_+phi0;
-// }
-
 
