@@ -41,7 +41,8 @@ void Orkestr::updatePhase(float t_)
 float tc = 6;//6.5;
 float ts = 2.5;//4.6;
 float phiS = 1.4;
-float phi0 = M_PI/2;
+float phi0 = (M_PI/2)+(0.05);
+
 void Orkestr::Foo(float vel){
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
