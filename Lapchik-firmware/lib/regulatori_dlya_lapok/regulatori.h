@@ -1,6 +1,6 @@
 #pragma once
 #include<Arduino.h>
-#include"motor.h"
+#include"Dvigatel.h"
 #include"encoder.h"
 
 

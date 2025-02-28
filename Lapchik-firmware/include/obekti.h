@@ -3,7 +3,7 @@
 #include<Arduino.h>
 //#include"SLOVAR.h"
 #include "encoder.h"
-#include "motor.h"
+#include "Dvigatel.h"
 #include "regulatori.h"
 
 
