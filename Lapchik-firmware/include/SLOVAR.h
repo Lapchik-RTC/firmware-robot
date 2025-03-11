@@ -28,3 +28,34 @@
 #define SUPPLY_VOLTAGE 12 // подаваемое напряжение~
 
 ///////////////////////////////////////////////////
+// #define CS_PIN_1 A1
+// #define CS_PIN_2 A1
+// #define CS_PIN_3 A1
+// #define CS_PIN_4 A1
+// #define CS_PIN_5 A1
+// #define CS_PIN_6 A1
+
+// #define TRIG_CUR_1 1
+// #define TRIG_CUR_2 1
+// #define TRIG_CUR_3 1
+// #define TRIG_CUR_4 1
+// #define TRIG_CUR_5 1
+// #define TRIG_CUR_6 1
+uint8_t csPins[6] = 
+{
+    A1,
+    A1,
+    A1,
+    A1,
+    A1,
+    A1
+};
+uint8_t trigCurr[6] = 
+{
+    A1,
+    A1,
+    A1,
+    A1,
+    A1,
+    A1
+};
