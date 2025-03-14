@@ -3,7 +3,7 @@
 #include<Arduino.h>
 //#include"SLOVAR.h"
 #include "encoder.h"
-#include "motor.h"
+#include "Dvigatel.h"
 #include "regulatori.h"
 
 
@@ -38,8 +38,8 @@ uint8_t get_AB_enc5()
 
 uint8_t get_AB_enc6()
 {
-    // Serial.println("enc_6");
-    return (((PINB) & 0b11000000) >> 6);
+    //  Serial.println("enc_6============================================");
+    return (((PINJ) & 0b00000011) >> 0);
 }
 
 
@@ -100,9 +100,9 @@ EncoderParams enc_params_5 {
 };
 
 EncoderParams enc_params_6 {
-    .enc_pin_a = 12,    // 12
-    .enc_pin_b = 13,    // 13
-    .enc_dir = 1,
+    .enc_pin_a = 14,    // 12
+    .enc_pin_b = 15,    // 13
+    .enc_dir = -1,
     .ppr = KOLVO_ENC_TICK_6,
     .tick_to_rad = TICK_TO_RAD_6,
     .get_AB = get_AB_enc6,
@@ -122,6 +122,10 @@ Encoder enc_1(enc_params_1),
 ISR(PCINT0_vect)
 {
     enc_5.isr_handler();
+    // enc_6.isr_handler();
+}
+ISR(PCINT1_vect)
+{
     enc_6.isr_handler();
 }
 

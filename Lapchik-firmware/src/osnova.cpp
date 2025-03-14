@@ -30,13 +30,14 @@ void loop(){
     // enc_2.enc_tick();
     // enc_3.enc_tick();
     // enc_4.enc_tick();
-    // enc_5.enc_tick();
-    // enc_6.enc_tick();
+    enc_5.enc_tick();
+     enc_6.enc_tick();
     
-    robot.Foo(2);
+    //robot.Foo(2);
+    
     //dvigatel_3.update_voltage_in_V(5);
 
-    // dvigatel_5.update_voltage_in_V(1);
+    // dvigatel_5.update_voltage_in_V(1);a
     
     // Serial.print("\tenc1: ");
     // Serial.print(enc_1.get_tick());
@@ -47,10 +48,23 @@ void loop(){
     // Serial.print("\tenc4: ");
     // Serial.print(enc_4.get_tick());
     // Serial.print("\tenc5: ");
-    // Serial.print(enc_5.get_tick());
-    // Serial.print("\tenc6: ");
-    // Serial.print(enc_6.get_tick());
+
+    Serial.print(enc_5.get_tick());
+    Serial.print("\tenc6: ");
+    Serial.print(enc_6.get_tick());
+    Serial.print('\n');
+
+    // Serial.print("\tenc6_A: ");
+    // Serial.print(digitalRead(12));
+    // Serial.print("\tenc6_B: ");
+    // Serial.print(digitalRead(14));
     // Serial.print('\n');
+
+    // for(int i = 0; i < 6; i++)
+    // {
+    //     Serial.print("cs" + String(i) + ": " + analogRead(csPins[i]) + '\t');
+    // }
+
 
     // Serial.print(enc_5.get_phi());
     // Serial.print(" ");

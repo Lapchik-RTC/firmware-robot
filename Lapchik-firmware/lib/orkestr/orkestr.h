@@ -12,6 +12,8 @@ class Orkestr
   void updatePhase(float t_);
   void Foo(float vel);
 
+    void stendUp();
+
   void l1(float pos){serv1.setGoalPos(pos);};
   void l2(float pos){serv2.setGoalPos(pos);};
   void l3(float pos){serv3.setGoalPos(pos);};
@@ -21,6 +23,7 @@ class Orkestr
 
   private:
   float t, tc, ts, phiS, phi0;
+  void ork(uint8_t num, float pos);
 };
 
 
@@ -41,7 +44,8 @@ void Orkestr::updatePhase(float t_)
 float tc = 6;//6.5;
 float ts = 2.5;//4.6;
 float phiS = 1.4;
-float phi0 = M_PI/2;
+float phi0 = (M_PI/2)+(0.05);
+
 void Orkestr::Foo(float vel){
     updatePhase(t + vel * Ts_s_IN_SEC);
     float kount = int(t / tc) * tc;
@@ -64,3 +68,47 @@ void Orkestr::Foo(float vel){
     l6(dphi6/*2*M_PI*6*/);
 }
 
+void Orkestr::ork(uint8_t num, float pos)
+{
+    num = constrain(num, 0, 5);
+    switch (num)
+    {
+    case 0:
+        l1(pos);
+        break;
+    case 1:
+        l2(pos);
+        break;
+    case 2:
+        l3(pos);
+        break;
+    case 3:
+        l4(pos);
+        break;
+    case 4:
+        l5(pos);
+        break;
+    case 5:
+        l6(pos);
+        break;
+    default:
+        break;
+    }
+}
+
+void Orkestr::stendUp()
+{
+    //kalibr
+
+    for(int i = 0; i < 6; i++)
+    {
+        float kalibrPos = 0;
+        while(analogRead(csPins[i]) < trigCurr[i])
+        {
+            ork(i, kalibrPos);
+            kalibrPos -= M_PI/12;
+        }
+        kalibrPos = 0;
+    }
+    //
+}
