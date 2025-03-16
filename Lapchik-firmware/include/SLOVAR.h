@@ -43,12 +43,12 @@
 // #define TRIG_CUR_6 1
 uint8_t csPins[6] = 
 {
+    A4,
+    A2,
+    A0,
     A1,
-    A1,
-    A1,
-    A1,
-    A1,
-    A1
+    A3,
+    A5
 };
 uint8_t trigCurr[6] = 
 {

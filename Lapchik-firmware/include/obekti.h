@@ -102,7 +102,7 @@ EncoderParams enc_params_5 {
 EncoderParams enc_params_6 {
     .enc_pin_a = 14,    // 12
     .enc_pin_b = 15,    // 13
-    .enc_dir = -1,
+    .enc_dir = 1,
     .ppr = KOLVO_ENC_TICK_6,
     .tick_to_rad = TICK_TO_RAD_6,
     .get_AB = get_AB_enc6,

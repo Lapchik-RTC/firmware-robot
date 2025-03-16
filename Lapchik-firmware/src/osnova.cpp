@@ -8,33 +8,48 @@
 
 Orkestr robot;
 
-void setup() {   
+void setup() {
     Serial.begin(115200);
 
-    // float tc = 8;//2.0*M_PI;
-    // float ts = 4.6;//2.0*2.0/3.6*M_PI;
-    // float phiS = 1.5;
-    // float phi0 = -M_PI;
+    float tc = 7;//8;//2.0*M_PI;
+    float ts = 2.5   ;//4.6;//2.0*2.0/3.6*M_PI;
+    float phiS = 0;
+    float phi0 = -M_PI;
 
     robot.setParams(0, tc, ts, phiS, phi0);
-
+    robot.stendUp(); 
+    enc_1.encZero();
 }
 
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+    // static bool a = 1;
+    // static uint64_t t = millis();
+    // if(millis() - t > 3000)
+    // {
+    //     if(a)
+    //         enc_1.encZero();
+    //     a = 0;
+        serv1.setGoalPos(M_PI/2.0);
+    // }
 
-    //encUpd();
     // enc_1.enc_tick();
-    // enc_2.enc_tick();
-    // enc_3.enc_tick();
-    // enc_4.enc_tick();
-    enc_5.enc_tick();
-     enc_6.enc_tick();
+    // serv1.setGoalPos(M_PI/2.0);
+    // Serial.println(enc_1.get_phi());
     
-    //robot.Foo(2);
     
+    // robot.Foo(2);
+    
+}
+
+
+
+
+
+
+
     //dvigatel_3.update_voltage_in_V(5);
 
     // dvigatel_5.update_voltage_in_V(1);a
@@ -49,10 +64,10 @@ void loop(){
     // Serial.print(enc_4.get_tick());
     // Serial.print("\tenc5: ");
 
-    Serial.print(enc_5.get_tick());
-    Serial.print("\tenc6: ");
-    Serial.print(enc_6.get_tick());
-    Serial.print('\n');
+    // Serial.print(enc_5.get_tick());
+    // Serial.print("\tenc6: ");
+    // Serial.print(enc_6.get_tick());
+    // Serial.print('\n');
 
     // Serial.print("\tenc6_A: ");
     // Serial.print(digitalRead(12));
@@ -60,10 +75,18 @@ void loop(){
     // Serial.print(digitalRead(14));
     // Serial.print('\n');
 
-    // for(int i = 0; i < 6; i++)
-    // {
-    //     Serial.print("cs" + String(i) + ": " + analogRead(csPins[i]) + '\t');
-    // }
+    // serv1.setGoalPos(M_PI/6);
+    // serv2.setGoalPos(M_PI/6);
+    // serv3.setGoalPos(M_PI/6);
+    // serv4.setGoalPos(M_PI/6);
+    // serv5.setGoalPos(M_PI);
+    // serv6.setGoalPos(M_PI/6);
+    /*for(int i = 0; i < 6; i++)
+    {
+        Serial.print("\tcs" + String(i) + ": " + analogRead(csPins[i]));
+    }*/
+    // Serial.print("\tcs" + String(1) + ": " + analogRead(csPins[0]));
+    // Serial.print('\n');
 
 
     // Serial.print(enc_5.get_phi());
@@ -71,8 +94,6 @@ void loop(){
     // Serial.print(enc_5.get_w_moment_rad());
     // Serial.print(" ");
     // Serial.print('\n');
-
-}
 
 
 
