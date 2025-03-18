@@ -13,6 +13,7 @@ class Orkestr
   void Foo(float vel);
 
     void stendUp();
+    void step();
 
   void l1(float pos){serv1.setGoalPos(pos);};
   void l2(float pos){serv2.setGoalPos(pos);};
@@ -29,6 +30,7 @@ bool zeroAll = 1;
 // uint64_t timerK = micros();
 
     uint32_t preKalibrTimer = millis();
+    uint32_t KalibrTimer = millis();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +103,10 @@ void Orkestr::Foo(float vel){
 //         break;
 //     }
 // }
+void Orkestr::step()
+{
 
+}
 void Orkestr::stendUp()
 {
     ///// preKalibr /////
@@ -118,12 +123,14 @@ void Orkestr::stendUp()
     /////////////////////
     float vel = -1.6;
     int trig1 = 110;
-    int trig2 = 140;
-    int trig3 = 135;
-    int trig4 = 130;
-    int trig5 = 130;
-    int trig6 = 140;
-    
+    int trig2_ = 150;//140;
+        int trig2 = 130;
+    int trig3_ = 150;//130;
+        int trig3 = 130;
+    int trig4 = 150;//135;
+    int trig5 = 150;//130;
+    int trig6_ = 150;//146;
+        int trig6 = 130;
     ///  dv1  ///
     while( analogRead(csPins[0]) < trig1 && kalibrON1)
     {
@@ -135,7 +142,7 @@ void Orkestr::stendUp()
     ///  dv2  ///
     while( analogRead(csPins[1]) < trig2 && kalibrON2)
     {
-        serv2.setGoalSpeed(vel);
+        serv2.setGoalSpeed(-vel);
     }
     kalibrON2 = 0;
     serv2.setGoalSpeed(0);
@@ -143,7 +150,7 @@ void Orkestr::stendUp()
     ///  dv3  ///
     while( analogRead(csPins[2]) < trig3 && kalibrON3)
     {
-        serv3.setGoalSpeed(vel);
+        serv3.setGoalSpeed(-vel);
     }
     kalibrON3 = 0;
     serv3.setGoalSpeed(0);
@@ -167,9 +174,27 @@ void Orkestr::stendUp()
     ///  dv6  ///
     while( analogRead(csPins[5]) < trig6 && kalibrON6)
     {
-        serv6.setGoalSpeed(vel);
+        serv6.setGoalSpeed(-vel);
     }
     kalibrON6 = 0;
     serv6.setGoalSpeed(0);
     
+    enc_1.encZero();
+    enc_2.encZero();
+    enc_3.encZero();
+    enc_4.encZero();
+    enc_5.encZero();
+    enc_6.encZero();
+
+    KalibrTimer = micros();
+    while(micros() - KalibrTimer < Ts_s);
+    KalibrTimer = micros();
+
+    float startPos = (M_PI/2.0) + (M_PI/30.0);
+    serv1.setGoalPos(-startPos);
+    serv2.setGoalPos(startPos);
+    serv3.setGoalPos(startPos);
+    serv4.setGoalPos(-startPos);
+    serv5.setGoalPos(-startPos);
+   serv6.setGoalPos(startPos);
 }
