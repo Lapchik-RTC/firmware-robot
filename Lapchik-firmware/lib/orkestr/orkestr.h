@@ -23,9 +23,15 @@ class Orkestr
 
   private:
   float t, tc, ts, phiS, phi0;
-  void ork(uint8_t num, float pos);
+//   bool startK = 1;
+bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
+bool zeroAll = 1;
+// uint64_t timerK = micros();
+
+    uint32_t preKalibrTimer = millis();
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
 {
@@ -68,47 +74,102 @@ void Orkestr::Foo(float vel){
     l6(dphi6/*2*M_PI*6*/);
 }
 
-void Orkestr::ork(uint8_t num, float pos)
-{
-    num = constrain(num, 0, 5);
-    switch (num)
-    {
-    case 0:
-        l1(pos);
-        break;
-    case 1:
-        l2(pos);
-        break;
-    case 2:
-        l3(pos);
-        break;
-    case 3:
-        l4(pos);
-        break;
-    case 4:
-        l5(pos);
-        break;
-    case 5:
-        l6(pos);
-        break;
-    default:
-        break;
-    }
-}
+// void Orkestr::ork(uint8_t num, float pos)
+// {
+//     num = constrain(num, 0, 5);
+//     switch (num)
+//     {
+//     case 0:
+//         l1(pos);
+//         break;
+//     case 1:
+//         l2(pos);
+//         break;
+//     case 2:
+//         l3(pos);
+//         break;
+//     case 3:
+//         l4(pos);
+//         break;
+//     case 4:
+//         l5(pos);
+//         break;
+//     case 5:
+//         l6(pos);
+//         break;
+//     default:
+//         break;
+//     }
+// }
 
 void Orkestr::stendUp()
 {
-    //kalibr
-
-    for(int i = 0; i < 6; i++)
+    ///// preKalibr /////
+    float pKvel = -0.2;
+    while(millis() - preKalibrTimer < 1500)
     {
-        float kalibrPos = 0;
-        while(analogRead(csPins[i]) < trigCurr[i])
-        {
-            ork(i, kalibrPos);
-            kalibrPos -= M_PI/12;
-        }
-        kalibrPos = 0;
+        serv1.setGoalSpeed(pKvel);
+        serv2.setGoalSpeed(pKvel);
+        serv3.setGoalSpeed(pKvel);
+        serv4.setGoalSpeed(pKvel);
+        serv5.setGoalSpeed(pKvel);
+        serv6.setGoalSpeed(pKvel);
     }
-    //
+    /////////////////////
+    float vel = -1.6;
+    int trig1 = 110;
+    int trig2 = 140;
+    int trig3 = 135;
+    int trig4 = 130;
+    int trig5 = 130;
+    int trig6 = 140;
+    
+    ///  dv1  ///
+    while( analogRead(csPins[0]) < trig1 && kalibrON1)
+    {
+        serv1.setGoalSpeed(vel);
+    }
+    kalibrON1 = 0;
+    serv1.setGoalSpeed(0);
+
+    ///  dv2  ///
+    while( analogRead(csPins[1]) < trig2 && kalibrON2)
+    {
+        serv2.setGoalSpeed(vel);
+    }
+    kalibrON2 = 0;
+    serv2.setGoalSpeed(0);
+
+    ///  dv3  ///
+    while( analogRead(csPins[2]) < trig3 && kalibrON3)
+    {
+        serv3.setGoalSpeed(vel);
+    }
+    kalibrON3 = 0;
+    serv3.setGoalSpeed(0);
+
+    ///  dv4  ///
+    while( analogRead(csPins[3]) < trig4 && kalibrON4)
+    {
+        serv4.setGoalSpeed(vel);
+    }
+    kalibrON4 = 0;
+    serv4.setGoalSpeed(0);
+
+    ///  dv5  ///
+    while( analogRead(csPins[4]) < trig5 && kalibrON5)
+    {
+        serv5.setGoalSpeed(vel);
+    }
+    kalibrON5 = 0;
+    serv5.setGoalSpeed(0);
+
+    ///  dv6  ///
+    while( analogRead(csPins[5]) < trig6 && kalibrON6)
+    {
+        serv6.setGoalSpeed(vel);
+    }
+    kalibrON6 = 0;
+    serv6.setGoalSpeed(0);
+    
 }
