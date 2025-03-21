@@ -48,7 +48,7 @@ void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_
 
 void Orkestr::updatePhase(float t_)
 {
-    this->t = t_;
+    this->t += t_;
 }
 
 // float tc = 6;//6.5;
@@ -57,22 +57,10 @@ void Orkestr::updatePhase(float t_)
 // float phi0 = (M_PI/2)+(0.05);
 
 void Orkestr::Foo(float vel){
-    updatePhase(t + vel * Ts_s_IN_SEC);
-    if(perehodFix)
-    {
-        // updatePhase(0);
-        enc_1.encZero();
-        enc_2.encZero();
-        enc_3.encZero();
-        enc_4.encZero();
-        enc_5.encZero();
-        enc_6.encZero();
-        perehodFix = 0;
-    }
-
-    float kount = int(t / tc) * tc;
+    updatePhase(vel * Ts_s_IN_SEC);
+    // float kount = int(t / tc) * tc;
     float X = Ffull(t, tc, ts, phiS, phi0);
-    float XPi = Ffull(t+(M_PI + (M_PI/30.0)), tc, ts, phiS, phi0);
+    float XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
