@@ -76,7 +76,10 @@ void ServoPrivod::setGoalPos(float phi0){
     {
       phi_err += 2*M_PI;
     }
-    phi_err -= 2*M_PI;
+    if(perehodFix)
+    {
+      phi_err -= 2*M_PI;
+    }
   float w0 = Preg(phi_err);
 
   setGoalSpeed(w0);

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+bool perehodFix = 1;
 #include "encoder.h"
 #include "orkestr.h"
 #include "obekti.h"
@@ -7,24 +8,27 @@
 //#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
 
 Orkestr robot;
-
 void setup() {
     Serial.begin(115200);
 
-    float tc = 7;//8;//2.0*M_PI;
+    float tc = 10;//8;//2.0*M_PI;
     float ts = 2.5   ;//4.6;//2.0*2.0/3.6*M_PI;
-    float phiS = 0;
-    float phi0 = -M_PI;
+    float phiS = 1.6;
+    float phi0 = 0;
 
     robot.setParams(0, tc, ts, phiS, phi0);
-    robot.stendUp(); 
-    
+    // robot.stendUp(); 
+    // robot.step();
 }
 
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+    
+
+    robot.Foo(1.5);
+    // robot.setPhiAll(0, 0);
     // static bool a = 1;
     // static uint64_t t = millis();
     // if(millis() - t > 3000)
@@ -43,7 +47,6 @@ void loop(){
     
    //*/
     
-    // robot.Foo(2);
     
 }
 

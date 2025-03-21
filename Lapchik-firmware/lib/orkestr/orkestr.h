@@ -22,15 +22,17 @@ class Orkestr
   void l5(float pos){serv5.setGoalPos(pos);};
   void l6(float pos){serv6.setGoalPos(pos);};
 
+  void setPhiAll(float nPhiL, float nPhiR);
   private:
   float t, tc, ts, phiS, phi0;
-//   bool startK = 1;
-bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
-bool zeroAll = 1;
-// uint64_t timerK = micros();
-
-    uint32_t preKalibrTimer = millis();
-    uint32_t KalibrTimer = millis();
+  bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
+  bool zeroAll = 1;
+  uint32_t preKalibrTimer = millis();
+  uint32_t whaitPos = millis();
+  uint32_t whaitPosL = millis();
+  uint32_t whaitPosR = millis();
+  void setPhiL(float nPhi);
+  void setPhiR(float nPhi);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,16 +51,29 @@ void Orkestr::updatePhase(float t_)
     this->t = t_;
 }
 
-float tc = 6;//6.5;
-float ts = 2.5;//4.6;
-float phiS = 1.4;
-float phi0 = (M_PI/2)+(0.05);
+// float tc = 6;//6.5;
+// float ts = 2.5;//4.6;
+// float phiS = 1.4;
+// float phi0 = (M_PI/2)+(0.05);
 
 void Orkestr::Foo(float vel){
     updatePhase(t + vel * Ts_s_IN_SEC);
+    if(perehodFix)
+    {
+        // updatePhase(0);
+        enc_1.encZero();
+        enc_2.encZero();
+        enc_3.encZero();
+        enc_4.encZero();
+        enc_5.encZero();
+        enc_6.encZero();
+        perehodFix = 0;
+    }
+
     float kount = int(t / tc) * tc;
     float X = Ffull(t, tc, ts, phiS, phi0);
-    float XPi = Ffull(t+M_PI, tc, ts, phiS, phi0);
+    float XPi = Ffull(t+(M_PI + (M_PI/30.0)), tc, ts, phiS, phi0);
+    // XPi = X;
     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
@@ -76,37 +91,15 @@ void Orkestr::Foo(float vel){
     l6(dphi6/*2*M_PI*6*/);
 }
 
-// void Orkestr::ork(uint8_t num, float pos)
-// {
-//     num = constrain(num, 0, 5);
-//     switch (num)
-//     {
-//     case 0:
-//         l1(pos);
-//         break;
-//     case 1:
-//         l2(pos);
-//         break;
-//     case 2:
-//         l3(pos);
-//         break;
-//     case 3:
-//         l4(pos);
-//         break;
-//     case 4:
-//         l5(pos);
-//         break;
-//     case 5:
-//         l6(pos);
-//         break;
-//     default:
-//         break;
-//     }
-// }
 void Orkestr::step()
 {
-
+    setPhiAll((M_PI) - (M_PI/30.0), 0);
+    setPhiAll(0, (M_PI) - (M_PI/30.0));
+    setPhiAll(0, 0);
+    // setPhiR((M_PI) - (M_PI/30.0));
+    // setPhiL((M_PI) - (M_PI/30.0));
 }
+
 void Orkestr::stendUp()
 {
     ///// preKalibr /////
@@ -180,10 +173,6 @@ void Orkestr::stendUp()
     kalibrON6 = 0;
     serv6.setGoalSpeed(0);
     
-    // KalibrTimer = micros();
-    // while(micros() - KalibrTimer < Ts_s);
-    // KalibrTimer = micros();
-
     enc_1.encZero();
     enc_2.encZero();
     enc_3.encZero();
@@ -192,8 +181,9 @@ void Orkestr::stendUp()
     enc_6.encZero();
 
     float startPos = (M_PI/2.0) + (M_PI/30.0);
-    int _k = -1;
-
+    setPhiAll(startPos, startPos);
+    /*int _k = 1;
+    
     while(
         (enc_6.get_phi() < startPos * 0.8) || (enc_6.get_phi() < (startPos  + (startPos * 0.2)))
         ||
@@ -208,11 +198,47 @@ void Orkestr::stendUp()
         (enc_5.get_phi() < startPos * 0.8) || (enc_5.get_phi() < (startPos  + (startPos * 0.2)))
     )
     {
-        serv1.setGoalPos(-startPos * _k);
+        serv1.setGoalPos(startPos * _k);
         serv2.setGoalPos(startPos);
         serv3.setGoalPos(startPos);
-        serv4.setGoalPos(-startPos * _k);
-        serv5.setGoalPos(-startPos * _k);
+        serv4.setGoalPos(startPos * _k);
+        serv5.setGoalPos(startPos * _k);
         serv6.setGoalPos(startPos);
+    }*/
+}
+
+void Orkestr::setPhiAll(float nPhiL, float nPhiR)
+{
+    enc_1.encZero();
+    enc_2.encZero();
+    enc_3.encZero();
+    enc_4.encZero();
+    enc_5.encZero();
+    enc_6.encZero();
+
+    //float startPos = (M_PI/2.0) + (M_PI/30.0);
+    int _k = 1;
+    whaitPos = millis();
+    while((millis() - whaitPos < 1500) && (
+        (enc_6.get_phi() < nPhiL * 0.8) || (enc_6.get_phi() < (nPhiL  + (nPhiL * 0.2)))
+        ||
+        (enc_1.get_phi() < nPhiR * 0.8) || (enc_1.get_phi() < (nPhiR  + (nPhiR * 0.2)))
+        ||
+        (enc_2.get_phi() < nPhiL * 0.8) || (enc_2.get_phi() < (nPhiL  + (nPhiL * 0.2)))
+        ||
+        (enc_3.get_phi() < nPhiL * 0.8) || (enc_3.get_phi() < (nPhiL  + (nPhiL * 0.2)))
+        ||
+        (enc_4.get_phi() < nPhiR * 0.8) || (enc_4.get_phi() < (nPhiR  + (nPhiR * 0.2)))
+        ||
+        (enc_5.get_phi() < nPhiR * 0.8) || (enc_5.get_phi() < (nPhiR  + (nPhiR * 0.2)))
+    )
+    )
+    {
+        serv1.setGoalPos(nPhiR * _k);
+        serv2.setGoalPos(nPhiL);
+        serv3.setGoalPos(nPhiL);
+        serv4.setGoalPos(nPhiR * _k);
+        serv5.setGoalPos(nPhiR * _k);
+        serv6.setGoalPos(nPhiL);
     }
 }
