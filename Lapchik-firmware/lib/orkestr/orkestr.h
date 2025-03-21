@@ -120,6 +120,7 @@ void Orkestr::stendUp()
         serv5.setGoalSpeed(pKvel);
         serv6.setGoalSpeed(pKvel);
     }
+    
     /////////////////////
     float vel = -1.6;
     int trig1 = 110;
@@ -179,6 +180,10 @@ void Orkestr::stendUp()
     kalibrON6 = 0;
     serv6.setGoalSpeed(0);
     
+    // KalibrTimer = micros();
+    // while(micros() - KalibrTimer < Ts_s);
+    // KalibrTimer = micros();
+
     enc_1.encZero();
     enc_2.encZero();
     enc_3.encZero();
@@ -186,15 +191,28 @@ void Orkestr::stendUp()
     enc_5.encZero();
     enc_6.encZero();
 
-    KalibrTimer = micros();
-    while(micros() - KalibrTimer < Ts_s);
-    KalibrTimer = micros();
-
     float startPos = (M_PI/2.0) + (M_PI/30.0);
-    serv1.setGoalPos(-startPos);
-    serv2.setGoalPos(startPos);
-    serv3.setGoalPos(startPos);
-    serv4.setGoalPos(-startPos);
-    serv5.setGoalPos(-startPos);
-   serv6.setGoalPos(startPos);
+    int _k = -1;
+
+    while(
+        (enc_6.get_phi() < startPos * 0.8) || (enc_6.get_phi() < (startPos  + (startPos * 0.2)))
+        ||
+        (enc_1.get_phi() < startPos * 0.8) || (enc_1.get_phi() < (startPos  + (startPos * 0.2)))
+        ||
+        (enc_2.get_phi() < startPos * 0.8) || (enc_2.get_phi() < (startPos  + (startPos * 0.2)))
+        ||
+        (enc_3.get_phi() < startPos * 0.8) || (enc_3.get_phi() < (startPos  + (startPos * 0.2)))
+        ||
+        (enc_4.get_phi() < startPos * 0.8) || (enc_4.get_phi() < (startPos  + (startPos * 0.2)))
+        ||
+        (enc_5.get_phi() < startPos * 0.8) || (enc_5.get_phi() < (startPos  + (startPos * 0.2)))
+    )
+    {
+        serv1.setGoalPos(-startPos * _k);
+        serv2.setGoalPos(startPos);
+        serv3.setGoalPos(startPos);
+        serv4.setGoalPos(-startPos * _k);
+        serv5.setGoalPos(-startPos * _k);
+        serv6.setGoalPos(startPos);
+    }
 }

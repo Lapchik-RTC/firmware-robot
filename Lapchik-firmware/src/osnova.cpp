@@ -18,12 +18,7 @@ void setup() {
 
     robot.setParams(0, tc, ts, phiS, phi0);
     robot.stendUp(); 
-    enc_1.encZero();
-    enc_2.encZero();
-    enc_3.encZero();
-    enc_4.encZero();
-    enc_5.encZero();
-    enc_6.encZero();
+    
 }
 
 void loop(){
@@ -44,6 +39,9 @@ void loop(){
     // serv1.setGoalPos(M_PI/2.0);
     // Serial.println(enc_1.get_phi());
     
+    
+    
+   //*/
     
     // robot.Foo(2);
     
