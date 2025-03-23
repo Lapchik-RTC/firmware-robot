@@ -59,7 +59,7 @@ void Orkestr::updatePhase(float t_)
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC);
     // float kount = int(t / tc) * tc;
-    float X = Ffull(t, tc, ts, phiS, phi0);
+    float X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
     float XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
@@ -77,6 +77,7 @@ void Orkestr::Foo(float vel){
     l2(dphi2/*2*M_PI*6*/);
     l3(dphi3);
     l6(dphi6/*2*M_PI*6*/);
+    Serial.println(X);
 }
 
 void Orkestr::step()
@@ -92,6 +93,7 @@ void Orkestr::stendUp()
 {
     ///// preKalibr /////
     float pKvel = -0.2;
+    
     while(millis() - preKalibrTimer < 1500)
     {
         serv1.setGoalSpeed(pKvel);
@@ -104,15 +106,21 @@ void Orkestr::stendUp()
     
     /////////////////////
     float vel = -1.6;
-    int trig1 = 110;
-    int trig2_ = 150;//140;
-        int trig2 = 130;
-    int trig3_ = 150;//130;
-        int trig3 = 130;
+    int trig1 = 150;
+
+        int trig2 = 150;//140;
+        int trig2_ = 130;
+    
+        int trig3 = 150;//130;
+        int trig3_ = 130;
+    
     int trig4 = 150;//135;
+    
     int trig5 = 150;//130;
-    int trig6_ = 150;//146;
-        int trig6 = 130;
+    
+        int trig6 = 150;//146;
+        int trig6_ = 130;
+
     ///  dv1  ///
     while( analogRead(csPins[0]) < trig1 && kalibrON1)
     {
@@ -170,6 +178,14 @@ void Orkestr::stendUp()
 
     float startPos = (M_PI/2.0) + (M_PI/30.0);
     setPhiAll(startPos, startPos);
+
+    enc_1.encZero();
+    enc_2.encZero();
+    enc_3.encZero();
+    enc_4.encZero();
+    enc_5.encZero();
+    enc_6.encZero();
+    perehodFix = 1;
     /*int _k = 1;
     
     while(
@@ -205,7 +221,7 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     enc_6.encZero();
 
     //float startPos = (M_PI/2.0) + (M_PI/30.0);
-    int _k = 1;
+    int _k = -1;
     whaitPos = millis();
     while((millis() - whaitPos < 1500) && (
         (enc_6.get_phi() < nPhiL * 0.8) || (enc_6.get_phi() < (nPhiL  + (nPhiL * 0.2)))
