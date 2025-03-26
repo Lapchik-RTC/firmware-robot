@@ -22,9 +22,19 @@ class Orkestr
   void l5(float pos){serv5.setGoalPos(pos);};
   void l6(float pos){serv6.setGoalPos(pos);};
 
+
+// void triR(float pos){ serv1.setGoalPos(pos); serv3.setGoalPos(pos); serv4.setGoalPos(pos); }
+// void triL(float pos){ serv2.setGoalPos(pos); serv5.setGoalPos(pos); serv6.setGoalPos(pos); }
+
+
   void setPhiAll(float nPhiL, float nPhiR);
+
+  void ostanovka();
+  
+  
   private:
   float t, tc, ts, phiS, phi0;
+  float X, XPi;
   bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
   bool zeroAll = 1;
   uint32_t preKalibrTimer = millis();
@@ -59,8 +69,8 @@ void Orkestr::updatePhase(float t_)
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC);
     // float kount = int(t / tc) * tc;
-    float X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
-    float XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
@@ -70,13 +80,13 @@ void Orkestr::Foo(float vel){
     float dphi6 = XPi;
     //X = X - tc * floor( (X + (tc*0.5) ) / tc );
     
-    l1(/*(2*M_PI*6)+M_PI*/dphi1);
-    l4(/*(2*M_PI*6)+M_PI*/dphi4);
+    // l1(/*(2*M_PI*6)+M_PI*/dphi1);
+    // l4(/*(2*M_PI*6)+M_PI*/dphi4);
     l5(/*(2*M_PI*6)+M_PI*/dphi5);
      
-    l2(dphi2/*2*M_PI*6*/);
-    l3(dphi3);
-    l6(dphi6/*2*M_PI*6*/);
+    // l2(dphi2/*2*M_PI*6*/);
+    // l3(dphi3);
+    // l6(dphi6/*2*M_PI*6*/);
     Serial.println(X);
 }
 
@@ -186,29 +196,7 @@ void Orkestr::stendUp()
     enc_5.encZero();
     enc_6.encZero();
     perehodFix = 1;
-    /*int _k = 1;
-    
-    while(
-        (enc_6.get_phi() < startPos * 0.8) || (enc_6.get_phi() < (startPos  + (startPos * 0.2)))
-        ||
-        (enc_1.get_phi() < startPos * 0.8) || (enc_1.get_phi() < (startPos  + (startPos * 0.2)))
-        ||
-        (enc_2.get_phi() < startPos * 0.8) || (enc_2.get_phi() < (startPos  + (startPos * 0.2)))
-        ||
-        (enc_3.get_phi() < startPos * 0.8) || (enc_3.get_phi() < (startPos  + (startPos * 0.2)))
-        ||
-        (enc_4.get_phi() < startPos * 0.8) || (enc_4.get_phi() < (startPos  + (startPos * 0.2)))
-        ||
-        (enc_5.get_phi() < startPos * 0.8) || (enc_5.get_phi() < (startPos  + (startPos * 0.2)))
-    )
-    {
-        serv1.setGoalPos(startPos * _k);
-        serv2.setGoalPos(startPos);
-        serv3.setGoalPos(startPos);
-        serv4.setGoalPos(startPos * _k);
-        serv5.setGoalPos(startPos * _k);
-        serv6.setGoalPos(startPos);
-    }*/
+
 }
 
 void Orkestr::setPhiAll(float nPhiL, float nPhiR)
@@ -245,4 +233,25 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
         serv5.setGoalPos(nPhiR * _k);
         serv6.setGoalPos(nPhiL);
     }
+}
+
+void Orkestr::ostanovka()
+{
+    // float gPos = 0;
+    float dohodTrig = 3.2;
+    if(X <= dohodTrig)
+    {
+        setPhiAll(M_PI, M_PI);
+    }
+    else
+    {
+        setPhiAll(0, 0);
+    }
+    enc_1.encZero();
+    enc_2.encZero();
+    enc_3.encZero();
+    enc_4.encZero();
+    enc_5.encZero();
+    enc_6.encZero();
+    setPhiAll(0, 0);
 }

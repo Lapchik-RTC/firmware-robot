@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-bool perehodFix = 0;
+bool perehodFix = 1;
 #include "encoder.h"
 #include "orkestr.h"
 #include "obekti.h"
@@ -12,13 +12,14 @@ void setup() {
     Serial.begin(115200);
 
     float tc = 2.0*M_PI;
-    float ts = 2.6   ;//4.6;//2.0*2.0/3.6*M_PI;
+    float ts = 2.7   ;//4.6;//2.0*2.0/3.6*M_PI;
     float phiS = 0.5;
     float phi0 = M_PI;
  
     robot.setParams(M_PI, tc, ts, phiS, phi0);
-    robot.stendUp(); 
-    robot.setPhiAll(0, 0);
+    // robot.stendUp(); 
+    // robot.setPhiAll(0, 0);
+
     // robot.step();
 }
 
@@ -27,8 +28,17 @@ void loop(){
     while(micros() - timer < Ts_s);
     timer = micros();
     
-
-    robot.Foo(1.5);
+    static uint32_t timerStop = millis();
+    bool ok = 1;
+    if(millis() - timerStop > 3000)
+    {
+        // if(ok)
+            robot.ostanovka();
+        serv5.setGoalSpeed(0);
+        ok = 0;
+    }
+    else
+        robot.Foo(1.5);
 }
 
 
