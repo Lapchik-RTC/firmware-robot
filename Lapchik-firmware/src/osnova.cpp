@@ -17,7 +17,14 @@ void setup() {
     float phi0 = M_PI;
  
     robot.setParams(M_PI, tc, ts, phiS, phi0);
-    // robot.stendUp(); 
+    robot.stendUp(); 
+
+    serv1.setGoalSpeed(0);
+    serv2.setGoalSpeed(0);
+    serv3.setGoalSpeed(0);
+    serv4.setGoalSpeed(0);
+    serv5.setGoalSpeed(0);
+    serv6.setGoalSpeed(0);
     // robot.setPhiAll(0, 0);
 
     // robot.step();
@@ -29,16 +36,26 @@ void loop(){
     timer = micros();
     
     static uint32_t timerStop = millis();
-    bool ok = 1;
-    if(millis() - timerStop > 3000)
-    {
-        // if(ok)
-            robot.ostanovka();
-        serv5.setGoalSpeed(0);
-        ok = 0;
-    }
-    else
-        robot.Foo(1.5);
+    static bool ok = 1;
+
+    // if(millis() - timerStop > 15000)
+    // {
+    //     if(ok)
+    //     {
+    //         robot.ostanovka();
+    //         ok = 0;
+    //     }
+    //     perehodFix = 0;
+    //     serv1.setGoalSpeed(0);
+    //     serv2.setGoalSpeed(0);
+    //     serv3.setGoalSpeed(0);
+    //     serv4.setGoalSpeed(0);
+    //     serv5.setGoalSpeed(0);
+    //     serv6.setGoalSpeed(0);
+    //     perehodFix = 1;
+    // }
+    // else
+        robot.invFoo(-1.5);
 }
 
 
