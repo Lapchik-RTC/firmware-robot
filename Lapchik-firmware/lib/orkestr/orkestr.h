@@ -226,31 +226,34 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     }
 }
 
-void Orkestr::invFoo(float vel){
-    updatePhase(vel * Ts_s_IN_SEC, -(vel * Ts_s_IN_SEC));
+// void Orkestr::invFoo(float vel){
+//     updatePhase(vel * Ts_s_IN_SEC, -(vel * Ts_s_IN_SEC));
 
-    Serial.print("X: " + String(t) +" (1, 4, 5)");
-    Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
+//     Serial.print("X: " + String(t) +" (1, 4, 5)");
+//     Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
     
-    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
-    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
-    // XPi = X;
+//     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+//     XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
+//     // XPi = X;
 
-    float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi6 = XPi;
+//     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+//     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+//     float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+//     float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+//     float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+//     float dphi6 = XPi;
    
-    l1(dphi1 + M_PI);
-    l4(dphi4 + M_PI);
-    l5(dphi5 + M_PI);
-    l2(dphi2 + M_PI);
-    l3(dphi3 + M_PI);
-    l6(dphi6 + M_PI);
+//     l1(dphi1 + M_PI);
+//     l4(dphi4 + M_PI);
+//     l5(dphi5 + M_PI);
+//     l2(dphi2 + M_PI);
+//     l3(dphi3 + M_PI);
+//     l6(dphi6 + M_PI);
+// }
+void Orkestr::invFoo(int vel)
+{
+    
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 void Orkestr::ostanovka()
