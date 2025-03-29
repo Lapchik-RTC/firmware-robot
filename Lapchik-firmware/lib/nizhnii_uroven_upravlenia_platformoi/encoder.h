@@ -3,7 +3,7 @@
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
 
-
+void phaseTick();
 
 struct EncoderParams
 { 
@@ -83,6 +83,7 @@ public:
     
     enc_old = enc;
     interrupts();
+    phaseTick();
   }
 
   float get_phi(){

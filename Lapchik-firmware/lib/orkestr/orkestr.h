@@ -7,33 +7,27 @@
 class Orkestr
 {
   public:
-  //void hexopod();
+  
   void setParams(float t, float tc, float ts, float phiS, float phi0);
-  void updatePhase(float t_, float);
-  void Foo(float vel);
-
-    void stendUp();
-    void step();
-
-  void l1(float pos){serv1.setGoalPos(pos);};
-  void l2(float pos){serv2.setGoalPos(pos);};
-  void l3(float pos){serv3.setGoalPos(pos);};
-  void l4(float pos){serv4.setGoalPos(pos);};
-  void l5(float pos){serv5.setGoalPos(pos);};
-  void l6(float pos){serv6.setGoalPos(pos);};
-
-
-// void triR(float pos){ serv1.setGoalPos(pos); serv3.setGoalPos(pos); serv4.setGoalPos(pos); }
-// void triL(float pos){ serv2.setGoalPos(pos); serv5.setGoalPos(pos); serv6.setGoalPos(pos); }
-
-
+  void stendUp();
+  /// @brief Foo params
   void setPhiAll(float nPhiL, float nPhiR);
 
-  void invFoo(float);
+  //___STATES___
 
+  /// @brief Forw
+  void Foo(float vel);
+  /// @brief Back
+  void ReversFoo(float vel);
+  /// @brief --- 
+  void moonwalk(float);
+  void asynchroFoo(float velL, float velR);
+  
   void ostanovka();
-  
-  
+
+  void turnL(float vel);
+  void turnR(float vel);
+
   private:
   float t, t2, tc, ts, phiS, phi0;
   float X, XPi;
@@ -43,8 +37,20 @@ class Orkestr
   uint32_t whaitPos = millis();
   uint32_t whaitPosL = millis();
   uint32_t whaitPosR = millis();
-  void setPhiL(float nPhi);
-  void setPhiR(float nPhi);
+  
+  void updatePhase(float t_, float);
+
+
+  void l1(float pos){serv1.setGoalPos(pos);};
+  void l2(float pos){serv2.setGoalPos(pos);};
+  void l3(float pos){serv3.setGoalPos(pos);};
+  void l4(float pos){serv4.setGoalPos(pos);};
+  void l5(float pos){serv5.setGoalPos(pos);};
+  void l6(float pos){serv6.setGoalPos(pos);};
+  void setPhiL(float nPhi){ l2(nPhi); l3(nPhi); l6(nPhi); };
+  void setPhiR(float nPhi){ l1(nPhi); l4(nPhi); l5(nPhi); };
+  void setPhiSideL(float nPhi){ l2(nPhi); l4(nPhi); l6(nPhi); };
+  void setPhiSideR(float nPhi){ l1(nPhi); l3(nPhi); l5(nPhi); };
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,15 +85,14 @@ void Orkestr::Foo(float vel){
     float dphi6 = XPi;
     
     
-    l1(dphi1);
-    l4(dphi4);
-    l5(dphi5);
-     
-    l2(dphi2);
-    l3(dphi3);
-    l6(dphi6);
+    l1(M_PI/*dphi1*/);
+    l4(M_PI/*dphi4*/);
+    l5(M_PI/*dphi5*/);
+    l2(M_PI/*dphi2*/);
+    l3(M_PI/*dphi3*/);
+    l6(M_PI/*dphi6*/);
 
-    Serial.print("X: " + String(X) +" (1, 4, 5)");
+    Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
     Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
 }
 
@@ -188,6 +193,12 @@ void Orkestr::stendUp()
     enc_5.encZero();
     enc_6.encZero();
     perehodFix = 1;
+    serv1.setGoalSpeed(0);
+    serv2.setGoalSpeed(0);
+    serv3.setGoalSpeed(0);
+    serv4.setGoalSpeed(0);
+    serv5.setGoalSpeed(0);
+    serv6.setGoalSpeed(0);
 
 }
 
@@ -226,33 +237,55 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     }
 }
 
-// void Orkestr::invFoo(float vel){
-//     updatePhase(vel * Ts_s_IN_SEC, -(vel * Ts_s_IN_SEC));
+void Orkestr::moonwalk(float vel){
+    updatePhase(vel * Ts_s_IN_SEC, -(vel * Ts_s_IN_SEC));
 
-//     Serial.print("X: " + String(t) +" (1, 4, 5)");
-//     Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
-    
-//     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
-//     XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
-//     // XPi = X;
+    Serial.print("X: " + String(t) +" (1, 4, 5)");
+    Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
+  
+    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
+    // XPi = X;
 
-//     float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-//     float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-//     float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-//     float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-//     float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-//     float dphi6 = XPi;
-   
-//     l1(dphi1 + M_PI);
-//     l4(dphi4 + M_PI);
-//     l5(dphi5 + M_PI);
-//     l2(dphi2 + M_PI);
-//     l3(dphi3 + M_PI);
-//     l6(dphi6 + M_PI);
-// }
-void Orkestr::invFoo(int vel)
-{
-    
+    float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi6 = XPi;
+  
+    l1(dphi1 + M_PI);
+    l4(dphi4 + M_PI);
+    l5(dphi5 + M_PI);
+    l2(dphi2 + M_PI);
+    l3(dphi3 + M_PI);
+    l6(dphi6 + M_PI);
+}//*/
+
+
+void Orkestr::ReversFoo(float vel){
+    updatePhase(-(vel * Ts_s_IN_SEC), -(vel * Ts_s_IN_SEC));
+
+    // Serial.print("X: " + String(t) +" (1, 4, 5)");
+    // Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
+  
+    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
+    // XPi = X;
+
+    float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    float dphi6 = XPi;
+  
+    l1(dphi1 + M_PI);
+    l4(dphi4 + M_PI);
+    l5(dphi5 + M_PI);
+    l2(dphi2 + M_PI);
+    l3(dphi3 + M_PI);
+    l6(dphi6 + M_PI);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -279,13 +312,8 @@ void Orkestr::ostanovka()
     }
     perehodFix = 0;
     float ust = M_PI;
-       setPhiAll(gPosL + ust, gPosR + ust);
-    // enc_1.encZero();
-    // enc_2.encZero();
-    // enc_3.encZero();
-    // enc_4.encZero();
-    // enc_5.encZero();
-    // enc_6.encZero();
+    setPhiAll(gPosL + ust, gPosR + ust);
+    
     serv1.setGoalSpeed(0);
     serv2.setGoalSpeed(0);
     serv3.setGoalSpeed(0);
@@ -293,4 +321,49 @@ void Orkestr::ostanovka()
     serv5.setGoalSpeed(0);
     serv6.setGoalSpeed(0);
     perehodFix = 1;
+}
+
+
+void Orkestr::asynchroFoo(float velL, float velR){
+    updatePhase(velL * Ts_s_IN_SEC, velR * Ts_s_IN_SEC);
+
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    XPi = Ffull(t2 + M_PI, tc, ts, phiS, phi0);
+    // XPi = X;
+    float dphi1 = X;
+    float dphi2 = XPi;
+    float dphi3 = XPi;
+    float dphi4 = X;
+    float dphi5 = X;
+    float dphi6 = XPi;
+    
+    
+    l1(dphi1);
+    l4(dphi4);
+    l5(dphi5);
+     
+    l2(dphi2);
+    l3(dphi3);
+    l6(dphi6);
+
+    // Serial.print("X: " + String(X) +" (1, 4, 5)");
+    // Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
+}
+
+
+void Orkestr::turnL(float vel)
+{
+    // pre turn //
+    
+    // setPhiSideL(M_PI);
+    // serv2.setGoalPos(M_PI);     
+    // serv4.setGoalPos(M_PI);
+    // serv6.setGoalPos(M_PI);
+    Serial.println(enc_6.get_tick());
+    // updatePhase(0, vel * Ts_s_IN_SEC);
+    // float xLcentre = Ffull(t2, tc, ts, phiS, phi0);
+    // float xLedge = Ffull(t2+M_PI, tc, ts, phiS, phi0+(M_PI/6));
+    // l1(xLedge);
+    // l4(xLcentre);
+    // l5(xLedge);
 }

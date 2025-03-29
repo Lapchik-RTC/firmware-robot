@@ -1,44 +1,44 @@
 #include <Arduino.h>
 
-bool perehodFix = 1;
+bool perehodFix = 0;
 #include "encoder.h"
-#include "orkestr.h"
 #include "obekti.h"
-
-//#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
+#include "phese.h"
+#include "orkestr.h"
 
 Orkestr robot;
 void setup() {
     Serial.begin(115200);
 
     float tc = 2.0*M_PI;
-    float ts = 2.7   ;//4.6;//2.0*2.0/3.6*M_PI;
+    float ts = 2.7;//4.6;//2.0*2.0/3.6*M_PI;
     float phiS = 0.5;
     float phi0 = M_PI;
  
     robot.setParams(M_PI, tc, ts, phiS, phi0);
-    robot.stendUp(); 
+    // robot.stendUp(); 
 
-    serv1.setGoalSpeed(0);
-    serv2.setGoalSpeed(0);
-    serv3.setGoalSpeed(0);
-    serv4.setGoalSpeed(0);
-    serv5.setGoalSpeed(0);
-    serv6.setGoalSpeed(0);
+    
     // robot.setPhiAll(0, 0);
 
     // robot.step();
 }
-
+long i = 0;
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
-    
-    static uint32_t timerStop = millis();
-    static bool ok = 1;
+    // enc_6.enc_tick();
 
-    // if(millis() - timerStop > 15000)
+    // Serial.println(i);
+    // i += 1;
+    
+    // robot.turnL(1.5);
+    serv4.setGoalPos(2*M_PI);
+    // static uint32_t timerStop = millis();
+    // static bool ok = 1;
+
+    // if(millis() - timerStop > 9000)
     // {
     //     if(ok)
     //     {
@@ -46,16 +46,16 @@ void loop(){
     //         ok = 0;
     //     }
     //     perehodFix = 0;
-    //     serv1.setGoalSpeed(0);
-    //     serv2.setGoalSpeed(0);
-    //     serv3.setGoalSpeed(0);
-    //     serv4.setGoalSpeed(0);
-    //     serv5.setGoalSpeed(0);
-    //     serv6.setGoalSpeed(0);
+    //     // serv1.setGoalSpeed(0);
+    //     // serv2.setGoalSpeed(0);
+    //     // serv3.setGoalSpeed(0);
+    //     // serv4.setGoalSpeed(0);
+    //     // serv5.setGoalSpeed(0);
+    //     // serv6.setGoalSpeed(0);
     //     perehodFix = 1;
     // }
     // else
-        robot.invFoo(-1.5);
+        // robot.Foo(1.5);
 }
 
 
