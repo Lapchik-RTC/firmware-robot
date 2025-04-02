@@ -83,7 +83,7 @@ public:
     
     enc_old = enc;
     interrupts();
-    phaseTick();
+    // phaseTick();
   }
 
   float get_phi(){

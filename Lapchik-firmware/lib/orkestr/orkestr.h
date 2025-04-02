@@ -85,12 +85,12 @@ void Orkestr::Foo(float vel){
     float dphi6 = XPi;
     
     
-    l1(M_PI/*dphi1*/);
-    l4(M_PI/*dphi4*/);
-    l5(M_PI/*dphi5*/);
-    l2(M_PI/*dphi2*/);
-    l3(M_PI/*dphi3*/);
-    l6(M_PI/*dphi6*/);
+    l1(dphi1);
+    l4(dphi4);
+    l5(dphi5);
+    l2(dphi2);
+    l3(dphi3);
+    l6(dphi6);
 
     Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
     Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
@@ -304,16 +304,34 @@ void Orkestr::ostanovka()
 
     if(XPi <= M_PI)
     {
-        gPosL = M_PI - X;
+        gPosL = M_PI - XPi;
     }
     else
     {
-        gPosL = 2.0*M_PI - X;
+        gPosL = 2.0*M_PI - XPi;
     }
     perehodFix = 0;
     float ust = M_PI;
-    setPhiAll(gPosL + ust, gPosR + ust);
-    
+    // setPhiAll(gPosL + ust, gPosR + ust);
+    whaitPos = millis();
+    float tochnost = 1.0;
+    while((millis() - whaitPos < 10000) && (
+        (enc_1.get_phi() < (gPosR + ust) * tochnost || (enc_1.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
+        (enc_2.get_phi() < (gPosL + ust) * tochnost || (enc_2.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))||
+        (enc_3.get_phi() < (gPosL + ust) * tochnost || (enc_3.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))||
+        (enc_4.get_phi() < (gPosR + ust) * tochnost || (enc_4.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
+        (enc_5.get_phi() < (gPosR + ust) * tochnost || (enc_5.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
+        (enc_6.get_phi() < (gPosL + ust) * tochnost || (enc_6.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))
+    )
+    )
+    {
+        serv1.setGoalPos(gPosR + ust);
+        serv2.setGoalPos(gPosL + ust);
+        serv3.setGoalPos(gPosL + ust);
+        serv4.setGoalPos(gPosR + ust);
+        serv5.setGoalPos(gPosR + ust);
+        serv6.setGoalPos(gPosL + ust);  
+    }
     serv1.setGoalSpeed(0);
     serv2.setGoalSpeed(0);
     serv3.setGoalSpeed(0);
