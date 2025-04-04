@@ -1,11 +1,22 @@
 #include <Arduino.h>
 
 bool perehodFix = 1;
-float posStatic[6] = {}
+float posStatic[6] = {0,0,0,0,0,0};
+
+
 
 #include "encoder.h"
 #include "obekti.h"
 #include "phese.h"
+void statPosUpd()
+{
+    posStatic[0] = enc_1.get_phi();
+    posStatic[1] = enc_2.get_phi();
+    posStatic[2] = enc_3.get_phi();
+    posStatic[3] = enc_4.get_phi();
+    posStatic[4] = enc_5.get_phi();
+    posStatic[5] = enc_6.get_phi();
+}
 #include "orkestr.h"
 
 Orkestr robot;
@@ -18,26 +29,56 @@ void setup() {
     float phi0 = 0;//M_PI;
     
     robot.setParams(M_PI, tc, ts, phiS, phi0);
-    robot.stendUp(); 
-    
-    
-    // robot.setPhiAll(0, 0);
-    
-    // robot.step();
+    robot.calibr();
+    robot.stendUp();
 }
-// long i = 0;
 
 
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+    
+
     static uint32_t t = millis();
-    while(millis() - t < 20000)
+    static bool a = 1, b = 1;
+
+    float v = 3.0;
+    if(a)
     {
-        robot.Foo(6.0);
+        statPosUpd();
+        a = 0;
     }
-    robot.ostanovka();
+    int timeWork = 6000;
+    while((millis() - t) < timeWork)
+    {
+        robot.turnL(v);
+        // if(millis() - t == timeWork - 1)
+        // {
+        //     statPosUpd();
+        // }
+    }
+    while (millis() - t < 11000)
+    {
+        serv1.setGoalSpeed(-0.3);
+        serv2.setGoalSpeed(-0.3);
+        serv3.setGoalSpeed(-0.3);
+        serv4.setGoalSpeed(-0.3);
+        serv5.setGoalSpeed(-0.3);
+        serv6.setGoalSpeed(-0.3);
+    }
+    if(b)
+    {
+        robot.calibr();
+        robot.stendUp();
+        b = 0;
+    }
+    robot.Foo(v);
+    // robot.ostanovka();
+    
+    
+    // while (1);
+    
 }
 
 
