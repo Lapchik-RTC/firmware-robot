@@ -2,6 +2,7 @@
 #include<Arduino.h>
 #include"Dvigatel.h"
 #include"encoder.h"
+#include "f.h"
 
 
 
@@ -69,23 +70,9 @@ void ServoPrivod::setGoalPos(float phi0){
   phi_err = fmod(phi_err, 2*M_PI);
   
   if(perehodFix){
-    if(phi_err > M_PI)
-    {
-      phi_err -= M_PI;
-    }
-    else if(phi_err < M_PI)
-    {
-      phi_err += M_PI;
-    }
+    phi_err = modc(phi_err, 2*M_PI);
   }
-//*/
-      
-      // 
-      // {
-      //     phi_err += 2*M_PI;
-      //   }
-  // Serial.println(phi_err);
-        float w0 = Preg(phi_err);
+  float w0 = Preg(phi_err);
 
   setGoalSpeed(w0);
 }

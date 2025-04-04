@@ -7,6 +7,10 @@ float modc(float in, float modder)
     {
         in = in - modder;
     }
+    while(in < -modder * 0.5)
+    {
+        in = in + modder;
+    }
     return in;
 }
 

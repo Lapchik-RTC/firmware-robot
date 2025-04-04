@@ -1,44 +1,84 @@
 #include <Arduino.h>
 
 bool perehodFix = 1;
-#include "encoder.h"
-#include "orkestr.h"
-#include "obekti.h"
+float posStatic[6] = {0,0,0,0,0,0};
 
-//#define sgn(a) (a > 0? 1 : a < 0? -1 : 0)
+
+
+#include "encoder.h"
+#include "obekti.h"
+#include "phese.h"
+void statPosUpd()
+{
+    posStatic[0] = enc_1.get_phi();
+    posStatic[1] = enc_2.get_phi();
+    posStatic[2] = enc_3.get_phi();
+    posStatic[3] = enc_4.get_phi();
+    posStatic[4] = enc_5.get_phi();
+    posStatic[5] = enc_6.get_phi();
+}
+#include "orkestr.h"
 
 Orkestr robot;
 void setup() {
     Serial.begin(115200);
-
+    
     float tc = 2.0*M_PI;
-    float ts = 2.7   ;//4.6;//2.0*2.0/3.6*M_PI;
+    float ts = 2.7;//4.6;//2.0*2.0/3.6*M_PI;
     float phiS = 0.5;
-    float phi0 = M_PI;
- 
+    float phi0 = 0;//M_PI;
+    
     robot.setParams(M_PI, tc, ts, phiS, phi0);
-    // robot.stendUp(); 
-    // robot.setPhiAll(0, 0);
-
-    // robot.step();
+    robot.calibr();
+    robot.stendUp();
 }
+
 
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
     
-    static uint32_t timerStop = millis();
-    bool ok = 1;
-    if(millis() - timerStop > 3000)
+
+    static uint32_t t = millis();
+    static bool a = 1, b = 1;
+
+    float v = 3.0;
+    if(a)
     {
-        // if(ok)
-            robot.ostanovka();
-        serv5.setGoalSpeed(0);
-        ok = 0;
+        statPosUpd();
+        a = 0;
     }
-    else
-        robot.Foo(1.5);
+    int timeWork = 6000;
+    while((millis() - t) < timeWork)
+    {
+        robot.turnL(v);
+        // if(millis() - t == timeWork - 1)
+        // {
+        //     statPosUpd();
+        // }
+    }
+    while (millis() - t < 11000)
+    {
+        serv1.setGoalSpeed(-0.3);
+        serv2.setGoalSpeed(-0.3);
+        serv3.setGoalSpeed(-0.3);
+        serv4.setGoalSpeed(-0.3);
+        serv5.setGoalSpeed(-0.3);
+        serv6.setGoalSpeed(-0.3);
+    }
+    if(b)
+    {
+        robot.calibr();
+        robot.stendUp();
+        b = 0;
+    }
+    robot.Foo(v);
+    // robot.ostanovka();
+    
+    
+    // while (1);
+    
 }
 
 
