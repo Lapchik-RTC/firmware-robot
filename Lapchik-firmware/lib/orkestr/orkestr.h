@@ -112,8 +112,8 @@ updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
     l3(dphi3);
     l6(dphi6);
 
-    Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
-    Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
+    // Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
+    // Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
 }
 
 void Orkestr::calibr()
@@ -152,7 +152,7 @@ void Orkestr::calibr()
     
         int trig6 = 150;//146;
         int trig6_ = 130;
-    int whaitTimeCalibr = 1500;
+    int whaitTimeCalibr = 1;
     ///  dv1  ///
     calibrTime = millis();
     while( analogRead(csPins[0]) < trig1 && kalibrON1 || (millis() - calibrTime < whaitTimeCalibr))
@@ -227,12 +227,12 @@ void Orkestr::stendUp()
     enc_5.encZero();
     enc_6.encZero();
     perehodFix = 1;
-    serv1.setGoalSpeed(0);
-    serv2.setGoalSpeed(0);
-    serv3.setGoalSpeed(0);
-    serv4.setGoalSpeed(0);
-    serv5.setGoalSpeed(0);
-    serv6.setGoalSpeed(0);
+        // serv1.setGoalSpeed(0);
+        // serv2.setGoalSpeed(0);
+        // serv3.setGoalSpeed(0);
+        // serv4.setGoalSpeed(0);
+        // serv5.setGoalSpeed(0);
+        // serv6.setGoalSpeed(0);
 
 }
 

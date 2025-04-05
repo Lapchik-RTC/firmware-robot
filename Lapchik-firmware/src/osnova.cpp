@@ -14,6 +14,7 @@ float posStatic[6] = {0,0,0,0,0,0};
 void setup() {
     Serial.begin(115200);
     Serial1.begin(19200);
+
     memset(&gamePad, 0, sizeof(gamePad));
 
     float tc = 2.0*M_PI;
@@ -32,8 +33,9 @@ void loop(){
     
     readPacket();
 
-    
-    
+    stateMachine();    
+    Serial.print("\tgamePad.RightThumbY: " + String(gamePad.RightThumbY) + "\tgamePad.RightThumbX: " + String(gamePad.RightThumbX) + "\tgamePad.B: " + String(gamePad.B));
+    Serial.println();
     /*
     static uint32_t t = millis();
     float v = 3.0;

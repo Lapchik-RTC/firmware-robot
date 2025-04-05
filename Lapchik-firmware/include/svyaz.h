@@ -72,10 +72,10 @@ bool readPacket() {
             }
             
             // Распаковка данных
-            gamePad.A          = packet[1] & 0x80;
-            gamePad.B          = packet[1] & 0x40;
-            gamePad.X          = packet[1] & 0x20;
-            gamePad.Y          = packet[1] & 0x10;
+            gamePad.A          = packet[1] & 0x40;
+            gamePad.B          = packet[1] & 0x80;
+            gamePad.X          = packet[1] & 0x10;
+            gamePad.Y          = packet[1] & 0x20;
             gamePad.DPad_Up    = packet[1] & 0x08;
             gamePad.DPad_Down  = packet[1] & 0x04;
             gamePad.DPad_Left  = packet[1] & 0x02;
@@ -104,24 +104,28 @@ bool readPacket() {
 }
 /////////////////////////   Проверка конкретных кнопок   /////////////////////////
 
+int luft = 6000;
 bool nado_rabotat() {
-  if (
-    (gamePad.RightThumbY > 0) && (gamePad.RightThumbY < 700) &&
-    (gamePad.RightThumbY < 0) && (gamePad.RightThumbY > -700) &&
-    (gamePad.RightThumbX > 0) && (gamePad.RightThumbX < 700) &&
-    (gamePad.RightThumbX < 0) && (gamePad.RightThumbX > -700) &&
-    ( !gamePad.B )
-  ) {  
-    return false;
-  }
-  else {
+  // if (
+  //   (gamePad.RightThumbY >= -luft) && (gamePad.RightThumbY <= luft) &&
+  //   (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) &&
+  //   ( !gamePad.B )
+  // ) {  
+    
+  //   return false;
+  // }
+  // else {
     return true;
-  }
-}  
-
+  // }
+} 
+bool vpered();
+bool nazad();
+bool vpravo();
+bool vlevo();
+bool rovnaysa();
 
 bool vpered() {
-    if( (gamePad.RightThumbY > 0) && (gamePad.RightThumbY < 700) )
+    if( (gamePad.RightThumbY >= 0) && (gamePad.RightThumbY <= luft) && !nazad())
     {
         return false;
     }
@@ -129,17 +133,10 @@ bool vpered() {
     {
         return true;
     }
-
-    // if (!gamePad.A && !gamePad.B && !gamePad.DPad_Up && !gamePad.DPad_Down && !gamePad.DPad_Left && !gamePad.DPad_Right && (abs(gamePad.LeftThumbX) < min_LeftThumbX) && (abs(gamePad.LeftThumbY) < min_LeftThumbY)) {  
-    //   return false;
-    // }
-    // else {
-    //   return true;
-    // }
   }
 
   bool nazad() {
-    if( (gamePad.RightThumbY < 0) && (gamePad.RightThumbY > -700) )
+    if( (gamePad.RightThumbY <= 0) && (gamePad.RightThumbY >= -luft) && !vpered())
     {
         return false;
     }
@@ -152,7 +149,7 @@ bool vpered() {
 //   int invertThumbX = 1;
   
   bool vpravo() {
-    if( (gamePad.RightThumbX > 0) && (gamePad.RightThumbX < 700) )
+    if( (gamePad.RightThumbX >= 0) && (gamePad.RightThumbX <= luft) && !vlevo())
     {
         return false;
     }
@@ -163,7 +160,7 @@ bool vpered() {
   }
   
   bool vlevo() {
-    if( (gamePad.RightThumbX < 0) && (gamePad.RightThumbX > -700) )
+    if( (gamePad.RightThumbX <= 0) && (gamePad.RightThumbX >= -luft) && !vpravo())
     {
         return false;
     }
