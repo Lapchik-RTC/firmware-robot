@@ -119,6 +119,7 @@ updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
 void Orkestr::calibr()
 {
     ///// preKalibr /////
+    
     float pKvel = -0.2;
     kalibrON1 = 1;
     kalibrON2 = 1;
@@ -139,23 +140,15 @@ void Orkestr::calibr()
     /////////////////////
     float vel = -1.6;
     int trig1 = 150;
-
-        int trig2 = 150;//140;
-        int trig2_ = 130;
-    
-        int trig3 = 150;//130;
-        int trig3_ = 130;
-    
-    int trig4 = 160;//135;
-    
-    int trig5 = 150;//130;
-    
-        int trig6 = 150;//146;
-        int trig6_ = 130;
-    int whaitTimeCalibr = 1;
+    int trig2 = 150;       
+    int trig3 = 150;
+    int trig4 = 160;
+    int trig5 = 150;
+    int trig6 = 150;
+    int whaitTimeCalibr = 1500;
     ///  dv1  ///
     calibrTime = millis();
-    while( analogRead(csPins[0]) < trig1 && kalibrON1 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[0]) < trig1 && kalibrON1 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv1.setGoalSpeed(vel);
     }
@@ -164,7 +157,7 @@ void Orkestr::calibr()
 
     ///  dv2  ///
     calibrTime = millis();
-    while( analogRead(csPins[1]) < trig2 && kalibrON2 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[1]) < trig2 && kalibrON2 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv2.setGoalSpeed(-vel);
     }
@@ -173,7 +166,7 @@ void Orkestr::calibr()
 
     ///  dv3  ///
     calibrTime = millis();
-    while( analogRead(csPins[2]) < trig3 && kalibrON3 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[2]) < trig3 && kalibrON3 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv3.setGoalSpeed(-vel);
     }
@@ -182,7 +175,7 @@ void Orkestr::calibr()
 
     ///  dv4  ///
     calibrTime = millis();
-    while( analogRead(csPins[3]) < trig4 && kalibrON4 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[3]) < trig4 && kalibrON4 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv4.setGoalSpeed(vel);
     }
@@ -191,7 +184,7 @@ void Orkestr::calibr()
 
     ///  dv5  ///
     calibrTime = millis();
-    while( analogRead(csPins[4]) < trig5 && kalibrON5 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[4]) < trig5 && kalibrON5 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv5.setGoalSpeed(vel);
     }
@@ -200,7 +193,7 @@ void Orkestr::calibr()
 
     ///  dv6  ///
     calibrTime = millis();
-    while( analogRead(csPins[5]) < trig6 && kalibrON6 || (millis() - calibrTime < whaitTimeCalibr))
+    while( analogRead(csPins[5]) < trig6 && kalibrON6 && (millis() - calibrTime < whaitTimeCalibr))
     {
         serv6.setGoalSpeed(-vel);
     }
@@ -219,7 +212,6 @@ void Orkestr::stendUp()
 {
     float startPos = (M_PI/2.0) + (M_PI/30.0);
     setPhiAll(startPos, startPos);
-
     enc_1.encZero();
     enc_2.encZero();
     enc_3.encZero();
@@ -297,7 +289,7 @@ void Orkestr::moonwalk(float vel){
 }//*/
 
 void Orkestr::ReversFoo(float velL, float velR){
-    updatePhase(sgn(velL)*(velR * Ts_s_IN_SEC), sgn(velL)*(velL * Ts_s_IN_SEC));
+    updatePhase(-(velR * Ts_s_IN_SEC), -(velL * Ts_s_IN_SEC));
 
     // Serial.print("X: " + String(t) +" (1, 4, 5)");
     // Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
@@ -324,6 +316,7 @@ void Orkestr::ReversFoo(float velL, float velR){
 ////////////////////////////////////////////////////////////////////////
 void Orkestr::ostCalibr()
 {
+    
     uint32_t timeOstCalibr = millis();
     float velOC = -1.0;
     int dir[6] = {1,1,1,1,1,1};
@@ -331,22 +324,22 @@ void Orkestr::ostCalibr()
     {
         
         if(modc(enc_1.get_phi(), 2.0*M_PI) < M_PI) dir[0] = -1;
-        else dir[0] = -1;
+        else dir[0] = 1;
 
         if(modc(enc_2.get_phi(), 2.0*M_PI) < M_PI) dir[1] = -1;
-        else dir[1] = -1;
+        else dir[1] = 1;
 
         if(modc(enc_3.get_phi(), 2.0*M_PI) < M_PI) dir[2] = -1;
-        else dir[2] = -1;
+        else dir[2] = 1;
 
         if(modc(enc_4.get_phi(), 2.0*M_PI) < M_PI) dir[3] = -1;
-        else dir[3] = -1;
+        else dir[3] = 1;
 
         if(modc(enc_5.get_phi(), 2.0*M_PI) < M_PI) dir[4] = -1;
-        else dir[4] = -1;
+        else dir[4] = 1;
 
         if(modc(enc_6.get_phi(), 2.0*M_PI) < M_PI) dir[5] = -1;
-        else dir[5] = -1;
+        else dir[5] = 1;
 
         serv1.setGoalSpeed(velOC * dir[0]);
         serv2.setGoalSpeed(velOC * dir[1]);
@@ -365,6 +358,7 @@ void Orkestr::ostCalibr()
         serv6.setGoalSpeed(velOC * dir[5]);
     calibr();
     stendUp();
+    
 }
 void Orkestr::ostanovka()
 {
