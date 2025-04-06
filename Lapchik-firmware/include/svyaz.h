@@ -104,19 +104,18 @@ bool readPacket() {
 }
 /////////////////////////   Проверка конкретных кнопок   /////////////////////////
 
-int luft = 6000;
+int luft = 20000;
 bool nado_rabotat() {
-  // if (
-  //   (gamePad.RightThumbY >= -luft) && (gamePad.RightThumbY <= luft) &&
-  //   (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) &&
-  //   ( !gamePad.B )
-  // ) {  
+  if (
+    (gamePad.RightThumbY >= -luft) && (gamePad.RightThumbY <= luft) &&
+    (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) && (!gamePad.B)
+  ) {  
     
-  //   return false;
-  // }
-  // else {
+    return false;
+  }
+  else {
     return true;
-  // }
+  }
 } 
 bool vpered();
 bool nazad();
@@ -125,59 +124,60 @@ bool vlevo();
 bool rovnaysa();
 
 bool vpered() {
-    if( (gamePad.RightThumbY >= 0) && (gamePad.RightThumbY <= luft) && !nazad())
+    if( gamePad.RightThumbY >= luft)
     {
-        return false;
+        return 1;
     }
     else
     {
-        return true;
+        return 0;
     }
   }
 
   bool nazad() {
-    if( (gamePad.RightThumbY <= 0) && (gamePad.RightThumbY >= -luft) && !vpered())
+    if( gamePad.RightThumbY <= -luft)
     {
-        return false;
+        return 1;
     }
     else
     {
-        return true;
+        return 0;
     }
   }
 
 //   int invertThumbX = 1;
   
   bool vpravo() {
-    if( (gamePad.RightThumbX >= 0) && (gamePad.RightThumbX <= luft) && !vlevo())
+    if( gamePad.RightThumbX >= luft)
     {
-        return false;
+        return 1;
     }
     else
     {
-        return true;
+        return 0;
     }
   }
   
   bool vlevo() {
-    if( (gamePad.RightThumbX <= 0) && (gamePad.RightThumbX >= -luft) && !vpravo())
+    if(gamePad.RightThumbX <= -luft)
     {
-        return false;
+        return 1;
     }
     else
     {
-        return true;
+        return 0;
     }
   }
 
   bool rovnaysa()
   {
-    if( !gamePad.B )
+    if( gamePad.B )
     {
-        return false;
+      
+        return 1;
     }
     else
     {
-        return true;
+        return 0;
     }
   }
