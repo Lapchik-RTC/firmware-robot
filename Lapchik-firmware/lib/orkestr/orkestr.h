@@ -40,7 +40,7 @@ class Orkestr
   void ReversFoo(float velL, float velR);
   /// @brief --- 
   void moonwalk(float);
-
+void onePhase(float vel);
   void ostCalibr();  
   void ostanovka();
 
@@ -313,6 +313,18 @@ void Orkestr::ReversFoo(float velL, float velR){
     l6(dphi6 + M_PI);
 }
 
+void Orkestr::onePhase(float vel)
+{
+    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    XPi = Ffull(t, tc, ts, phiS, phi0);
+    l1(X);
+    l4(X);
+    l5(X);
+    l2(XPi);
+    l3(XPi);
+    l6(XPi);
+}
 ////////////////////////////////////////////////////////////////////////
 void Orkestr::ostCalibr()
 {

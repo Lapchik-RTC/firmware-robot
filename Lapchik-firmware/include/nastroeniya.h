@@ -23,6 +23,10 @@ void stateMachine()
         robot.Foo(4.5);
         // }
     }
+    if(vperedVmeste())
+    {
+        robot.onePhase(4.5);
+    }
     if(vpravo())
     {
         Serial.println("vpravo");
