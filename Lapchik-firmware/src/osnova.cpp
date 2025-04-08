@@ -73,6 +73,7 @@ void loop(){
     }
     else {
         statPosUpd();
+        
         while (!nado_rabotat()){
             readPacket();
             // Serial.print("...");

@@ -40,9 +40,10 @@ class Orkestr
   void ReversFoo(float velL, float velR);
   /// @brief --- 
   void moonwalk(float);
-void onePhase(float vel);
+  void onePhase(float vel);
   void ostCalibr();  
   void ostanovka();
+  void legDown();
 
   void turnL(float vel);
   void turnR(float vel);
@@ -92,8 +93,7 @@ void Orkestr::updatePhase(float t_, float t2_)
 }
 
 void Orkestr::Foo(float vel){
-updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-
+    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
     X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
     XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
@@ -370,8 +370,8 @@ void Orkestr::ostCalibr()
         serv6.setGoalSpeed(velOC * dir[5]);
     calibr();
     stendUp();
-    
 }
+
 void Orkestr::ostanovka()
 {
     uint32_t timeOst = millis();
@@ -493,4 +493,17 @@ void Orkestr::turnR(float vel)
     serv2.setGoalPos(fPos);
     serv4.setGoalPos(fPosPi);
     serv6.setGoalPos(fPos);
+}
+
+void Orkestr::legDown(float vel)
+{
+    statPosUpd();
+    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
+    X = Ffull(modc(enc_1.get_phi()), tc, ts, phiS, phi0+(M_PI/6));
+    XPi = Ffull(modc(enc_1.get_phi()) + M_PI, tc, ts, phiS, phi0);
+
+    // if( modc(enc_1.get_phi(), 2.0*M_PI) < X)
+    // {
+        serv1.setGoalPos( 2.0*M_PI - modc(enc_1.get_phi()));
+    // }
 }
