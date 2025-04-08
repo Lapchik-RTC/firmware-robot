@@ -1,6 +1,6 @@
 #pragma once
 #include "svyaz.h"
-Orkestr robot;
+
 uint32_t pereriv = millis();
 uint32_t pererivOst = millis();
 
