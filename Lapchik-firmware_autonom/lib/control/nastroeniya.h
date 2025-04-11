@@ -1,6 +1,6 @@
 #pragma once
 #include "svyaz.h"
-Orkestr robot;
+
 uint32_t pereriv = millis();
 uint32_t pererivOst = millis();
 
@@ -22,6 +22,10 @@ void stateMachine()
         // delay(1000);
         robot.Foo(4.5);
         // }
+    }
+    if(vperedVmeste())
+    {
+        robot.onePhase(4.5);
     }
     if(vpravo())
     {

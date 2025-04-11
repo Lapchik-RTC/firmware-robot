@@ -108,7 +108,7 @@ int luft = 20000;
 bool nado_rabotat() {
   if (
     (gamePad.RightThumbY >= -luft) && (gamePad.RightThumbY <= luft) &&
-    (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) && (!gamePad.B)
+    (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) && (!gamePad.B) && (!gamePad.A)
   ) {  
     
     return false;
@@ -118,10 +118,24 @@ bool nado_rabotat() {
   }
 } 
 bool vpered();
+bool vperedVmeste();
 bool nazad();
 bool vpravo();
 bool vlevo();
 bool rovnaysa();
+
+bool vperedVmeste()
+{
+  if( gamePad.A )
+    {
+      
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 bool vpered() {
     if( gamePad.RightThumbY >= luft)

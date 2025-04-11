@@ -29,24 +29,30 @@ class Orkestr
   void setParams(float t, float tc, float ts, float phiS, float phi0);
   void calibr();
   void stendUp();
+ 
   /// @brief Foo params
   void setPhiAll(float nPhiL, float nPhiR);
 
   //___STATES___
-
   /// @brief Forw
   void Foo(float vel);
+
   /// @brief Back
   void ReversFoo(float velL, float velR);
-  /// @brief --- 
-  void moonwalk(float);
-  void onePhase(float vel);
-  void ostCalibr();  
-  void ostanovka();
-  void legDown();
 
+  /// @brief Foo Synchro
+  void onePhase(float vel);
+
+  /// @brief calibr
+  void ostCalibr();  
+
+  /// @brief Turn
   void turnL(float vel);
   void turnR(float vel);
+
+  /// @brief --- 
+  void legDown(float vel);
+  
 
   private:
   float t, t2, tc, ts, phiS, phi0;
@@ -94,7 +100,7 @@ void Orkestr::updatePhase(float t_, float t2_)
 
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/4));
     XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;
@@ -105,12 +111,12 @@ void Orkestr::Foo(float vel){
     float dphi6 = XPi;
     
     
-    l1(dphi1);
-    l4(dphi4);
-    l5(dphi5);
-    l2(dphi2);
+    // l1(dphi1);
+    // l4(dphi4);
+    // l5(dphi5);
+    // l2(dphi2);
     l3(dphi3);
-    l6(dphi6);
+    // l6(dphi6);
 
     // Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
     // Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
@@ -263,36 +269,8 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     }
 }
 
-void Orkestr::moonwalk(float vel){
-    updatePhase(vel * Ts_s_IN_SEC, -(vel * Ts_s_IN_SEC));
-
-    Serial.print("X: " + String(t) +" (1, 4, 5)");
-    Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
-  
-    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
-    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
-    // XPi = X;
-
-    float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
-    float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
-    float dphi6 = XPi;
-  
-    l1(dphi1 + M_PI);
-    l4(dphi4 + M_PI);
-    l5(dphi5 + M_PI);
-    l2(dphi2 + M_PI);
-    l3(dphi3 + M_PI);
-    l6(dphi6 + M_PI);
-}//*/
-
 void Orkestr::ReversFoo(float velL, float velR){
     updatePhase(-(velR * Ts_s_IN_SEC), -(velL * Ts_s_IN_SEC));
-
-    // Serial.print("X: " + String(t) +" (1, 4, 5)");
-    // Serial.println("\tXPi: " + String(t2) +" (2, 3, 6)");
   
     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
     XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
@@ -372,97 +350,6 @@ void Orkestr::ostCalibr()
     stendUp();
 }
 
-void Orkestr::ostanovka()
-{
-    uint32_t timeOst = millis();
-    while (millis() - timeOst < 1500)
-    {    
-        serv2.setGoalPos(posStatic[1]);
-        serv3.setGoalPos(posStatic[2]);
-        serv6.setGoalPos(posStatic[5]);  
-        serv1.setGoalPos(posStatic[0]);
-        serv4.setGoalPos(posStatic[3]);
-        serv5.setGoalPos(posStatic[4]);
-    }
-    float dPos[6] = {0,0,0,0,0,0};
-    float rPos[6] = {enc_1.get_phi(), enc_2.get_phi(), enc_3.get_phi(), enc_4.get_phi(), enc_5.get_phi(), enc_6.get_phi()};
-    for(int i = 0; i < 6; i++)
-    {
-        if(modc(rPos[i], 2.0*M_PI) < M_PI)
-        {
-            dPos[i] = M_PI - rPos[i];
-        }
-        else
-        {
-            dPos[i] = 2.0*M_PI - rPos[i];
-        }
-    }
-    serv2.setGoalPos(dPos[1]);
-    serv3.setGoalPos(dPos[2]);
-    serv6.setGoalPos(dPos[5]);  
-    serv1.setGoalPos(dPos[0]);
-    serv4.setGoalPos(dPos[3]);
-    serv5.setGoalPos(dPos[4]);
-
-    // statPosUpd();
-    // float gPosL = 0, gPosR = 0;
-    //
-    // if(X <= M_PI)
-    // {
-    //     gPosR = M_PI - X;
-    // }
-    // else
-    // {
-    //     gPosR = 2.0*M_PI - X;
-    // }
-    //
-    // if(XPi <= M_PI)
-    // {
-    //     gPosL = M_PI - XPi;
-    // }
-    // else
-    // {
-    //     gPosL = 2.0*M_PI - XPi;
-    // }
-    // perehodFix = 0;
-    // float ust = M_PI;
-    // // setPhiAll(gPosL + ust, gPosR + ust);
-    // whaitPos = millis();
-    // float tochnost = 1.0;
-    // while((millis() - whaitPos < 10000) && (
-    //     (enc_1.get_phi() < (gPosR + ust) * tochnost || (enc_1.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
-    //     (enc_2.get_phi() < (gPosL + ust) * tochnost || (enc_2.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))||
-    //     (enc_3.get_phi() < (gPosL + ust) * tochnost || (enc_3.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))||
-    //     (enc_4.get_phi() < (gPosR + ust) * tochnost || (enc_4.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
-    //     (enc_5.get_phi() < (gPosR + ust) * tochnost || (enc_5.get_phi() < ((gPosR + ust)  + ((gPosR + ust) * (1.0 - tochnost)))))||
-    //     (enc_6.get_phi() < (gPosL + ust) * tochnost || (enc_6.get_phi() < ((gPosL + ust)  + ((gPosL + ust) * (1.0 - tochnost)))))
-    // )
-    // )
-    // {
-    //     serv2.setGoalPos(/*posStatic[1] + */gPosL + ust);
-    //     serv3.setGoalPos(/*posStatic[2] + */gPosL + ust);
-    //     serv6.setGoalPos(/*posStatic[5] + */gPosL + ust);  
-    //     serv1.setGoalPos(/*posStatic[0] + */gPosR + ust*0.5);
-    //     serv4.setGoalPos(/*posStatic[3] + */gPosR + ust*0.5);
-    //     serv5.setGoalPos(/*posStatic[4] + */gPosR + ust*0.5);
-    // }
-    // // statPosUpd();
-    // // serv2.setGoalPos(posStatic[1]+(M_PI/6.0));
-    // // serv3.setGoalPos(posStatic[2]+(M_PI/6.0));
-    // // serv6.setGoalPos(posStatic[5]+(M_PI/6.0));  
-    // // serv1.setGoalPos(posStatic[0]+(M_PI/6.0)+ust*0.5);
-    // // serv4.setGoalPos(posStatic[3]+(M_PI/6.0)+ust*0.5);
-    // // serv5.setGoalPos(posStatic[4]+(M_PI/6.0)+ust*0.5);
-    // // serv1.setGoalSpeed(0);
-    // // serv2.setGoalSpeed(0);
-    // // serv3.setGoalSpeed(0);
-    // // serv4.setGoalSpeed(0);
-    // // serv5.setGoalSpeed(0);
-    // // serv6.setGoalSpeed(0);
-    // perehodFix = 1;
-
-}
-
 void Orkestr::turnL(float vel)
 {
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
@@ -497,13 +384,31 @@ void Orkestr::turnR(float vel)
 
 void Orkestr::legDown(float vel)
 {
+    enc_3.enc_tick();
+    // updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
+    // X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    // XPi = Ffull(t+M_PI, tc, ts, phiS, phi0);
+    
     statPosUpd();
-    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(modc(enc_1.get_phi()), tc, ts, phiS, phi0+(M_PI/6));
-    XPi = Ffull(modc(enc_1.get_phi()) + M_PI, tc, ts, phiS, phi0);
+    float rp = modc(posStatic[2], 2.0*M_PI) - M_PI;
+    float gp = 0;
 
-    // if( modc(enc_1.get_phi(), 2.0*M_PI) < X)
-    // {
-        serv1.setGoalPos( 2.0*M_PI - modc(enc_1.get_phi()));
-    // }
+    while(rp != gp)
+    {
+        // if(gp < rp)
+        //     serv3.setGoalPos(rp - (gp - rp));
+        // else
+        //     serv3.setGoalPos(gp - rp);
+        Serial.print("rp: " + String(rp));
+        Serial.print("\tgp: " + String(gp));
+        int err = 0;
+        // if(gp < rp)
+        //     err = (rp - (gp - rp));
+        // else
+            err = (gp - rp);
+        // Serial.print("\tgp: " + String(gp));
+        Serial.print("\terr: " + String(err));
+        Serial.println();
+
+    }
 }
