@@ -100,7 +100,7 @@ void Orkestr::updatePhase(float t_, float t2_)
 
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/4));
     XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;
@@ -384,14 +384,31 @@ void Orkestr::turnR(float vel)
 
 void Orkestr::legDown(float vel)
 {
+    enc_3.enc_tick();
+    // updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
+    // X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    // XPi = Ffull(t+M_PI, tc, ts, phiS, phi0);
+    
     statPosUpd();
-    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(modc(enc_3.get_phi(), 2.0*M_PI), tc, ts, phiS, phi0+(M_PI/6));
-    XPi = Ffull(modc(enc_3.get_phi(), 2.0*M_PI) + M_PI, tc, ts, phiS, phi0);
+    float rp = modc(posStatic[2], 2.0*M_PI) - M_PI;
+    float gp = 0;
 
-    // if( modc(enc_1.get_phi(), 2.0*M_PI) < X)
-    // {
-        serv3.setGoalPos( M_PI - modc(enc_3.get_phi(), 2.0*M_PI));
-        // l1( 2.0*M_PI - modc(enc_1.get_phi(), 2.0*M_PI) );
-    // }
+    while(rp != gp)
+    {
+        // if(gp < rp)
+        //     serv3.setGoalPos(rp - (gp - rp));
+        // else
+        //     serv3.setGoalPos(gp - rp);
+        Serial.print("rp: " + String(rp));
+        Serial.print("\tgp: " + String(gp));
+        int err = 0;
+        // if(gp < rp)
+        //     err = (rp - (gp - rp));
+        // else
+            err = (gp - rp);
+        // Serial.print("\tgp: " + String(gp));
+        Serial.print("\terr: " + String(err));
+        Serial.println();
+
+    }
 }
