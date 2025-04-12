@@ -64,7 +64,9 @@ bool readPacket() {
             
             // Проверка CRC (байты 1-11)
             uint16_t receivedCrc = (packet[11] << 8) | packet[12];
-            uint16_t calculatedCrc = crc16_ccitt(&packet[1], 10);
+            uint16_t calculatedCrc = crc16_ccitt(&packet[1], 11);
+            Serial.print(packet[12]);
+            delay(10000);
             
             if (receivedCrc != calculatedCrc) {
                 gamePad.CRC_Error = true;

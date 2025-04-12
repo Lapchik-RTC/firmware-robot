@@ -6,7 +6,7 @@ float posStatic[6] = {0,0,0,0,0,0};
 
 #include "encoder.h"
 #include "obekti.h"
-#include "phese.h"
+// #include "phese.h"
 #include "orkestr.h"
  
 #include "svyaz.h"
@@ -47,7 +47,7 @@ void printPacket() {
       if(gamePad.DPad_Down) Serial.print("DPad_Down ");
       if(gamePad.DPad_Left) Serial.print("DPad_Left ");
       if(gamePad.DPad_Right) Serial.println("DPad_Right ");
-    } else if(gamePad.CRC_Error) {
+    } else {
       Serial.println("CRC Error!");
     }
   // delay(20);
@@ -60,35 +60,44 @@ void loop(){
     // timer = micros();
     // Serial.print(gamePad.B);
 
-    // printPacket();
+    printPacket();
+    // Serial.println(0);
     // delay(500);
-    readPacket();
+   
+   
+   
+   
+    // readPacket();
 
-    if (nado_rabotat()) {
-        // readPacket();
-        // Serial.println("21111111111");
+    // if (nado_rabotat()) {
+    //     // readPacket();
+    //     // Serial.println("21111111111");
 
-        stateMachine();
+    //     stateMachine();
 
-    }
-    else {
-        statPosUpd();
+    // }
+    // else {
+    //     statPosUpd();
         
-        while (!nado_rabotat()){
-            readPacket();
-            // Serial.print("...");
-                serv2.setGoalPos(posStatic[2 - 1]);
-                serv3.setGoalPos(posStatic[3 - 1]);
-                serv6.setGoalPos(posStatic[6 - 1]);  
-                serv1.setGoalPos(posStatic[1 - 1]);
-                serv4.setGoalPos(posStatic[4 - 1]);
-                serv5.setGoalPos(posStatic[5 - 1]);
+    //     while (!nado_rabotat()){
+    //         readPacket();
+    //         // Serial.print("...");
+    //             serv2.setGoalPos(posStatic[2 - 1]);
+    //             serv3.setGoalPos(posStatic[3 - 1]);
+    //             serv6.setGoalPos(posStatic[6 - 1]);  
+    //             serv1.setGoalPos(posStatic[1 - 1]);
+    //             serv4.setGoalPos(posStatic[4 - 1]);
+    //             serv5.setGoalPos(posStatic[5 - 1]);
             
-        }
-    }
+    //     }
+    // }
     // Serial.println();
     // Serial.print("\tgamePad.RightThumbY: " + String(gamePad.RightThumbY) + "\tgamePad.RightThumbX: " + String(gamePad.RightThumbX) + "\tgamePad.B: " + String(gamePad.B));
     // Serial.println();
+   
+   
+   
+   
     /*
     static uint32_t t = millis();
     float v = 3.0;
