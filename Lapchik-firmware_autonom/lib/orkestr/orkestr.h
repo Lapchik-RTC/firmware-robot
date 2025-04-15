@@ -49,6 +49,7 @@ class Orkestr
   /// @brief Turn
   void turnL(float vel);
   void turnR(float vel);
+  void _turnL(float vel);
 
   /// @brief --- 
   void legDown(float vel);
@@ -56,6 +57,7 @@ class Orkestr
 
   private:
   float t, t2, tc, ts, phiS, phi0;
+//   float t3, t4;
   float X, XPi;
   bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
   bool zeroAll = 1;
@@ -111,12 +113,12 @@ void Orkestr::Foo(float vel){
     float dphi6 = XPi;
     
     
-    // l1(dphi1);
-    // l4(dphi4);
-    // l5(dphi5);
-    // l2(dphi2);
+    l1(dphi1);
+    l4(dphi4);
+    l5(dphi5);
+    l2(dphi2);
     l3(dphi3);
-    // l6(dphi6);
+    l6(dphi6);
 
     // Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
     // Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
@@ -411,4 +413,30 @@ void Orkestr::legDown(float vel)
         Serial.println();
 
     }
+}
+
+void Orkestr::_turnL(float vel){
+    updatePhase((vel * Ts_s_IN_SEC), -(vel * Ts_s_IN_SEC));
+  
+    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+    XPi = Ffull(t2 + M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
+    // XPi = X;
+    float L1 = X;
+    float L2 = Ffull(t + M_PI, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);;
+    float R1 = XPi;
+    float R2 = Ffull(t2, tc, ts, phiS, phi0-(M_PI/6.0));;
+    // float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    // float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    // float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    // float dphi4 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
+    // float dphi5 = X;/* + M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
+    // float dphi6 = XPi;
+  
+    l1(L1);
+    l4(R2);
+    l5(L1);
+
+    l2(R1);
+    l3(L2);
+    l6(R1);
 }
