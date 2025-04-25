@@ -53,6 +53,7 @@ class Orkestr
 
   /// @brief --- 
   void legDown(float vel);
+  void legDown2();
   
 
   private:
@@ -415,7 +416,76 @@ void Orkestr::legDown(float vel)
     }
 }
 
+uint32_t tWait_ = millis();
+void Orkestr::legDown2()
+{
+    statPosUpd();
+    float ust1 = 0+M_PI /*- (M_PI/8.0)*/;
+    float ust2 = 0 /*- (M_PI/8.0)*/;
+    float ust3 = 0 /*- (M_PI/8.0)*/;
+    float ust4 = 0+M_PI /*- (M_PI/8.0)*/;
+    float ust5 = 0+M_PI /*- (M_PI/8.0)*/;
+    float ust6 = 0 /*- (M_PI/8.0)*/;
+
+    bool correct1 = 1, correct2 = 1, correct3 = 1, correct4 = 1, correct5 = 1, correct6 = 1;
+    while((millis() - tWait_ < 12000) && (
+        (abs( modc(enc_1.get_phi(), 2.0*M_PI) ) > ust1) ||
+        (abs( modc(enc_2.get_phi(), 2.0*M_PI) ) > ust2) ||
+        (abs( modc(enc_3.get_phi(), 2.0*M_PI) ) > ust3) ||
+        (abs( modc(enc_4.get_phi(), 2.0*M_PI) ) > ust4) ||
+        (abs( modc(enc_5.get_phi(), 2.0*M_PI) ) > ust5) ||
+        (abs( modc(enc_6.get_phi(), 2.0*M_PI) ) > ust6)                
+    )
+    )
+    {
+        float rp1 = modc(enc_1.get_phi(), 2.0*M_PI);
+        float rp2 = modc(enc_2.get_phi(), 2.0*M_PI);
+        float rp3 = modc(enc_3.get_phi(), 2.0*M_PI);
+        float rp4 = modc(enc_4.get_phi(), 2.0*M_PI);
+        float rp5 = modc(enc_5.get_phi(), 2.0*M_PI);
+        float rp6 = modc(enc_6.get_phi(), 2.0*M_PI);
+        if(rp1 > M_PI && correct1)
+        {
+            ust1 += M_PI;
+            correct1 = 0;
+        }
+        if(rp2 > M_PI && correct2)
+        {
+            ust2 += M_PI;
+            correct2 = 0;
+        }
+        if(rp3 > M_PI && correct3)
+        {
+            ust3 += M_PI;
+            correct3 = 0;
+        }
+        if(rp4 > M_PI && correct4)
+        {
+            ust4 += M_PI;
+            correct4 = 0;
+        }
+        if(rp5 > M_PI && correct5)
+        {
+            ust5 += M_PI;
+            correct5 = 0;
+        }
+        if(rp6 > M_PI && correct6)
+        {
+            ust6 += M_PI;
+            correct6 = 0;
+        }
+        perehodFix = 0;
+        serv1.setGoalPos(ust1/* - rp1*/); 
+        serv2.setGoalPos(ust2/* - rp2*/); 
+        serv3.setGoalPos(ust3/* - rp3*/); 
+        serv4.setGoalPos(ust4/* - rp4*/); 
+        serv5.setGoalPos(ust5/* - rp5*/); 
+        serv6.setGoalPos(ust6/* - rp6*/); 
+    }
+}
+
 void Orkestr::_turnL(float vel){
+    
     updatePhase((vel * Ts_s_IN_SEC), -(vel * Ts_s_IN_SEC));
   
     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
@@ -439,4 +509,6 @@ void Orkestr::_turnL(float vel){
     l2(R1);
     l3(L2);
     l6(R1);
+    // setParams(M_PI, 2.0*M_PI, 2.7, 0.5, 0);
 }
+Orkestr robot;
