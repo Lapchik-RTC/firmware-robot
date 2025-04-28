@@ -1,11 +1,6 @@
 #include <Arduino.h>
-bool calibr152 = 0;
-bool perehodFix = 1;
-float posStatic[6] = {0,0,0,0,0,0};
-
-#include "encoder.h"
-#include "obekti.h"
-#include "orkestr.h"
+#include "SLOVAR.h"
+#include "orkestr/orkestr.h"
 
 // #include "subStateMachine.h"
 
@@ -40,7 +35,7 @@ void loop(){
     static uint32_t timeWork = millis();
     // enc_3.enc_tick();
     // Serial.println(enc_3.get_tick());    
-    static bool ld = 1;
+    // static bool ld = 1;
     int velo = 4.5;
     robot.Foo(velo);
     // if (millis() - timeWork < 3100)

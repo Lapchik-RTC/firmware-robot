@@ -1,10 +1,5 @@
 {
-	"folders": [
-		{
-			"name": "Lapchik-firmware_autonom",
-			"path": ".."
-		}
-	],
+	"folders": [],
 	"settings": {
 		"files.associations": {
 			"*.md": "cpp"

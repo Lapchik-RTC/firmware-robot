@@ -1,43 +1,5 @@
-#pragma once
-#include<Arduino.h>
-#include"Dvigatel.h"
-#include"encoder.h"
-#include "f.h"
 
-
-
-struct MotorControlParams//структура общая
-{
-  float Ts_sec;
-  float kpPI;
-  float ki;
-  float maxU; // Максимальное напряжение на двигателе
-  float kpP;
-  float maxVel; // Максимальная угловая скорость
-  float kalibrSpeed;
-};
-
-///////////////////////   ServoPrivod   ///////////////////////
-class ServoPrivod
-{
-private:
-  float realSpeed, realAngle;
-  MotorControlParams params;
-  Dvigatel *motor;
-  Encoder *enc;
-  float I;
-  float PIreg(float err);
-  float Preg(float err);
-  
-public:
-  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc) {
-    this->params = mconp;
-    this->motor = motor;
-    this->enc = enc;
-  }
-  void setGoalPos(float goalPos_tick, bool legDownEven = 0);
-  void setGoalSpeed(float goalSpeed);//rad/s
-};
+#include "C:\!projects\lapchik\firmware-robot\Lapchik-firmware_autonomRe\lib\tsokol\regulatori_dlya_lapok\regulatori.h"
 
 ///////////////// REGULATORI /////////////////
 float ServoPrivod::PIreg(float err)
