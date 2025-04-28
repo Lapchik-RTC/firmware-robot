@@ -16,7 +16,7 @@ void setup() {
     float ts = 2.7;
     float phiS = 0.5;
     float phi0 = 0;
-    robot.setParams(M_PI, tc, ts, phiS, phi0);
+    robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
     
     robot.ostCalibr();
     enc_1.encZero();
@@ -38,46 +38,81 @@ void loop(){
     timer = micros();
 
     static uint32_t timeWork = millis();
-    // enc_3.enc_tick();
-    // Serial.println(enc_3.get_tick());    
-    static bool ld = 1;
-    int velo = 4.5;
-    robot.Foo(velo);
-    // if (millis() - timeWork < 3100)
+    
+    static float velo = 0;
+    // for(static int i = 0; i < 1; i++)
+    //     robot.setParams(0/*M_PI*/, 2.0*M_PI, 5.0, 0.5, 0);
+    // robot._turnL(6.0);
+    if(millis() - timeWork < 3000)
+    {
+        velo = 4.5;
+        robot.Foo(velo);
+    }
+    else
+    {
+        if(millis() - timeWork < 4000)
+        {
+            velo = 0;
+            robot.Foo(velo);
+            
+        }
+        else
+        {
+            if(millis() - timeWork < 10000)
+            {
+                
+                robot._turnL(3.0);
+            }
+            else
+            {
+                if(millis() - timeWork < 13000)
+                {
+                    velo = 4.5;
+                    robot.Foo(velo);
+                }
+                else
+                {
+                    velo = 0;
+                    robot.Foo(velo);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // while(millis() - timeWork < 1000)
     // {
     //     robot.Foo(velo);
     // }
-    // else
+    // if(millis() - timeWork < 1000)
     // {
-    //     static bool spu = 1;
-        
-    //     if(ld)
+    //     static bool flag = 1;
+    //     if(flag)
     //     {
-            
-            
     //         robot.legDown2();
-    //         perehodFix = 1;
-    //         ld = 0;
-            
+    //         flag = 0;
+    //         statPosUpd();
     //     }
     //     else
     //     {
-    //         if(spu) {statPosUpd();spu = 0;}
-    //         serv1.setGoalPos(posStatic[0]); 
+    //         serv1.setGoalPos(posStatic[0]);
     //         serv2.setGoalPos(posStatic[1]);
     //         serv3.setGoalPos(posStatic[2]);
     //         serv4.setGoalPos(posStatic[3]);
     //         serv5.setGoalPos(posStatic[4]);
-    //         serv6.setGoalPos(posStatic[5]);
-    //         // Serial.println( String(posStatic[3]) + String(modc(posStatic[3], 2.0*M_PI)));
-    //         /*Serial.println(
-    //             "enc_1: " + String(modc(enc_1.get_phi(), 2.0*M_PI)) + '\t' +
-    //              "enc_2: " + String(modc(enc_2.get_phi(), 2.0*M_PI)) + '\t' +
-    //              "enc_3: " + String(modc(enc_3.get_phi(), 2.0*M_PI)) + '\t' +
-    //              "enc_4: " + String(modc(enc_4.get_phi(), 2.0*M_PI)) + '\t' +
-    //              "enc_5: " + String(modc(enc_5.get_phi(), 2.0*M_PI)) + '\t' +
-    //              "enc_6: " + String(modc(enc_6.get_phi(), 2.0*M_PI))
-    //         );//*/
+    //         serv6.setGoalPos(posStatic[5]); 
     //     }
-    //}
+    // }
+    
 }

@@ -62,3 +62,6 @@ inline float Ffull(float t, float tc, float ts, float phis, float phi0) {
     }
     return out + phi0;
 }
+
+
+/////////////////

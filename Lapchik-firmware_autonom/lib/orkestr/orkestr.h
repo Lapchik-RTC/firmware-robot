@@ -5,8 +5,9 @@
 
 int sgn(float in)
 {
-    if(in >= 0) return 1;
-    else return -1;
+    if(in > 0) return 1;
+    else if(in < 0) return -1;
+    else return 0;
 }
 
 
@@ -103,8 +104,9 @@ void Orkestr::updatePhase(float t_, float t2_)
 
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/4));
-    XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
+
+    X = Ffull(t * abs(sgn(vel)), tc, ts, phiS, phi0 + (M_PI/4)* abs(sgn(vel)));
+    XPi = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;
     float dphi2 = XPi;
@@ -122,7 +124,7 @@ void Orkestr::Foo(float vel){
     l6(dphi6);
 
     // Serial.print("X: " + String(enc_4.get_phi()) +" (1, 4, 5)");
-    // Serial.println("\tXPi: " + String(XPi) +" (2, 3, 6)");
+    // Serial.println(( sgn(vel) ));
 }
 
 void Orkestr::calibr()
@@ -419,7 +421,7 @@ void Orkestr::legDown(float vel)
 uint32_t tWait_ = millis();
 void Orkestr::legDown2()
 {
-    statPosUpd();
+    // statPosUpd();
     float ust1 = M_PI /*- (M_PI/8.0)*/;
     float ust2 = 0 /*- (M_PI/8.0)*/;
     float ust3 = 0 /*- (M_PI/8.0)*/;
@@ -476,19 +478,20 @@ void Orkestr::legDown2()
             correct6 = 0;
         }//*/
         perehodFix = 0;
-        serv1.setGoalPos(ust1/* - rp1*/); 
-        serv2.setGoalPos(ust2/* - rp2*/); 
-        serv3.setGoalPos(ust3/* - rp3*/); 
-        serv4.setGoalPos(ust4/* - rp4*/); 
-        serv5.setGoalPos(ust5/* - rp5*/); 
-        serv6.setGoalPos(ust6/* - rp6*/); 
+        serv1.setGoalPos(-ust1/* - rp1*/); 
+        serv2.setGoalPos(-ust2/* - rp2*/); 
+        serv3.setGoalPos(-ust3/* - rp3*/); 
+        serv4.setGoalPos(-ust4/* - rp4*/); 
+        serv5.setGoalPos(-ust5/* - rp5*/); 
+        serv6.setGoalPos(-ust6/* - rp6*/); 
     }
 }
 
 void Orkestr::_turnL(float vel){
     
     updatePhase((vel * Ts_s_IN_SEC), -(vel * Ts_s_IN_SEC));
-  
+    // setParams(M_PI, 2.0*M_PI, 1.9, 0.5, 0);
+    
     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
     XPi = Ffull(t2 + M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
     // XPi = X;
@@ -511,5 +514,7 @@ void Orkestr::_turnL(float vel){
     l3(L2);
     l6(R1);
     // setParams(M_PI, 2.0*M_PI, 2.7, 0.5, 0);
+    
+    
 }
 Orkestr robot;
