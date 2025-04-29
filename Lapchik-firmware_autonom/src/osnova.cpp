@@ -8,7 +8,10 @@ float posStatic[6] = {0,0,0,0,0,0};
 #include "orkestr.h"
 
 // #include "subStateMachine.h"
-
+void setDefaultParams()
+{
+    robot.setParams(0, 2.0*M_PI, 2.7, 0.5, 0);
+}
 void setup() {
     Serial.begin(115200);
 
@@ -31,7 +34,6 @@ void setup() {
 // void foo(){Serial.println("foo");}
 // void foo2(){Serial.println("foo2");}
 
-
 void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
@@ -39,45 +41,77 @@ void loop(){
 
     static uint32_t timeWork = millis();
     
-    static float velo = 0;
+    float velo = 0.0;
+    for(int i = 0; i < 4; i++){
+    timeWork = millis();
+    int ft = 2700;
+    while(millis() - timeWork < ft)
+    {
+        robot.Foo(4.5);
+    }
+    
+    timeWork = millis();
+    while(millis() - timeWork < 1000)
+    {
+        robot.Foo(0);
+    }
+
+    timeWork = millis();
+    robot.ts = 3.0;
+    while(millis() - timeWork < 3000)
+    {
+        robot._turnL(3.0);
+    }
+    robot.ts = 2.7;
+    timeWork = millis();
+    while(millis() - timeWork < 1000)
+    {
+        robot.Foo(0);
+    }
+}
+while(1)
+{
+    robot.Foo(0);
+}
+
     // for(static int i = 0; i < 1; i++)
     //     robot.setParams(0/*M_PI*/, 2.0*M_PI, 5.0, 0.5, 0);
     // robot._turnL(6.0);
-    if(millis() - timeWork < 3000)
-    {
-        velo = 4.5;
-        robot.Foo(velo);
-    }
-    else
-    {
-        if(millis() - timeWork < 4000)
-        {
-            velo = 0;
-            robot.Foo(velo);
+    // if(millis() - timeWork < 3000)
+    // {
+    //     velo = 4.5;
+    //     robot.Foo(velo);
+    // }
+    // else
+    // {
+    //     if(millis() - timeWork < 4000)
+    //     {
+    //         velo = 0;
+    //         robot.Foo(velo);
             
-        }
-        else
-        {
-            if(millis() - timeWork < 10000)
-            {
+    //     }
+    //     else
+    //     {
+    //         if(millis() - timeWork < 10000)
+    //         {
                 
-                robot._turnL(3.0);
-            }
-            else
-            {
-                if(millis() - timeWork < 13000)
-                {
-                    velo = 4.5;
-                    robot.Foo(velo);
-                }
-                else
-                {
-                    velo = 0;
-                    robot.Foo(velo);
-                }
-            }
-        }
-    }
+    //             robot._turnL(3.0);
+    //         }
+    //         else
+    //         {
+    //             if(millis() - timeWork < 13000)
+    //             {
+    //                 velo = 4.5;
+    //                 robot.Foo(velo);
+    //             }
+    //             else
+    //             {
+    //                 velo = 0;
+    //                 robot.Foo(velo);
+    //             }
+    //         }
+    //     }
+    // }
 
 
 

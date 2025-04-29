@@ -57,8 +57,8 @@ class Orkestr
   void legDown2();
   
 
-  private:
   float t, t2, tc, ts, phiS, phi0;
+  private:
 //   float t3, t4;
   float X, XPi;
   bool kalibrON1 = 1, kalibrON2 = 1, kalibrON3 = 1, kalibrON4 = 1, kalibrON5 = 1, kalibrON6 = 1;
@@ -105,7 +105,7 @@ void Orkestr::updatePhase(float t_, float t2_)
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
 
-    X = Ffull(t * abs(sgn(vel)), tc, ts, phiS, phi0 + (M_PI/4)* abs(sgn(vel)));
+    X = Ffull(t * abs(sgn(vel)), tc, ts, phiS, phi0 + ((M_PI/6.0)* abs(sgn(vel))));
     XPi = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;
@@ -493,12 +493,12 @@ void Orkestr::_turnL(float vel){
     // setParams(M_PI, 2.0*M_PI, 1.9, 0.5, 0);
     
     X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
-    XPi = Ffull(t2 + M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
-    // XPi = X;
+    XPi = Ffull(t2 + M_PI, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+    // XPi = X;////////////////////////////////////
     float L1 = X;
-    float L2 = Ffull(t + M_PI, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);;
+    float L2 = Ffull(t + M_PI, tc, ts, phiS, phi0+(M_PI/6.0));
     float R1 = XPi;
-    float R2 = Ffull(t2, tc, ts, phiS, phi0-(M_PI/6.0));;
+    float R2 = Ffull(t2, tc, ts, phiS, phi0+(M_PI/6.0));
     // float dphi1 = X;//kount + Ffull(t, tc, ts, phiS, phi0);
     // float dphi2 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
     // float dphi3 = XPi;/*+ M_PI;*///kount + Ffull(t, tc, ts, phiS, phi0 + M_PI_2);
@@ -513,6 +513,8 @@ void Orkestr::_turnL(float vel){
     l2(R1);
     l3(L2);
     l6(R1);
+
+
     // setParams(M_PI, 2.0*M_PI, 2.7, 0.5, 0);
     
     
