@@ -30,9 +30,6 @@ void setup() {
     enc_6.encZero();
     // robot.setParams(M_PI, 2.0*M_PI, 1.9, 0.5, 0);
 }
-// SubStateMachine ssm;
-// void foo(){Serial.println("foo");}
-// void foo2(){Serial.println("foo2");}
 
 void loop(){
     static uint64_t timer = micros();

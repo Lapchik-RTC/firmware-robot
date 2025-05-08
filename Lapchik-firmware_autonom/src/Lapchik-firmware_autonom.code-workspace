@@ -1,8 +1,8 @@
 {
 	"folders": [
 		{
-			"name": "Lapchik-firmware_autonom",
-			"path": ".."
+			"name": "getPultVal",
+			"path": "../../Control/getPultVal"
 		}
 	],
 	"settings": {
