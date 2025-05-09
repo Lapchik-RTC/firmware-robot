@@ -35,7 +35,7 @@ public:
     this->motor = motor;
     this->enc = enc;
   }
-  void setGoalPos(float goalPos_tick);
+  void setGoalPos(float goalPos_tick, bool legDownEven = 0);
   void setGoalSpeed(float goalSpeed);//rad/s
 };
 
@@ -64,13 +64,17 @@ void ServoPrivod::setGoalSpeed(float goalSpd)
   motor->update_voltage_in_V(u);
 }
 
-void ServoPrivod::setGoalPos(float phi0){
+void ServoPrivod::setGoalPos(float phi0, bool legDownEven = 0){
   float phi = enc->get_phi();
   float phi_err = phi0 - phi;
   phi_err = fmod(phi_err, 2*M_PI);
   
   if(perehodFix){
     phi_err = modc(phi_err, 2*M_PI);
+  }
+  if(legDownEven)
+  {
+    phi_err = modc(phi_err + M_PI, 2*M_PI);
   }
   float w0 = Preg(phi_err);
 

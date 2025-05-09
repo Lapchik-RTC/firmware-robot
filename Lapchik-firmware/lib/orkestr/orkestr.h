@@ -43,7 +43,7 @@ class Orkestr
   void onePhase(float vel);
   void ostCalibr();  
   void ostanovka();
-  void legDown();
+  void legDown(float);
 
   void turnL(float vel);
   void turnR(float vel);
@@ -497,7 +497,7 @@ void Orkestr::turnR(float vel)
 
 void Orkestr::legDown(float vel)
 {
-    statPosUpd();
+   /* statPosUpd();
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
     X = Ffull(modc(enc_1.get_phi()), tc, ts, phiS, phi0+(M_PI/6));
     XPi = Ffull(modc(enc_1.get_phi()) + M_PI, tc, ts, phiS, phi0);
@@ -505,5 +505,5 @@ void Orkestr::legDown(float vel)
     // if( modc(enc_1.get_phi(), 2.0*M_PI) < X)
     // {
         serv1.setGoalPos( 2.0*M_PI - modc(enc_1.get_phi()));
-    // }
+    // }*/
 }
