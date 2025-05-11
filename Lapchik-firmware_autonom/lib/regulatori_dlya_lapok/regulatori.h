@@ -4,8 +4,6 @@
 #include"encoder.h"
 #include "f.h"
 
-
-
 struct MotorControlParams//структура общая
 {
   float Ts_sec;
