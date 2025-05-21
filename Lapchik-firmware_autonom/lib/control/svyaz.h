@@ -117,6 +117,8 @@ bool nado_rabotat() {
     return true;
   }
 } 
+
+
 bool vpered();
 bool vperedVmeste();
 bool nazad();
