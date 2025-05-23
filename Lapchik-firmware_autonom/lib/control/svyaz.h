@@ -50,7 +50,7 @@ bool readPacket() {
         uint8_t b = Serial1.read();
         
         // Сброс при длительном простое
-        if (millis() - lastByteTime > 50) index = 0;
+        if (millis() - lastByteTime > 100/*50*/) index = 0;
         lastByteTime = millis();
         
         // Поиск стартового байта
@@ -102,6 +102,34 @@ bool readPacket() {
     }
     return false;
 }
+
+
+void printPacket() {
+    if (readPacket()) {
+      // Serial.println("Valid packet:");
+      // Serial.print("LeftThumbX: "); Serial.print(gamePad.LeftThumbX);
+      // Serial.print(" LeftThumbY: "); Serial.print(gamePad.LeftThumbY);
+      if(gamePad.LeftThumbPress) Serial.println("  Левый стик нажат! ");
+      else Serial.println("  Левый НЕ стик нажат! ");
+  
+      // Serial.print("RightThumbX: "); Serial.print(gamePad.RightThumbX);
+      // Serial.print(" RightThumbY: "); Serial.print(gamePad.RightThumbY);
+      if(gamePad.RightThumbPress) Serial.println("  Правый стик нажат! ");
+      else Serial.println("  Правый НЕ стик нажат! ");
+      // Serial.print("Buttons: ");
+      if(gamePad.A) Serial.print("A ");
+      if(gamePad.B) Serial.print("B ");
+      if(gamePad.X) Serial.print("X ");
+      if(gamePad.Y) Serial.print("Y; ");
+      // if(gamePad.DPad_Up) Serial.print("DPad_Up ");
+      // if(gamePad.DPad_Down) Serial.print("DPad_Down ");
+      // if(gamePad.DPad_Left) Serial.print("DPad_Left ");
+      // if(gamePad.DPad_Right) Serial.println("DPad_Right ");
+    } else {
+      Serial.println("CRC Error!");
+    }
+  // delay(20);
+  }
 /////////////////////////   Проверка конкретных кнопок   /////////////////////////
 
 int luft = 20000;
