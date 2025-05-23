@@ -16,8 +16,8 @@ void setup() {
     float phiS = 0.5;
     float phi0 = 0;
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
-    // robot.ostCalibr();
-    // robot.allEncZero();
+    robot.ostCalibr();
+    robot.allEncZero();
 
 }
 
@@ -25,8 +25,18 @@ void loop(){
     // static uint64_t timer = micros();
     // while(micros() - timer < Ts_s);
     // timer = micros();
-    printPacket();
+    // robot.Foo(3.5);
+    readPacket();
     
+    sm.setSpd(3.5);
     
+    sm.StateMachineUpd();
+    // readPacket();
+    // if(nado_rabotat())
+    // {
+    //     Serial.println("Проверка конкретных кнопок");
+    // }
+    // else{Serial.println("...");}
+    //*/
     // robot.Foo(0);
 }

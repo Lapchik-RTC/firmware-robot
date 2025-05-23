@@ -10,7 +10,7 @@ enum mState
     turnL = 2,
     turnR = 3,
     revers = 4,
-    calibr = 5,
+    calibro = 5,
 
     synchro = 6
 };
@@ -35,11 +35,13 @@ void StateMachine::StateMachineUpd()
         //------
         case sleep:
             robot.Foo(0);
+            //Serial.println("Сплю");
             break;
 
         //------
         case forw:
             robot.Foo(spd);
+            //Serial.println("Вперед");
             break;
 
         //------
@@ -58,50 +60,65 @@ void StateMachine::StateMachineUpd()
             break;
 
         //------
-        case calibr:
+        case calibro:
             robot.ostCalibr();
+            robot.allEncZero();
             break;
 
         //------ 
         default:
-            robot.Foo(0);
             break;
     }
 }
-
+uint32_t lastCalibrTime = millis();
 mState StateMachine::ChoiseState()
 {
+    mState st = sleep;
     if(nado_rabotat())
     {
         bool choised = false;
         if(vpered() && !choised)
         {
-            state = forw;
+            st = forw;
             choised = true;
         }
-        if(vperedVmeste() && !choised)
-        {
-            state = synchro;
-            choised = true;
-        }
+        // if(vperedVmeste() && !choised)
+        // {
+        //     st = synchro;
+        //     choised = true;
+        // }
         if(vpravo() && !choised)
         {
-            state = turnR;
+            st = turnR;
             choised = true;
         }
         if(vlevo() && !choised)
         {
-            state = turnL;
+            st = turnL;
             choised = true;
         }
         if(nazad() && !choised)
         {
-            state = revers;
+            st = revers;
             choised = true;
         }
+        int timeWithoutCalibr = 3000;
+        if(calibr() && !choised && (millis() - lastCalibrTime > timeWithoutCalibr))
+        {
+            st = calibro;
+            choised = true;
+            lastCalibrTime = millis();
+        }
+        if(st == calibro && (millis() - lastCalibrTime > timeWithoutCalibr))
+        {
+            st = sleep;
+        }
+    
     }
     else
     {
-        state = sleep;
+        st = sleep;
     }
+    state = st;
+    return st;
 }
