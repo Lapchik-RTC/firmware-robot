@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\!projects\\lapchik\\firmware-manipulator\\controller\\",
+  "WorkspaceRootPath": "C:\\!projects\\lapchik\\firmware-robot\\Control\\controller\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\!projects\\lapchik\\firmware-manipulator\\controller\\controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\!projects\\lapchik\\firmware-robot\\Control\\controller\\controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,9 +20,9 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "controller.cpp",
-              "DocumentMoniker": "C:\\!projects\\lapchik\\firmware-manipulator\\controller\\controller.cpp",
+              "DocumentMoniker": "C:\\!projects\\lapchik\\firmware-robot\\Control\\controller\\controller.cpp",
               "RelativeDocumentMoniker": "controller.cpp",
-              "ToolTip": "C:\\!projects\\lapchik\\firmware-manipulator\\controller\\controller.cpp",
+              "ToolTip": "C:\\!projects\\lapchik\\firmware-robot\\Control\\controller\\controller.cpp",
               "RelativeToolTip": "controller.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAATAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",

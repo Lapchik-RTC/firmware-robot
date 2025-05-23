@@ -28,34 +28,18 @@
 #define SUPPLY_VOLTAGE 12 // подаваемое напряжение~
 
 ///////////////////////////////////////////////////
-// #define CS_PIN_1 A1
-// #define CS_PIN_2 A1
-// #define CS_PIN_3 A1
-// #define CS_PIN_4 A1
-// #define CS_PIN_5 A1
-// #define CS_PIN_6 A1
+#define CS_PIN_1      A4
+#define CS_PIN_2      A2
+#define CS_PIN_3      A0
+#define CS_PIN_4      A1
+#define CS_PIN_5      A3
+#define CS_PIN_6      A5
 
-// #define TRIG_CUR_1 1
-// #define TRIG_CUR_2 1
-// #define TRIG_CUR_3 1
-// #define TRIG_CUR_4 1
-// #define TRIG_CUR_5 1
-// #define TRIG_CUR_6 1
-uint8_t csPins[6] = 
-{
-    A4,
-    A2,
-    A0,
-    A1,
-    A3,
-    A5
-};
-uint8_t trigCurr[6] = 
-{
-    A1,
-    A1,
-    A1,
-    A1,
-    A1,
-    A1
-};
+#define TRIG_CUR_1    150
+#define TRIG_CUR_2    150
+#define TRIG_CUR_3    150
+#define TRIG_CUR_4    160
+#define TRIG_CUR_5    150
+#define TRIG_CUR_6    150
+
+float posStatic[6] = {0,0,0,0,0,0};
