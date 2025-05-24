@@ -22,21 +22,9 @@ void setup() {
 }
 
 void loop(){
-    // static uint64_t timer = micros();
-    // while(micros() - timer < Ts_s);
-    // timer = micros();
-    // robot.Foo(3.5);
     readPacket();
     
     sm.setSpd(3.5);
     
     sm.StateMachineUpd();
-    // readPacket();
-    // if(nado_rabotat())
-    // {
-    //     Serial.println("Проверка конкретных кнопок");
-    // }
-    // else{Serial.println("...");}
-    //*/
-    // robot.Foo(0);
 }
