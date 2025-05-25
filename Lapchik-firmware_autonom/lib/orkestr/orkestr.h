@@ -32,7 +32,7 @@ class Orkestr
   void setParams(float t, float tc, float ts, float phiS, float phi0);
   void calibr();
   void stendUp();
- 
+  void calibr_();
   /// @brief Foo params
   void setPhiAll(float nPhiL, float nPhiR);
 
@@ -78,6 +78,7 @@ class Orkestr
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////   Foo   //////////////
 void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
 {
     this->t = t_;
@@ -114,6 +115,133 @@ void Orkestr::Foo(float vel){
     l2(dphi2);
     l3(dphi3);
     l6(dphi6);
+}
+
+//////////////   Enc   //////////////
+void Orkestr::allEncZero()
+{
+    enc_1.encZero();
+    enc_2.encZero();
+    enc_3.encZero();
+    enc_4.encZero();
+    enc_5.encZero();
+    enc_6.encZero();
+}
+
+//////////////   Calibr   //////////////
+
+void Orkestr::calibr_()
+{   
+    int pVel = -1.0;
+    preKalibrTimer = millis();
+    while(millis() - preKalibrTimer < 1500)
+    {
+        serv1.setGoalSpeed(pVel);
+        serv2.setGoalSpeed(pVel);
+        serv3.setGoalSpeed(pVel);
+        serv4.setGoalSpeed(pVel);
+        serv5.setGoalSpeed(pVel);
+        serv6.setGoalSpeed(pVel);
+    }
+
+    float velL = -2.5, velR = -2.5;
+    int whaitTimeCalibr_ = 1500;
+    static bool endCalibr[6] = {0,0,0,0,0,0};
+    while( (analogRead(CS_PIN_1) < TRIG_CUR_1) &&
+           (analogRead(CS_PIN_4) < TRIG_CUR_4) && 
+           (analogRead(CS_PIN_5) < TRIG_CUR_5) && 
+
+           (analogRead(CS_PIN_2) < TRIG_CUR_2) &&
+           (analogRead(CS_PIN_3) < TRIG_CUR_3) &&
+           (analogRead(CS_PIN_6) < TRIG_CUR_6) &&
+           (millis() - calibrTime < whaitTimeCalibr_)
+        )
+    {   
+        ///  dv1  ///
+        if(analogRead(CS_PIN_1) < TRIG_CUR_1)
+        {
+            serv1.setGoalSpeed(velR);
+        }
+        else
+        {
+            if(endCalibr[0] == false)
+                enc_1.encZero();
+            endCalibr[0] = true;
+            serv1.setGoalPos(0);
+        }
+
+        ///  dv2  ///
+        if(analogRead(CS_PIN_2) < TRIG_CUR_2)
+        {
+            serv2.setGoalSpeed(velL);
+        }
+        else
+        {
+            if(endCalibr[1] == false)
+                enc_2.encZero();
+
+            endCalibr[1] = true;
+            serv2.setGoalPos(0);
+        }
+
+        ///  dv3  ///
+        if(analogRead(CS_PIN_3) < TRIG_CUR_3)
+        {
+            serv3.setGoalSpeed(velL);
+        }
+        else
+        {
+            if(endCalibr[2] == false)
+                enc_3.encZero();
+
+            endCalibr[2] = true;
+            serv3.setGoalPos(0);
+        }
+
+        ///  dv4  ///
+        if(analogRead(CS_PIN_4) < TRIG_CUR_4)
+        {
+            serv4.setGoalSpeed(velR);
+        }
+        else
+        {
+            if(endCalibr[3] == false)
+                enc_4.encZero();
+
+            endCalibr[3] = true;
+            serv4.setGoalPos(0);
+        }
+
+        ///  dv5  ///
+        if(analogRead(CS_PIN_5) < TRIG_CUR_5)
+        {
+            serv5.setGoalSpeed(velR);
+        }
+        else
+        {
+            if(endCalibr[4] == false)
+                enc_5.encZero();
+
+            endCalibr[4] = true;
+            serv5.setGoalPos(0);
+        }
+
+        ///  dv6  ///
+        if(analogRead(CS_PIN_6) < TRIG_CUR_6)
+        {
+            serv6.setGoalSpeed(velL);
+        }
+        else
+        {
+            if(endCalibr[5] == false)
+                enc_6.encZero();
+
+            endCalibr[5] = true;
+            serv6.setGoalPos(0);
+        }
+    }
+    for(int i = 0; i < 6; i++) endCalibr[i] = false;
+
 }
 
 void Orkestr::calibr()
@@ -250,49 +378,7 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     }
 }
 
-void Orkestr::ReversFoo(float velL, float velR){
-    updatePhase(-(velR * Ts_s_IN_SEC), -(velL * Ts_s_IN_SEC));
-  
-    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
-    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
-
-    float dphi1 = X;
-    float dphi2 = XPi;
-    float dphi3 = XPi;
-    float dphi4 = X;
-    float dphi5 = X;
-    float dphi6 = XPi;
-  
-    l1(dphi1 + M_PI);
-    l4(dphi4 + M_PI);
-    l5(dphi5 + M_PI);
-    l2(dphi2 + M_PI);
-    l3(dphi3 + M_PI);
-    l6(dphi6 + M_PI);
-}
-
-void Orkestr::onePhase(float vel)
-{
-    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
-    XPi = Ffull(t, tc, ts, phiS, phi0);
-    l1(X);
-    l4(X);
-    l5(X);
-    l2(XPi);
-    l3(XPi);
-    l6(XPi);
-}
-
-void Orkestr::allEncZero()
-{
-    enc_1.encZero();
-    enc_2.encZero();
-    enc_3.encZero();
-    enc_4.encZero();
-    enc_5.encZero();
-    enc_6.encZero();
-}
+/////// Main Calibr ///////
 void Orkestr::ostCalibr()
 {    
     uint32_t timeOstCalibr = millis();
@@ -332,8 +418,44 @@ void Orkestr::ostCalibr()
         serv4.setGoalSpeed(velOC * dir[3]);
         serv5.setGoalSpeed(velOC * dir[4]);
         serv6.setGoalSpeed(velOC * dir[5]);
-    calibr();
+    calibr_();
     stendUp();
+}
+
+//////////////   Other move   //////////////
+
+void Orkestr::ReversFoo(float velL, float velR){
+    updatePhase(-(velR * Ts_s_IN_SEC), -(velL * Ts_s_IN_SEC));
+  
+    X = Ffull(t, tc, ts, phiS, phi0/*-(M_PI/6.0)*/);
+    XPi = Ffull(t2+M_PI, tc, ts, phiS, phi0-(M_PI/6.0));
+
+    float dphi1 = X;
+    float dphi2 = XPi;
+    float dphi3 = XPi;
+    float dphi4 = X;
+    float dphi5 = X;
+    float dphi6 = XPi;
+  
+    l1(dphi1);
+    l4(dphi4);
+    l5(dphi5);
+    l2(dphi2);
+    l3(dphi3);
+    l6(dphi6);
+}
+
+void Orkestr::onePhase(float vel)
+{
+    updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
+    X = Ffull(t, tc, ts, phiS, phi0+(M_PI/6));
+    XPi = Ffull(t, tc, ts, phiS, phi0);
+    l1(X);
+    l4(X);
+    l5(X);
+    l2(XPi);
+    l3(XPi);
+    l6(XPi);
 }
 
 void Orkestr::turnR(float vel)

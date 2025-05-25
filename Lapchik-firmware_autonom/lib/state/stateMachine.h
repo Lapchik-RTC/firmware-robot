@@ -3,6 +3,9 @@
 #include "orkestr.h"
 #include "svyaz.h"
 
+uint32_t lastCalibrTime = millis();
+#define TIME_WITHOUT_CALIBR 10000
+
 enum mState
 {
     sleep = 0,
@@ -35,13 +38,11 @@ void StateMachine::StateMachineUpd()
         //------
         case sleep:
             robot.Foo(0);
-            //Serial.println("Сплю");
             break;
 
         //------
         case forw:
             robot.Foo(spd);
-            //Serial.println("Вперед");
             break;
 
         //------
@@ -70,7 +71,7 @@ void StateMachine::StateMachineUpd()
             break;
     }
 }
-uint32_t lastCalibrTime = millis();
+
 mState StateMachine::ChoiseState()
 {
     mState st = sleep;
@@ -102,17 +103,19 @@ mState StateMachine::ChoiseState()
             st = revers;
             choised = true;
         }
-        int timeWithoutCalibr = 3000;
-        if(calibr() && !choised && (millis() - lastCalibrTime > timeWithoutCalibr))
+        
+        if(st == calibro && (millis() - lastCalibrTime < TIME_WITHOUT_CALIBR))
+        {
+            st = sleep;
+        }
+
+        if(calibr() && !choised && (millis() - lastCalibrTime > TIME_WITHOUT_CALIBR))
         {
             st = calibro;
             choised = true;
             lastCalibrTime = millis();
         }
-        if(st == calibro && (millis() - lastCalibrTime > timeWithoutCalibr))
-        {
-            st = sleep;
-        }
+        
     
     }
     else

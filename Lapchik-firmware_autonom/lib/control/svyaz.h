@@ -163,15 +163,19 @@ void printPacket() {
 /////////////////////////   Проверка конкретных кнопок   /////////////////////////
 
 int luft = 20000;
-enum LapState
-{
-  normal = 0,
-  kringe = 1
-}
+// enum RecState
+// {
+//   normal = 0,
+//   kringe = 1
+// };
+
 bool nado_rabotat() {
   if (
     (gamePad.RightThumbY >= -luft) && (gamePad.RightThumbY <= luft) &&
-    (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) && (!gamePad.B) && (!gamePad.A)
+    (gamePad.RightThumbX >= -luft) && (gamePad.RightThumbX <= luft) &&
+    (!gamePad.B) && (!gamePad.A) && (!gamePad.X) && (!gamePad.Y) &&
+    (!gamePad.DPad_Up)
+
   ) {  
     
     return false;
