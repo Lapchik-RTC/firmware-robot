@@ -39,7 +39,7 @@
 #define TRIG_CUR_2    150
 #define TRIG_CUR_3    150
 #define TRIG_CUR_4    160
-#define TRIG_CUR_5    150
+#define TRIG_CUR_5    160/*150*/
 #define TRIG_CUR_6    150
 
 float posStatic[6] = {0,0,0,0,0,0};

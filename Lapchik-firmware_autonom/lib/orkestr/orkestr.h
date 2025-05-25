@@ -132,9 +132,9 @@ void Orkestr::allEncZero()
 
 void Orkestr::calibr_()
 {   
-    int pVel = -1.0;
+    int pVel = 1.0;
     preKalibrTimer = millis();
-    while(millis() - preKalibrTimer < 1500)
+    while(millis() - preKalibrTimer < 1000)
     {
         serv1.setGoalSpeed(pVel);
         serv2.setGoalSpeed(pVel);
@@ -144,21 +144,23 @@ void Orkestr::calibr_()
         serv6.setGoalSpeed(pVel);
     }
 
-    float velL = -2.5, velR = -2.5;
-    int whaitTimeCalibr_ = 1500;
+    float velL = 2.0, velR = 2.0;
+    int whaitTimeCalibr_ = 3200;
     static bool endCalibr[6] = {0,0,0,0,0,0};
+    calibrTime = millis();
     while( (analogRead(CS_PIN_1) < TRIG_CUR_1) &&
            (analogRead(CS_PIN_4) < TRIG_CUR_4) && 
            (analogRead(CS_PIN_5) < TRIG_CUR_5) && 
 
            (analogRead(CS_PIN_2) < TRIG_CUR_2) &&
            (analogRead(CS_PIN_3) < TRIG_CUR_3) &&
-           (analogRead(CS_PIN_6) < TRIG_CUR_6) &&
-           (millis() - calibrTime < whaitTimeCalibr_)
+           (analogRead(CS_PIN_6) < TRIG_CUR_6) ||
+           (millis() - calibrTime < whaitTimeCalibr_) &&
+           (endCalibr[0] == false && endCalibr[1] == false && endCalibr[2] == false && endCalibr[3] == false && endCalibr[4] == false && endCalibr[5] == false)
         )
     {   
         ///  dv1  ///
-        if(analogRead(CS_PIN_1) < TRIG_CUR_1)
+        if(analogRead(CS_PIN_1) < TRIG_CUR_1 && (endCalibr[0] == false))
         {
             serv1.setGoalSpeed(velR);
         }
@@ -171,7 +173,7 @@ void Orkestr::calibr_()
         }
 
         ///  dv2  ///
-        if(analogRead(CS_PIN_2) < TRIG_CUR_2)
+        if(analogRead(CS_PIN_2) < TRIG_CUR_2 && (endCalibr[1] == false))
         {
             serv2.setGoalSpeed(velL);
         }
@@ -185,7 +187,7 @@ void Orkestr::calibr_()
         }
 
         ///  dv3  ///
-        if(analogRead(CS_PIN_3) < TRIG_CUR_3)
+        if(analogRead(CS_PIN_3) < TRIG_CUR_3 && (endCalibr[2] == false))
         {
             serv3.setGoalSpeed(velL);
         }
@@ -199,7 +201,7 @@ void Orkestr::calibr_()
         }
 
         ///  dv4  ///
-        if(analogRead(CS_PIN_4) < TRIG_CUR_4)
+        if(analogRead(CS_PIN_4) < TRIG_CUR_4 && (endCalibr[3] == false))
         {
             serv4.setGoalSpeed(velR);
         }
@@ -213,7 +215,7 @@ void Orkestr::calibr_()
         }
 
         ///  dv5  ///
-        if(analogRead(CS_PIN_5) < TRIG_CUR_5)
+        if(analogRead(CS_PIN_5) < TRIG_CUR_5 && (endCalibr[4] == false))
         {
             serv5.setGoalSpeed(velR);
         }
@@ -227,7 +229,7 @@ void Orkestr::calibr_()
         }
 
         ///  dv6  ///
-        if(analogRead(CS_PIN_6) < TRIG_CUR_6)
+        if(analogRead(CS_PIN_6) < TRIG_CUR_6 && (endCalibr[5] == false))
         {
             serv6.setGoalSpeed(velL);
         }
@@ -329,11 +331,13 @@ void Orkestr::calibr()
     enc_4.encZero();
     enc_5.encZero();
     enc_6.encZero();
+
+    
 }
 
 void Orkestr::stendUp()
 {
-    float startPos = (M_PI/2.0) + (M_PI/30.0);
+    float startPos = M_PI*1.5;// + (M_PI/2.0) + (M_PI/30.0);
     setPhiAll(startPos, startPos);
     enc_1.encZero();
     enc_2.encZero();
@@ -370,18 +374,18 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     )
     {
         serv1.setGoalPos(nPhiR * _k);
-        serv2.setGoalPos(nPhiL);
-        serv3.setGoalPos(nPhiL);
+        serv2.setGoalPos(-nPhiL);
+        serv3.setGoalPos(-nPhiL);
         serv4.setGoalPos(nPhiR * _k);
         serv5.setGoalPos(nPhiR * _k);
-        serv6.setGoalPos(nPhiL);
+        serv6.setGoalPos(-nPhiL);
     }
 }
 
 /////// Main Calibr ///////
 void Orkestr::ostCalibr()
 {    
-    uint32_t timeOstCalibr = millis();
+    /*uint32_t timeOstCalibr = millis();
     float velOC = -1.0;
     int dir[6] = {1,1,1,1,1,1};
     while (millis() - timeOstCalibr < 3100)
@@ -417,7 +421,7 @@ void Orkestr::ostCalibr()
         serv3.setGoalSpeed(velOC * dir[2]);
         serv4.setGoalSpeed(velOC * dir[3]);
         serv5.setGoalSpeed(velOC * dir[4]);
-        serv6.setGoalSpeed(velOC * dir[5]);
+        serv6.setGoalSpeed(velOC * dir[5]);*/
     calibr_();
     stendUp();
 }
