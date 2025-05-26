@@ -62,7 +62,7 @@ void StateMachine::StateMachineUpd()
 
         //------
         case calibro:
-            robot.ostCalibr();
+            robot.calibr();
             robot.allEncZero();
             break;
 

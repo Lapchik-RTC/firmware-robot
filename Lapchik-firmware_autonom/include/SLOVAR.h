@@ -41,5 +41,12 @@
 #define TRIG_CUR_4    160
 #define TRIG_CUR_5    160/*150*/
 #define TRIG_CUR_6    150
+///////////////////////////////////////////////////
+#define HALL_PIN_1    0
+#define HALL_PIN_2    0
+#define HALL_PIN_3    0
+#define HALL_PIN_4    0
+#define HALL_PIN_5    0
+#define HALL_PIN_6    0
 
 float posStatic[6] = {0,0,0,0,0,0};

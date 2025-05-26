@@ -16,15 +16,14 @@ void setup() {
     float phiS = 0.5;
     float phi0 = 0;
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
-    robot.ostCalibr();
-    robot.allEncZero();
+    robot.calibr();
 
 }
 
 void loop(){
     readPacket();
     
-    sm.setSpd(3.5);
-    
+    sm.setSpd( 3.5 );
+
     sm.StateMachineUpd();
 }
