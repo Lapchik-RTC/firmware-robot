@@ -24,6 +24,7 @@ class StateMachine
     void StateMachineUpd();
     mState getState(){return state;}
     void setSpd(float spd){this->spd = spd;}
+    void preState();
 
     private:
     mState state = sleep;
@@ -124,4 +125,14 @@ mState StateMachine::ChoiseState()
     }
     state = st;
     return st;
+}
+
+void StateMachine::preState()
+{
+    float tc = 2.0*M_PI;
+    float ts = 2.7;
+    float phiS = 0.5;
+    float phi0 = 0;
+    robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
+    robot.calibr();
 }

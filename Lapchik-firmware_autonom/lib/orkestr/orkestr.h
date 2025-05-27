@@ -52,6 +52,8 @@ class Orkestr
   /// @brief Turn
   void turnL(float vel);
   void turnR(float vel);
+
+  float* getPos();
   
 
   float t, t2, tc, ts, phiS, phi0;
@@ -123,6 +125,18 @@ void Orkestr::allEncZero()
     enc_4.encZero();
     enc_5.encZero();
     enc_6.encZero();
+}
+//////////////   Pos   //////////////
+float* Orkestr::getPos()
+{
+    float* arrPos = new float[6];
+    arrPos[0] = modc(enc_1.get_phi(), 2.0*M_PI);
+    arrPos[1] = modc(enc_2.get_phi(), 2.0*M_PI);
+    arrPos[2] = modc(enc_3.get_phi(), 2.0*M_PI);
+    arrPos[3] = modc(enc_4.get_phi(), 2.0*M_PI);
+    arrPos[4] = modc(enc_5.get_phi(), 2.0*M_PI);    
+    arrPos[5] = modc(enc_6.get_phi(), 2.0*M_PI);
+    return arrPos;
 }
 
 //////////////   Calibr   //////////////
