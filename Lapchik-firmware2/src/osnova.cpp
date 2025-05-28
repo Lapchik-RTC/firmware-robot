@@ -25,12 +25,12 @@ void setup() {
 }
 
 void loop(){
-    readPacket();
-    sm.setSpd( 3.5 );
-    // robot.Foo(3.5);
+    // readPacket();
+    // sm.setSpd( 3.5 );
+    robot.Foo(3.5);
     // halls.Upd();
     
-    sm.StateMachineUpd();
+    // sm.StateMachineUpd();
     
     // enc_3.enc_tick();
     // Serial.println(enc_3.get_tick());
