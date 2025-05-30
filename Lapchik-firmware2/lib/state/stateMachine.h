@@ -2,6 +2,7 @@
 #include "obekti.h"
 #include "orkestr.h"
 #include "svyaz.h"
+#include "hall.h"
 
 uint32_t lastCalibrTime = millis();
 #define TIME_WITHOUT_CALIBR 8000/*6700*/
@@ -45,6 +46,7 @@ class StateMachine
     uint32_t timeAuto = 0;
 
     bool ladm = 0;
+    bool sleepCalibr = 0;
 };
 #define _T_     robot.getRT()
 #define _TC_    2.0 * M_PI
@@ -62,6 +64,11 @@ void StateMachine::StateMachineUpd()
     {
         //------
         case sleep:
+            if(sleepCalibr)
+            {
+                hmmm.Upd();
+                sleepCalibr = 0;
+            }
             robot.Foo(0);
             break;
 
@@ -197,6 +204,7 @@ mState StateMachine::ChoiseState()
             _s_tLeft = 1;
             _s_tRight = 1;
             autoGo2 = 1;
+            sleepCalibr = 1;
 
             choised = true;
         }
@@ -220,6 +228,7 @@ mState StateMachine::ChoiseState()
             _back = 1;
             _s_tLeft = 1;
             _s_tRight = 1;
+            sleepCalibr = 1;
         }
         if(vpravo() && !choised)
         {
@@ -238,6 +247,7 @@ mState StateMachine::ChoiseState()
             _s_tLeft = 1;
             _s_tRight = 1;
             autoGo2 = 1;
+            sleepCalibr = 1;
 
             choised = true;
         }
@@ -258,6 +268,7 @@ mState StateMachine::ChoiseState()
             _s_tLeft = 1;
             _s_tRight = 1;
             autoGo2 = 1;
+            sleepCalibr = 1;
 
             choised = true;
         }
@@ -271,6 +282,7 @@ mState StateMachine::ChoiseState()
             _s_tLeft = 1;
             _s_tRight = 1;
             autoGo2 = 1;
+            sleepCalibr = 1;
 
             choised = true;
         }
@@ -292,6 +304,7 @@ mState StateMachine::ChoiseState()
             _s_tLeft = 1;
             _s_tRight = 1;
             autoGo2 = 1;
+            sleepCalibr = 1;
             
             lastCalibrTime = millis();
         }
@@ -323,3 +336,5 @@ void StateMachine::preState()
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
     robot.calibr();
 }
+
+StateMachine sm;

@@ -242,3 +242,4 @@ ServoPrivod serv3(mctrlp, &dvigatel_3, &enc_3);
 ServoPrivod serv4(mctrlp, &dvigatel_4, &enc_4);
 ServoPrivod serv5(mctrlp, &dvigatel_5, &enc_5);
 ServoPrivod serv6(mctrlp, &dvigatel_6, &enc_6);
+

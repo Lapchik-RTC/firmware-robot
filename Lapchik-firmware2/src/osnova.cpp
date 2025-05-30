@@ -1,18 +1,15 @@
 #include <Arduino.h>
 #include "SLOVAR.h"
+#include "obekti.h"
 #include "stateMachine.h"
 #include "hall.h"
-#include "obekti.h"
 
-StateMachine sm;
-Hall halls;
 void setup() {
     Serial.begin(115200);
     Serial1.begin(19200);
     
     memset(&gamePad, 0, sizeof(gamePad));
 
-    halls.Init();
     // sm.preState();
     float tc = 2.0*M_PI;
     float ts = 2.7;
