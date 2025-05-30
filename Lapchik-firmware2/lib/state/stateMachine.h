@@ -8,17 +8,18 @@ uint32_t lastCalibrTime = millis();
 
 enum mState
 {
-    sleep = 0,
-    forw = 1,
-    turnL = 2,
-    turnR = 3,
-    revers = 4,
-    calibro = 5,
-
-    synchro = 6,
+    sleep =   0,
+    forw =    1,
+    turnL =   2,
+    s_turnL = 3,
+    turnR =   4,
+    s_turnR = 5,
+    revers =  6,
+    calibro = 7,
+    synchro = 8,
+    a2 =      9
 
     // psvC = 7,
-    a2 = 8
 
 };
 
@@ -34,7 +35,13 @@ class StateMachine
     mState state = sleep;
     mState ChoiseState();
     float spd = 3.0;
-    bool _forw = 1, _tLeft = 1, _tRight = 1, _back = 1, psC = 1, autoGo2 = 1;
+    bool _forw =       1,
+         _tLeft =      1,
+         _tRight =     1,
+         _s_tLeft =    1,
+         _s_tRight =   1,
+         _back =       1,
+         autoGo2 =     1;
     uint32_t timeAuto = 0;
 
     bool ladm = 0;
@@ -44,6 +51,10 @@ class StateMachine
 #define _TS_    3.6/*2.7*/
 #define _PHIS_  0.5
 #define _PHI0_  0
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void StateMachine::StateMachineUpd()
 {
@@ -77,7 +88,7 @@ void StateMachine::StateMachineUpd()
             
             break;
 
-        //------
+        //-------------------------------------------------------------------
         case turnL:
             if(_tLeft)
             {
@@ -100,8 +111,29 @@ void StateMachine::StateMachineUpd()
 
             robot.turnR(spd);
             break;
-
+        
         //------
+        case s_turnR:
+            if(_s_tRight)
+            {
+                robot.setParams(_T_, _TC_, _TS_, _PHIS_, _PHI0_);
+                robot.t2 = _T_;
+                _s_tRight = 0;
+            }
+
+            robot.ShiftTurnR(spd);
+            break;
+        case s_turnL:
+            if(_s_tLeft)
+            {
+                robot.setParams(_T_, _TC_, _TS_, _PHIS_, _PHI0_);
+                robot.t2 = _T_;
+                _s_tLeft = 0;
+            }
+
+            robot.ShiftTurnL(spd);
+            break;
+        //-------------------------------------------------------------------
         case revers:
             if(_back)
             {
@@ -162,7 +194,8 @@ mState StateMachine::ChoiseState()
             _tLeft = 1;
             _tRight = 1;
             _back = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
             autoGo2 = 1;
 
             choised = true;
@@ -185,28 +218,45 @@ mState StateMachine::ChoiseState()
             _tLeft = 1;
             _tRight = 1;
             _back = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
         }
         if(vpravo() && !choised)
         {
-            st = turnR;
+            if(shift())
+            {
+                st = s_turnR;
+            }
+            else
+            {
+                st = turnR;
+            }
 
             _forw = 1;
             _tLeft = 1;
             _back = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
             autoGo2 = 1;
 
             choised = true;
         }
         if(vlevo() && !choised)
         {
-            st = turnL;
+            if(shift())
+            {
+                st = s_turnL;
+            }
+            else
+            {
+                st = turnL;
+            }
 
             _forw = 1;
             _tRight = 1;
             _back = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
             autoGo2 = 1;
 
             choised = true;
@@ -218,7 +268,8 @@ mState StateMachine::ChoiseState()
             _forw = 1;
             _tLeft = 1;
             _tRight = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
             autoGo2 = 1;
 
             choised = true;
@@ -238,7 +289,8 @@ mState StateMachine::ChoiseState()
             _tLeft = 1;
             _tRight = 1;
             _back = 1;
-            psC = 1;
+            _s_tLeft = 1;
+            _s_tRight = 1;
             autoGo2 = 1;
             
             lastCalibrTime = millis();
@@ -253,7 +305,8 @@ mState StateMachine::ChoiseState()
         _tLeft = 1;
         _tRight = 1;
         _back = 1;
-        psC = 1;
+        _s_tLeft = 1;
+        _s_tRight = 1;
         autoGo2 = 1;
     }
     state = st;

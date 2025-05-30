@@ -39,10 +39,10 @@
 
 #define TRIG_CUR_1    180
 #define TRIG_CUR_2    180
-#define TRIG_CUR_3    170
-#define TRIG_CUR_4    170
-#define TRIG_CUR_5    170/*150*/
-#define TRIG_CUR_6    170
+#define TRIG_CUR_3    190
+#define TRIG_CUR_4    180
+#define TRIG_CUR_5    180/*150*/
+#define TRIG_CUR_6    180
 ///////////////////////////////////////////////////
 #define HALL_PIN_1    30
 #define HALL_PIN_2    31

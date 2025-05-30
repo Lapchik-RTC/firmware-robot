@@ -26,37 +26,15 @@ void setup() {
 }
 
 void loop(){
-    readPacket();
     // halls.Upd();
+    static uint64_t timer = micros();
+    while(micros() - timer < Ts_s);
+    timer = micros();
+    readPacket();
 
-    sm.setSpd( 4.0 );
+    sm.setSpd( 3.5 );
     sm.StateMachineUpd();
-
-    // robot.ladFoo(3.5);
-
-    // static int pos= 0;
-    // static bool q = 1;
-    /*if(halls.getCondition(1))
-    {
-        serv5.setGoalSpeed(0.5);
-    }
-    else
-    {
-        if(q) {pos = enc_5.get_phi(); q=0;}
-        serv5.setGoalPos(pos);
-    }*/
-    // Serial.println(halls.getCondition(3));
-    
-    // robot.Foo(7.0);
-    
-    
-    // enc_1.enc_tick();
-    // Serial.println(enc_4.get_tick());
-
-    // Serial.println(
-    //     "enc1: "+ String(modc(enc_1.get_phi(), 2.0*M_PI)) +
-    //     "\tenc4: "+ String(modc(enc_4.get_phi(), 2.0*M_PI)) +
-    //     "\tenc5: "+ String(modc(enc_5.get_phi(), 2.0*M_PI))
-    // );
+    Serial.println(enc_3.get_tick());
+    // robot.ShiftTurnR(3.5);
         
 }

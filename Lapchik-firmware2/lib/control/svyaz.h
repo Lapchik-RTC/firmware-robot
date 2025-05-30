@@ -232,6 +232,18 @@ bool vpered() {
     }
   }
   
+  bool shift()
+  {
+    if( gamePad.LB )
+    {
+      
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+  }
   bool vlevo() {
     if(gamePad.RightThumbX <= -luft)
     {

@@ -225,6 +225,17 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
+MotorControlParams mctrlp3//структура общая
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = 0.3,//0.0001,
+  .ki = 0.007,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/2,
+  .kpP = KP_P,
+  .maxVel = 25,//16.0,
+  .kalibrSpeed = 1
+};
+
 ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
 ServoPrivod serv2(mctrlp, &dvigatel_2, &enc_2);
 ServoPrivod serv3(mctrlp, &dvigatel_3, &enc_3);
