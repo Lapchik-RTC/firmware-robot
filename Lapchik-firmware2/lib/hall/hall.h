@@ -6,11 +6,14 @@ class Hall
     public:
     void Init();
     void Upd();
+    void zer();
+    
+    bool getCondition(int i){return hallCondition[i-1];}
 
     private:
     uint32_t timeHall[6] = {0,0,0,0,0,0};
     float spd = 0.5;
-
+    bool hallCondition[6];
 };
 
 void Hall::Init()
@@ -28,18 +31,18 @@ void Hall::Init()
 void Hall::Upd()
 {
     //if (PIND & (1 << PD2))
+     
+        hallCondition[0] = digitalRead(HALL_PIN_1); 
+        hallCondition[1] = digitalRead(HALL_PIN_2); 
+        hallCondition[2] = digitalRead(HALL_PIN_3); 
+        hallCondition[3] = digitalRead(HALL_PIN_4); 
+        hallCondition[4] = digitalRead(HALL_PIN_5); 
+        hallCondition[5] = digitalRead(HALL_PIN_6);
+}
+void Hall::zer()
+{
     float luftUst = M_PI/12.0;
-    float k = 1.5;
-    float hallPing = (luftUst/spd)*k;
-    bool hallCondition[6] = {
-        digitalRead(HALL_PIN_1), 
-        digitalRead(HALL_PIN_2), 
-        digitalRead(HALL_PIN_3), 
-        digitalRead(HALL_PIN_4), 
-        digitalRead(HALL_PIN_5), 
-        digitalRead(HALL_PIN_6)
-    };
-
+    float hallPing = (luftUst/spd)*1.5;
     if( !hallCondition[0] && (millis() - timeHall[0] > hallPing) ) {enc_1.encZero(); timeHall[0] = millis();}
     if( !hallCondition[1] && (millis() - timeHall[1] > hallPing) ) {enc_2.encZero(); timeHall[1] = millis();}
     if( !hallCondition[2] && (millis() - timeHall[2] > hallPing) ) {enc_3.encZero(); timeHall[2] = millis();}
@@ -47,7 +50,6 @@ void Hall::Upd()
     if( !hallCondition[4] && (millis() - timeHall[4] > hallPing) ) {enc_5.encZero(); timeHall[4] = millis();}
     if( !hallCondition[5] && (millis() - timeHall[5] > hallPing) ) {enc_6.encZero(); timeHall[5] = millis();}
 }
-
 //////unused
 // && (abs( modc(enc_1.get_phi(), 2.0*M_PI) ) < luftUst) 
 // && (abs( modc(enc_2.get_phi(), 2.0*M_PI) ) < luftUst) 

@@ -9,13 +9,15 @@
 #define ENC_PPR 465.0
 #define GEAR_RATIO 47   // передаточное отношение редуктора
 
-#define KOLVO_ENC_TICK_1 1755.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
-#define KOLVO_ENC_TICK_4 1745.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
-#define KOLVO_ENC_TICK_5 1745.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define _TEST_KLV_ETC 1746.0
 
-#define KOLVO_ENC_TICK_2 1750.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
-#define KOLVO_ENC_TICK_3 1755.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
-#define KOLVO_ENC_TICK_6 1748.0 // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define KOLVO_ENC_TICK_1 _TEST_KLV_ETC/*1755.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define KOLVO_ENC_TICK_4 _TEST_KLV_ETC/*1745.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define KOLVO_ENC_TICK_5 _TEST_KLV_ETC/*1745.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+
+#define KOLVO_ENC_TICK_2 _TEST_KLV_ETC/*1750.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define KOLVO_ENC_TICK_3 _TEST_KLV_ETC/*1755.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
+#define KOLVO_ENC_TICK_6 _TEST_KLV_ETC/*1748.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
 
 #define TICK_TO_RAD_1 ((2.0*M_PI)/(KOLVO_ENC_TICK_1)) // коэфф. пересчета в угол с учётом количества тиков 1 экодера на полный оборот
 #define TICK_TO_RAD_2 ((2.0*M_PI)/(KOLVO_ENC_TICK_2)) // коэфф. пересчета в угол с учётом количества тиков 1 экодера на полный оборот
@@ -35,12 +37,12 @@
 #define CS_PIN_5      A3
 #define CS_PIN_6      A5
 
-#define TRIG_CUR_1    160
-#define TRIG_CUR_2    160
-#define TRIG_CUR_3    160
-#define TRIG_CUR_4    160
-#define TRIG_CUR_5    160/*150*/
-#define TRIG_CUR_6    160
+#define TRIG_CUR_1    180
+#define TRIG_CUR_2    180
+#define TRIG_CUR_3    170
+#define TRIG_CUR_4    170
+#define TRIG_CUR_5    170/*150*/
+#define TRIG_CUR_6    170
 ///////////////////////////////////////////////////
 #define HALL_PIN_1    30
 #define HALL_PIN_2    31
