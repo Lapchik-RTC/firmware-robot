@@ -64,11 +64,11 @@ void StateMachine::StateMachineUpd()
     {
         //------
         case sleep:
-            if(sleepCalibr)
-            {
-                hmmm.Upd();
-                sleepCalibr = 0;
-            }
+            // if(sleepCalibr)
+            // {
+            //     hmmm.Upd();
+            //     sleepCalibr = 0;
+            // }
             robot.Foo(0);
             break;
 

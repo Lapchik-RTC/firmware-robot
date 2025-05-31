@@ -8,8 +8,8 @@
 class Hall
 {
     public:
-    ServoPrivod* myserv;
     Encoder* ecn;
+    ServoPrivod* myserv;
     bool mirr = 0;
 
     Hall(byte pin, ServoPrivod* msv, Encoder* ecn, bool mirr = 0):myserv(msv), ecn(ecn)
@@ -40,7 +40,7 @@ class HallMachine
     uint32_t timeSC = millis();
     void Upd()
     {           
-        if(sm.getState() == sleep)
+        if(0/*sm.getState() == sleep*/)
         {         
             for(int i = 0; i < 6; i++)
             {

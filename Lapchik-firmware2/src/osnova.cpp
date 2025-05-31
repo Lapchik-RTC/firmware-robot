@@ -31,7 +31,7 @@ void loop(){
 
     sm.setSpd( 3.5 );
     sm.StateMachineUpd();
-    Serial.println(enc_3.get_tick());
+    // Serial.println(enc_3.get_tick());
     // robot.ShiftTurnR(3.5);
         
 }
