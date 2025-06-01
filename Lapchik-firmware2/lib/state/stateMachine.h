@@ -47,7 +47,32 @@ class StateMachine
 
     bool ladm = 0;
     bool sleepCalibr = 0;
+    uint32_t timeSC = millis();
+    void HallMagic(mState _sm);
 };
+
+void StateMachine::HallMagic(mState _sm)
+{           
+    if(_sm == sleep)
+    {         
+        for(int i = 0; i < 6; i++)
+        {
+            if(halls[i].getCondition() == 1)
+            {
+                timeSC = millis();
+                while ( halls[i].getCondition() == 1 && millis() - timeSC < 750)
+                {
+                    halls[i].myserv->setGoalSpeed(3.0);
+                }
+                halls[i].myserv->setGoalSpeed(0);
+                halls[i].ecn->encZero();
+                halls[i].myserv->setGoalPos(0);
+            }
+        }
+    }
+}
+
+
 #define _T_     robot.getRT()
 #define _TC_    2.0 * M_PI
 #define _TS_    3.6/*2.7*/
@@ -64,11 +89,11 @@ void StateMachine::StateMachineUpd()
     {
         //------
         case sleep:
-            // if(sleepCalibr)
-            // {
-            //     hmmm.Upd();
-            //     sleepCalibr = 0;
-            // }
+            if(sleepCalibr)
+            {
+                HallMagic(state);
+                sleepCalibr = 0;
+            }
             robot.Foo(0);
             break;
 

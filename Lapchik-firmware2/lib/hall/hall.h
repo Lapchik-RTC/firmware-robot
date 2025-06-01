@@ -1,7 +1,6 @@
 #pragma once
-#include "obekti.h"
 #include "SLOVAR.h"
-#include "stateMachine.h"
+#include "obekti.h"
 
 // ServoPrivod* priv[6]
 
@@ -33,31 +32,3 @@ Hall halls[6] =
     Hall(HALL_PIN_5, &serv5, &enc_5), 
     Hall(HALL_PIN_6, &serv6, &enc_6)
 };
-
-class HallMachine
-{
-    public:
-    uint32_t timeSC = millis();
-    void Upd()
-    {           
-        if(0/*sm.getState() == sleep*/)
-        {         
-            for(int i = 0; i < 6; i++)
-            {
-                if(halls[i].getCondition() == 1)
-                {
-                    timeSC = millis();
-                    while ( halls[i].getCondition() == 1 && millis() - timeSC < 750)
-                    {
-                        halls[i].myserv->setGoalSpeed(3.0);
-                    }
-                    halls[i].myserv->setGoalSpeed(0);
-                    halls[i].ecn->encZero();
-                    halls[i].myserv->setGoalPos(0);
-                }
-            }
-        }
-    }
-};
-
-HallMachine hmmm;

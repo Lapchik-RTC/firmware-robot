@@ -29,7 +29,7 @@ void loop(){
     timer = micros();
     readPacket();
 
-    sm.setSpd( 3.5 );
+    sm.setSpd( 8.0 );
     sm.StateMachineUpd();
     // Serial.println(enc_3.get_tick());
     // robot.ShiftTurnR(3.5);
