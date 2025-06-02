@@ -89,8 +89,7 @@ void StateMachine::StateMachineUpd()
     {
         //------
         case sleep:
-            if(sleepCalibr)
-            {
+            if(sleepCalibr)            {
                 HallMagic(state);
                 sleepCalibr = 0;
             }
