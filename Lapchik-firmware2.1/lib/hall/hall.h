@@ -18,17 +18,24 @@ class Hall
         this->mirr = mirr;
     }
     bool getCondition(){return digitalRead(pin);}
-    
+    byte getPin(){return pin;}
     private:
     byte pin;
 };
 
 Hall halls[6] = 
 {
-    Hall(HALL_PIN_1, &serv1, &enc_1, 1), 
-    Hall(HALL_PIN_2, &serv2, &enc_2, 1), 
-    Hall(HALL_PIN_3, &serv3, &enc_3), 
-    Hall(HALL_PIN_4, &serv4, &enc_4), 
-    Hall(HALL_PIN_5, &serv5, &enc_5), 
-    Hall(HALL_PIN_6, &serv6, &enc_6)
+    Hall(hallPin[0], &privod[0], &Enc[0]),
+    Hall(hallPin[1], &privod[1], &Enc[1]),
+    Hall(hallPin[2], &privod[2], &Enc[2]),
+    Hall(hallPin[3], &privod[3], &Enc[3]),
+    Hall(hallPin[4], &privod[4], &Enc[4]),
+    Hall(hallPin[5], &privod[5], &Enc[5])
 };
+// void HInit()
+// {
+//     for(int i = 0; i < 6; i++)
+//     {
+//         halls[i] = Hall(hallPin[i], &privod[i], &Enc[i]);
+//     }
+// }

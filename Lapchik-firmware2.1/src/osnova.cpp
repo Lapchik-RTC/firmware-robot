@@ -1,44 +1,63 @@
 #include <Arduino.h>
 #include "SLOVAR.h"
 #include "obekti.h"
-// #include "stateMachine.h"
-// #include "hall.h"
+#include "stateMachine.h"
 
 void setup() {
     Serial.begin(115200);
 
     Serial1.begin(19200);
+
     // memset(&gamePad, 0, sizeof(gamePad));
 
     
-    // float tc = 2.0*M_PI;
-    // float ts = 2.7;
-    // float phiS = 0.5;
-    // float phi0 = 0;
-    // robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
+    float tc = 2.0*M_PI;
+    float ts = 2.7;
+    float phiS = 0.5;
+    float phi0 = 0;
+    robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
 
-    // robot.calibr();
+    robot.calibr();
     // robot.allEncZero();
     
     
 }
 
+void encToRoundCalibr()
+{
+    static uint32_t lastTimeDetect[6] = {millis(), millis(), millis(), millis(), millis(), millis()};
+    static int32_t encOld[6] = {Enc[0].get_tick(), Enc[1].get_tick(), Enc[2].get_tick(), Enc[3].get_tick(), Enc[4].get_tick(), Enc[5].get_tick()};
+    static int n[6] = {0, 0, 0, 0, 0, 0};
+    float kT = 0.2;
+
+    for(int i = 0; i < 6; i++)
+    {
+        if(digitalRead(hallPin[i]) == 0 && millis() - lastTimeDetect[i] > (350))
+        {
+            // kolvTickRate[i] = ( ((Enc[i].get_tick() - encOld[i]) * kT) + (kolvTickRate[i] * (1-kT)) );
+            // encOld[i] = Enc[i].get_tick();
+
+            n[i]++;
+            kolvTickRate[i] = abs(Enc[i].get_tick())/n[i];
+            lastTimeDetect[i] = millis();
+        }
+    }
+    // Serial.println(String(digitalRead(HALL_PIN_1)) + " " + String(n) + " " + String(srT2R));
+    // privod[0].setGoalSpeed(3.5);
+}
+//*/
 void loop(){
     // halls.Upd();
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+    encToRoundCalibr();
 
     // readPacket();
-    // sm.setSpd( 8.0 );
+    // sm.setSpd( 5.0 );
     // sm.StateMachineUpd();
-    for (int i = 0; i < 2*M_PI; i++) {
-        for(int j = 0; j < 6; j++) {
-            privod[j].setGoalPos(i);
-        }
-    }
     
-    // Serial.println(enc_3.get_tick());
-    // robot.ShiftTurnR(3.5);
+    // Serial.println(digitalRead(hallPin[3]));
+    robot.Foo(5.0);
         
 }

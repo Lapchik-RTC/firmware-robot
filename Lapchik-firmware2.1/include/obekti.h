@@ -47,8 +47,8 @@ EncoderParams enc_params_2 {
     .enc_pin_a = 64,    //8 // A10
     .enc_pin_b = 65,    //9 // A11
     .enc_dir = -1,
-    .ppr = KOLVO_ENC_TICK_2,
-    .tick_to_rad = TICK_TO_RAD_2,
+    .ppr = kolvTickRate[1],//KOLVO_ENC_TICK_2,
+    .tick_to_rad = 0,//TICK_TO_RAD_2,
     .get_AB = get_AB_enc2,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -58,8 +58,8 @@ EncoderParams enc_params_1 {
     .enc_pin_a = 62,    // A10
     .enc_pin_b = 63,    // A11
     .enc_dir = -1,
-    .ppr = KOLVO_ENC_TICK_1,
-    .tick_to_rad = TICK_TO_RAD_1,
+    .ppr = kolvTickRate[0],//KOLVO_ENC_TICK_1,
+    .tick_to_rad = 0,//TICK_TO_RAD_1,
     .get_AB = get_AB_enc1,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -69,8 +69,8 @@ EncoderParams enc_params_3 {
     .enc_pin_a = 66,    // A12
     .enc_pin_b = 67,    // A13
     .enc_dir = 1,
-    .ppr = KOLVO_ENC_TICK_3,
-    .tick_to_rad = TICK_TO_RAD_3,
+    .ppr = kolvTickRate[2],//KOLVO_ENC_TICK_3,
+    .tick_to_rad = 0,//TICK_TO_RAD_3,
     .get_AB = get_AB_enc3,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -80,8 +80,8 @@ EncoderParams enc_params_4 {
     .enc_pin_a = 68,    // A14
     .enc_pin_b = 69,    // A15
     .enc_dir = 1,
-    .ppr = KOLVO_ENC_TICK_4,
-    .tick_to_rad = TICK_TO_RAD_4,
+    .ppr = kolvTickRate[3],//KOLVO_ENC_TICK_4,
+    .tick_to_rad = 0,//TICK_TO_RAD_4,
     .get_AB = get_AB_enc4,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -91,8 +91,8 @@ EncoderParams enc_params_5 {
     .enc_pin_a = 10,    // 10
     .enc_pin_b = 11,    // 11
     .enc_dir = 1,
-    .ppr = KOLVO_ENC_TICK_5,
-    .tick_to_rad = TICK_TO_RAD_5,
+    .ppr = kolvTickRate[4],//KOLVO_ENC_TICK_5,
+    .tick_to_rad = 0,//TICK_TO_RAD_5,
     .get_AB = get_AB_enc5,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -102,8 +102,8 @@ EncoderParams enc_params_6 {
     .enc_pin_a = 14,    // 12
     .enc_pin_b = 15,    // 13
     .enc_dir = 1,
-    .ppr = KOLVO_ENC_TICK_6,
-    .tick_to_rad = TICK_TO_RAD_6,
+    .ppr = kolvTickRate[5],//KOLVO_ENC_TICK_6,
+    .tick_to_rad = 0,//TICK_TO_RAD_6,
     .get_AB = get_AB_enc6,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
@@ -201,8 +201,8 @@ DvigatelParams dvigatel_params_6 {
 // dvigatel_5(dvigatel_params_5), 
 // dvigatel_6(dvigatel_params_6);
 Dvigatel Dv[6] = {
-    Dvigatel(dvigatel_params_1),
     Dvigatel(dvigatel_params_2),
+    Dvigatel(dvigatel_params_1),
     Dvigatel(dvigatel_params_3),
     Dvigatel(dvigatel_params_4),
     Dvigatel(dvigatel_params_5),

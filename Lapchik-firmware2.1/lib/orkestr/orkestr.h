@@ -15,12 +15,16 @@ int sgn(float in)
 
 void statPosUpd()
 {
-    posStatic[0] = enc_1.get_phi();
-    posStatic[1] = enc_2.get_phi();
-    posStatic[2] = enc_3.get_phi();
-    posStatic[3] = enc_4.get_phi();
-    posStatic[4] = enc_5.get_phi();
-    posStatic[5] = enc_6.get_phi();
+    // posStatic[0] = enc_1.get_phi();
+    // posStatic[1] = enc_2.get_phi();
+    // posStatic[2] = enc_3.get_phi();
+    // posStatic[3] = enc_4.get_phi();
+    // posStatic[4] = enc_5.get_phi();
+    // posStatic[5] = enc_6.get_phi();
+    for(int i = 0; i < 6; i++)
+    {
+        posStatic[i] = Enc[i].get_phi();
+    }
 }
 
 /////////////////////   Orkestr   ///////////////////////
@@ -78,12 +82,12 @@ class Orkestr
     bool endLad = 1;
   void updatePhase(float t_, float t2_);
 
-  void l1(float pos){serv1.setGoalPos(pos);};
-  void l2(float pos){serv2.setGoalPos(pos);};
-  void l3(float pos){serv3.setGoalPos(pos);};
-  void l4(float pos){serv4.setGoalPos(pos);};
-  void l5(float pos){serv5.setGoalPos(pos);};
-  void l6(float pos){serv6.setGoalPos(pos);};  
+  void l1(float pos){privod[0].setGoalPos(pos);};
+  void l2(float pos){privod[1].setGoalPos(pos);};
+  void l3(float pos){privod[2].setGoalPos(pos);};
+  void l4(float pos){privod[3].setGoalPos(pos);};
+  void l5(float pos){privod[4].setGoalPos(pos);};
+  void l6(float pos){privod[5].setGoalPos(pos);};  
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,23 +135,31 @@ void Orkestr::Foo(float vel){
 //////////////   Enc   //////////////
 void Orkestr::allEncZero()
 {
-    enc_1.encZero();
-    enc_2.encZero();
-    enc_3.encZero();
-    enc_4.encZero();
-    enc_5.encZero();
-    enc_6.encZero();
+    // enc_1.encZero();
+    // enc_2.encZero();
+    // enc_3.encZero();
+    // enc_4.encZero();
+    // enc_5.encZero();
+    // enc_6.encZero();
+    for(int i = 0; i < 6; i++)
+    {
+        Enc[i].encZero();
+    }
 }
 //////////////   Pos   //////////////
 float* Orkestr::getPos()
 {
     float* arrPos = new float[6];   
-    arrPos[0] = modc(enc_1.get_phi(), 2.0*M_PI);
-    arrPos[1] = modc(enc_2.get_phi(), 2.0*M_PI);
-    arrPos[2] = modc(enc_3.get_phi(), 2.0*M_PI);
-    arrPos[3] = modc(enc_4.get_phi(), 2.0*M_PI);
-    arrPos[4] = modc(enc_5.get_phi(), 2.0*M_PI);    
-    arrPos[5] = modc(enc_6.get_phi(), 2.0*M_PI);
+    // arrPos[0] = modc(enc_1.get_phi(), 2.0*M_PI);
+    // arrPos[1] = modc(enc_2.get_phi(), 2.0*M_PI);
+    // arrPos[2] = modc(enc_3.get_phi(), 2.0*M_PI);
+    // arrPos[3] = modc(enc_4.get_phi(), 2.0*M_PI);
+    // arrPos[4] = modc(enc_5.get_phi(), 2.0*M_PI);    
+    // arrPos[5] = modc(enc_6.get_phi(), 2.0*M_PI);
+    for(int i = 0; i < 6; i++)
+    {
+        arrPos[i] = modc(Enc[i].get_phi(), 2.0*M_PI);
+    }
     return arrPos;
 }
 
@@ -160,19 +172,28 @@ void Orkestr::calibr()
         preKalibrTimer = millis();
         while(millis() - preKalibrTimer < 1700)
         {
-            serv1.setGoalSpeed(pVel);
-            serv2.setGoalSpeed(pVel);
-            serv3.setGoalSpeed(pVel);
-            serv4.setGoalSpeed(pVel);
-            serv5.setGoalSpeed(pVel);
-            serv6.setGoalSpeed(pVel);
+            // serv1.setGoalSpeed(pVel);
+            // serv2.setGoalSpeed(pVel);
+            // serv3.setGoalSpeed(pVel);
+            // serv4.setGoalSpeed(pVel);
+            // serv5.setGoalSpeed(pVel);
+            // serv6.setGoalSpeed(pVel);
+            for(int i = 0; i < 6; i++)
+            {
+                privod[i].setGoalSpeed(pVel);
+            }
         }
-        serv1.setGoalSpeed(pVel);
-        serv2.setGoalSpeed(pVel);
-        serv3.setGoalSpeed(pVel);
-        serv4.setGoalSpeed(pVel);
-        serv5.setGoalSpeed(pVel);
-        serv6.setGoalSpeed(pVel);
+        // serv1.setGoalSpeed(pVel);
+        // serv2.setGoalSpeed(pVel);
+        // serv3.setGoalSpeed(pVel);
+        // serv4.setGoalSpeed(pVel);
+        // serv5.setGoalSpeed(pVel);
+        // serv6.setGoalSpeed(pVel);
+        for(int i = 0; i < 6; i++)
+        {
+            privod[i].setGoalSpeed(pVel);
+        }
+
        // firstCalibr = 0;
     /*}
     else
@@ -215,7 +236,7 @@ void Orkestr::calibr()
         }
     }*/
     
-    float velL = 3.0, velR = velL;
+    float vel = 3.0;
     int whaitTimeCalibr_ = 4000;
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
     calibrTime = millis();
@@ -230,87 +251,19 @@ void Orkestr::calibr()
            (millis() - calibrTime < whaitTimeCalibr_)
         )
     {   
-        ///  dv1  ///
-        if(analogRead(CS_PIN_1) < TRIG_CUR_1 && (endCalibr[0] == false))
-        {
-            serv1.setGoalSpeed(velR);
-        }
-        else
-        {
-            if(endCalibr[0] == false)
-                enc_1.encZero();
-            endCalibr[0] = true;
-            serv1.setGoalPos(0);
-        }
-
-        ///  dv2  ///
-        if(analogRead(CS_PIN_2) < TRIG_CUR_2 && (endCalibr[1] == false))
-        {
-            serv2.setGoalSpeed(velL);
-        }
-        else
-        {
-            if(endCalibr[1] == false)
-                enc_2.encZero();
-
-            endCalibr[1] = true;
-            serv2.setGoalPos(0);
-        }
-
-        ///  dv3  ///
-        if(analogRead(CS_PIN_3) < TRIG_CUR_3 && (endCalibr[2] == false))
-        {
-            serv3.setGoalSpeed(velL*1.5);
-        }
-        else
-        {
-            if(endCalibr[2] == false)
-                enc_3.encZero();
-
-            endCalibr[2] = true;
-            serv3.setGoalPos(0);
-        }
-
-        ///  dv4  ///
-        if(analogRead(CS_PIN_4) < TRIG_CUR_4 && (endCalibr[3] == false))
-        {
-            serv4.setGoalSpeed(velR);
-        }
-        else
-        {
-            if(endCalibr[3] == false)
-                enc_4.encZero();
-
-            endCalibr[3] = true;
-            serv4.setGoalPos(0);
-        }
-
-        ///  dv5  ///
-        if(analogRead(CS_PIN_5) < TRIG_CUR_5 && (endCalibr[4] == false))
-        {
-            serv5.setGoalSpeed(velR);
-        }
-        else
-        {
-            if(endCalibr[4] == false)
-                enc_5.encZero();
-
-            endCalibr[4] = true;
-            serv5.setGoalPos(0);
-        }
-
-        ///  dv6  ///
-        if(analogRead(CS_PIN_6) < TRIG_CUR_6 && (endCalibr[5] == false))
-        {
-            serv6.setGoalSpeed(velL);
-        }
-        else
-        {
-            if(endCalibr[5] == false)
-                enc_6.encZero();
-
-            endCalibr[5] = true;
-            serv6.setGoalPos(0);
+        for(int i = 0; i < 6; i++){
+            ///  dv1  ///
+            if(analogRead(csPin[i]) < trigCur[i] && (endCalibr[i] == false))
+            {
+                privod[i].setGoalSpeed(vel);
+            }
+            else
+            {
+                if(endCalibr[i] == false)
+                    Enc[i].encZero();
+                endCalibr[i] = true;
+                privod[i].setGoalPos(0);
+            }
         }
     }
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
@@ -329,12 +282,13 @@ void Orkestr::stendUp()
 {
     float startPos = M_PI*1.5;// + (M_PI/2.0) + (M_PI/30.0);
     setPhiAll(startPos, startPos);
-    enc_1.encZero();
-    enc_2.encZero();
-    enc_3.encZero();
-    enc_4.encZero();
-    enc_5.encZero();
-    enc_6.encZero();
+    allEncZero();
+    // enc_1.encZero();
+    // enc_2.encZero();
+    // enc_3.encZero();
+    // enc_4.encZero();
+    // enc_5.encZero();
+    // enc_6.encZero();
 }
 
 void Orkestr::stendUp2()
@@ -344,116 +298,63 @@ void Orkestr::stendUp2()
     calibrTime = millis();
     while
     (
-        (( modc(enc_1.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(enc_2.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(enc_3.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(enc_4.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(enc_5.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(enc_6.get_phi(), 2.0*M_PI) <= M_PI/2.0 ) )&&
+        ((modc(Enc[0].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
+        ( modc(Enc[1].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
+        ( modc(Enc[2].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
+        ( modc(Enc[3].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
+        ( modc(Enc[4].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
+        ( modc(Enc[5].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) )&&
         ( millis() - calibrTime <  1000)
     )
     {
-        if( (modc(enc_1.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[0] == false) )
-            serv1.setGoalSpeed(upSpd);
-        else
+        for(int i = 0; i < 6; i++)
         {
-            if(endCalibr[0] == false)
-                enc_1.encZero();
-            endCalibr[0] = 1;
-            serv1.setGoalPos(0);
-        }
-
-        if( (modc(enc_2.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[1] == false) )
-            serv2.setGoalSpeed(upSpd);
-        else
-        {
-            if(endCalibr[1] == false)
-                enc_2.encZero();
-            endCalibr[1] = 1;
-            serv2.setGoalPos(0);
-        }
-
-        if( (modc(enc_3.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[2] == false) )
-            serv3.setGoalSpeed(upSpd);
-        else
-        {
-            if(endCalibr[2] == false)
-                enc_3.encZero();
-            endCalibr[2] = 1;
-            serv3.setGoalPos(0);
-        }
-
-        if( (modc(enc_4.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[3] == false) )
-            serv4.setGoalSpeed(upSpd);
-        else
-        {
-            if(endCalibr[3] == false)
-                enc_4.encZero();
-            serv4.setGoalPos(0);
-            endCalibr[3] = 1;
-        }
-
-        if( (modc(enc_5.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[4] == false) )
-            serv5.setGoalSpeed(upSpd);
-        else
-        {
-            if(endCalibr[4] == false)
-                enc_5.encZero();
-            serv5.setGoalPos(0);
-            endCalibr[4] = 1;
-        }
-
-        if( (modc(enc_6.get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[5] == false) )
-            serv6.setGoalSpeed(upSpd);
-        else
-        {
-            if(endCalibr[5] == false)
-                enc_6.encZero();
-            serv6.setGoalPos(0);
-            endCalibr[5] = 1;
+            if( (modc(Enc[i].get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[i] == false) )
+                privod[i].setGoalSpeed(upSpd);
+            else
+            {
+                if(endCalibr[i] == false)
+                    Enc[i].encZero();
+                endCalibr[i] = 1;
+                privod[i].setGoalPos(0);
+            }
         }
     }
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
-    serv1.setGoalPos(0);
-    serv2.setGoalPos(0);
-    serv3.setGoalPos(0);
-    serv4.setGoalPos(0);
-    serv5.setGoalPos(0);
-    serv6.setGoalPos(0);    
+    for(int i = 0; i < 6; i++)
+    {
+        privod[i].setGoalPos(0);
+    }
+    // serv1.setGoalPos(0);
+    // serv2.setGoalPos(0);
+    // serv3.setGoalPos(0);
+    // serv4.setGoalPos(0);
+    // serv5.setGoalPos(0);
+    // serv6.setGoalPos(0);    
 }
 
 void Orkestr::setPhiAll(float nPhiL, float nPhiR)
 {
-    enc_1.encZero();
-    enc_2.encZero();
-    enc_3.encZero();
-    enc_4.encZero();
-    enc_5.encZero();
-    enc_6.encZero();
+    allEncZero();
 
     int _k = -1;
     whaitPos = millis();
     while((millis() - whaitPos < 1500) && (
-        (enc_6.get_phi() < nPhiL * 0.8) || (enc_6.get_phi() < (nPhiL  + (nPhiL * 0.2)))
-        ||
-        (enc_1.get_phi() < nPhiR * 0.8) || (enc_1.get_phi() < (nPhiR  + (nPhiR * 0.2)))
-        ||
-        (enc_2.get_phi() < nPhiL * 0.8) || (enc_2.get_phi() < (nPhiL  + (nPhiL * 0.2)))
-        ||
-        (enc_3.get_phi() < nPhiL * 0.8) || (enc_3.get_phi() < (nPhiL  + (nPhiL * 0.2)))
-        ||
-        (enc_4.get_phi() < nPhiR * 0.8) || (enc_4.get_phi() < (nPhiR  + (nPhiR * 0.2)))
-        ||
-        (enc_5.get_phi() < nPhiR * 0.8) || (enc_5.get_phi() < (nPhiR  + (nPhiR * 0.2)))
+        (Enc[5].get_phi() < nPhiL * 0.8) || (Enc[5].get_phi() < (nPhiL  + (nPhiL * 0.2))) ||
+        (Enc[0].get_phi() < nPhiR * 0.8) || (Enc[0].get_phi() < (nPhiR  + (nPhiR * 0.2))) ||
+        (Enc[1].get_phi() < nPhiL * 0.8) || (Enc[1].get_phi() < (nPhiL  + (nPhiL * 0.2))) ||
+        (Enc[2].get_phi() < nPhiL * 0.8) || (Enc[2].get_phi() < (nPhiL  + (nPhiL * 0.2))) ||
+        (Enc[3].get_phi() < nPhiR * 0.8) || (Enc[3].get_phi() < (nPhiR  + (nPhiR * 0.2))) ||
+        (Enc[4].get_phi() < nPhiR * 0.8) || (Enc[4].get_phi() < (nPhiR  + (nPhiR * 0.2)))
     )
     )
     {
-        serv1.setGoalPos(nPhiR * _k);
-        serv2.setGoalPos(-nPhiL);
-        serv3.setGoalPos(-nPhiL);
-        serv4.setGoalPos(nPhiR * _k);
-        serv5.setGoalPos(nPhiR * _k);
-        serv6.setGoalPos(-nPhiL);
+        privod[0].setGoalPos(nPhiR * _k);
+        privod[1].setGoalPos(-nPhiL);
+        privod[2].setGoalPos(-nPhiL);
+        privod[3].setGoalPos(nPhiR * _k);
+        privod[4].setGoalPos(nPhiR * _k);
+        privod[5].setGoalPos(-nPhiL);
     }
 }
 
@@ -462,7 +363,7 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
 //////////////   Other move   //////////////
 
 /////////////////////////////////////////////
-
+/*
 void Orkestr::ladFoo(float vel)
 {
     updatePhase((vel * Ts_s_IN_SEC), (vel * Ts_s_IN_SEC));
@@ -478,12 +379,12 @@ void Orkestr::ladFoo(float vel)
     
     if( millis() - ladXChange <= ((vel * M_PI)*k_milToS) )
     {
-       serv1.setGoalSpeed(-M_PI/6);
-       serv2.setGoalSpeed(-M_PI/6);
+       Enc[0].setGoalSpeed(-M_PI/6);
+       Enc[1].setGoalSpeed(-M_PI/6);
        if(!( (millis() - ladXChange >  ((vel * M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 2.0*M_PI)*k_milToS)) ))
        {
-           serv3.setGoalPos(-M_PI/6);
-           serv4.setGoalPos(-M_PI/6);
+           .setGoalPos(-M_PI/6);
+           .setGoalPos(-M_PI/6);
        }
        l5(X1);
        l6(X1);
@@ -524,7 +425,7 @@ void Orkestr::ladFoo(float vel)
     }
     
 }
-
+*/
 
 
 void Orkestr::ReversFoo(float velL, float velR){

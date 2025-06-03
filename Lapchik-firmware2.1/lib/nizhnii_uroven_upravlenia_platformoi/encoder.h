@@ -90,7 +90,6 @@ public:
     return phi;
   }
 
-
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
   void enc_tick() {
     
@@ -98,7 +97,7 @@ public:
 
     
     tick += counter; 
-    phi += counter * encoderParams.tick_to_rad;
+    phi += counter * ((2.0*M_PI)/(encoderParams.ppr));//encoderParams.tick_to_rad;
 
     w_moment_rad_s = (phi - I) / encoderParams.T_sec;
     I += w_moment_rad_s * encoderParams.Ts_sec;
