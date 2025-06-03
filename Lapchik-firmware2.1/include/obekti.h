@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Arduino.h>
-//#include"SLOVAR.h"
+#include"SLOVAR.h"
 #include "encoder.h"
 #include "Dvigatel.h"
 #include "regulatori.h"
@@ -110,33 +110,38 @@ EncoderParams enc_params_6 {
 };
 
 
-Encoder enc_1(enc_params_1),
-        enc_2(enc_params_2),
-        enc_3(enc_params_3),
-        enc_4(enc_params_4),
-        enc_5(enc_params_5),
-        enc_6(enc_params_6);
-
+// Encoder enc_1(enc_params_1),
+//         enc_2(enc_params_2),
+//         enc_3(enc_params_3),
+//         enc_4(enc_params_4),
+//         enc_5(enc_params_5),
+//         enc_6(enc_params_6);
+Encoder Enc[6] = {
+    Encoder(enc_params_1),
+    Encoder(enc_params_2),
+    Encoder(enc_params_3),
+    Encoder(enc_params_4),
+    Encoder(enc_params_5),
+    Encoder(enc_params_6)
+};
 
 ISR(PCINT0_vect)
 {
-    enc_5.isr_handler();
-    // enc_6.isr_handler();
+    Enc[4].isr_handler();
 }
+
 ISR(PCINT1_vect)
 {
-    enc_6.isr_handler();
+    Enc[5].isr_handler();
 }
 
 ISR(PCINT2_vect)
 {
-    enc_1.isr_handler();
-    enc_2.isr_handler();
-    enc_3.isr_handler();
-    enc_4.isr_handler();  
+    Enc[0].isr_handler();
+    Enc[1].isr_handler();
+    Enc[2].isr_handler();
+    Enc[3].isr_handler();  
 }
-
-
 
 
 
@@ -189,25 +194,20 @@ DvigatelParams dvigatel_params_6 {
     .supply_voltage = 12
 };
 
-Dvigatel dvigatel_1(dvigatel_params_2), 
-dvigatel_2(dvigatel_params_1), 
-dvigatel_3(dvigatel_params_3), 
-dvigatel_4(dvigatel_params_4), 
-dvigatel_5(dvigatel_params_5), 
-dvigatel_6(dvigatel_params_6);
-
-/////////////////////////////////////////////////////////
-// inline void encUpd()
-// {
-//     enc_1.enc_tick();
-//     enc_2.enc_tick();
-//     enc_3.enc_tick();
-//     enc_4.enc_tick();
-//     enc_5.enc_tick();
-//     enc_6.enc_tick();
-// }
-
-
+// Dvigatel dvigatel_1(dvigatel_params_2), 
+// dvigatel_2(dvigatel_params_1), 
+// dvigatel_3(dvigatel_params_3), 
+// dvigatel_4(dvigatel_params_4), 
+// dvigatel_5(dvigatel_params_5), 
+// dvigatel_6(dvigatel_params_6);
+Dvigatel Dv[6] = {
+    Dvigatel(dvigatel_params_1),
+    Dvigatel(dvigatel_params_2),
+    Dvigatel(dvigatel_params_3),
+    Dvigatel(dvigatel_params_4),
+    Dvigatel(dvigatel_params_5),
+    Dvigatel(dvigatel_params_6)
+};
 
 #define KP_PI 1//0.06
 #define KI_PI 0.01//0.05//2.1//5
@@ -225,21 +225,11 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
-MotorControlParams mctrlp3//структура общая
-{
-  .Ts_sec = Ts_s_IN_SEC,
-  .kpPI = 0.3,//0.0001,
-  .ki = 0.007,//00079,//0.00001,
-  .maxU = SUPPLY_VOLTAGE/2,
-  .kpP = KP_P,
-  .maxVel = 25,//16.0,
-  .kalibrSpeed = 1
-};
 
-ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
-ServoPrivod serv2(mctrlp, &dvigatel_2, &enc_2);
-ServoPrivod serv3(mctrlp, &dvigatel_3, &enc_3);
-ServoPrivod serv4(mctrlp, &dvigatel_4, &enc_4);
-ServoPrivod serv5(mctrlp, &dvigatel_5, &enc_5);
-ServoPrivod serv6(mctrlp, &dvigatel_6, &enc_6);
+// ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
+// ServoPrivod serv2(mctrlp, &dvigatel_2, &enc_2);
+// ServoPrivod serv3(mctrlp, &dvigatel_3, &enc_3);
+// ServoPrivod serv4(mctrlp, &dvigatel_4, &enc_4);
+// ServoPrivod serv5(mctrlp, &dvigatel_5, &enc_5);
+// ServoPrivod serv6(mctrlp, &dvigatel_6, &enc_6);
 
