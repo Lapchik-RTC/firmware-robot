@@ -32,7 +32,11 @@ void loop(){
     // readPacket();
     // sm.setSpd( 8.0 );
     // sm.StateMachineUpd();
-
+    for (int i = 0; i < 2*M_PI; i++) {
+        for(int j = 0; j < 6; j++) {
+            privod[j].setGoalPos(i);
+        }
+    }
     
     // Serial.println(enc_3.get_tick());
     // robot.ShiftTurnR(3.5);

@@ -225,6 +225,14 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
+ServoPrivod privod[6] = {
+    ServoPrivod(mctrlp, &Dv[0], &Enc[0]),
+    ServoPrivod(mctrlp, &Dv[1], &Enc[1]),
+    ServoPrivod(mctrlp, &Dv[2], &Enc[2]),
+    ServoPrivod(mctrlp, &Dv[3], &Enc[3]),
+    ServoPrivod(mctrlp, &Dv[4], &Enc[4]),
+    ServoPrivod(mctrlp, &Dv[5], &Enc[5])
+};
 
 // ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
 // ServoPrivod serv2(mctrlp, &dvigatel_2, &enc_2);
