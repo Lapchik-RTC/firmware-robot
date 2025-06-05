@@ -81,7 +81,7 @@ class Orkestr
     uint32_t ladXChange = 0;
     bool endLad = 1;
   void updatePhase(float t_, float t2_);
-
+public:
   void l1(float pos){privod[0].setGoalPos(pos);};
   void l2(float pos){privod[1].setGoalPos(pos);};
   void l3(float pos){privod[2].setGoalPos(pos);};
@@ -122,14 +122,14 @@ void Orkestr::Foo(float vel){
     float dphi5 = X;
     float dphi6 = XPi;
 
-    Serial.print("GPos: " + String(X) + '\t');
+    // Serial.print("GPos: " + String(X) + '\t');
 
-    l3(dphi3);
-    l5(dphi5);
-    l1(dphi1);
-    l4(dphi4);   
+    // l3(dphi3);
+    // l5(dphi5);
+    // l1(dphi1);
+    // l4(dphi4);   
     l2(dphi2);
-    l6(dphi6);
+    // l6(dphi6);
 }
 
 //////////////   Enc   //////////////

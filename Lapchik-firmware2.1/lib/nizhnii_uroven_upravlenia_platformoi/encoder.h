@@ -2,8 +2,9 @@
 #include <Arduino.h>
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
+#include "f.h"
 
-#define MAX_TICK_CORR 250.0
+#define MAX_TICK_CORR 5.0
 
 void phaseTick();
 
@@ -18,6 +19,9 @@ public:
   uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
   float Ts_sec;             // Период квантования
   float T_sec;              // Постоянная времени фильтра скорости
+
+  byte Hpin;
+  bool mirrHall;
 };
 
 class Encoder {
@@ -26,8 +30,7 @@ class Encoder {
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   float I = 0;
-  volatile float rotErr = 0.0;
-  volatile float corr = 0.0;
+
 public:
   volatile int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
@@ -50,7 +53,7 @@ public:
     encoder_init();
   }
   ////////////////////////////////////////////////////////////////
-  void encZero(){/*counter = 0;*/ tick = 0; phi = 0; I = 0;}
+  void encZero(){counter = 0; tick = 0; phi = 0; I = 0;}
   ////////////////////////////////////////////////////////////////
   void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
@@ -94,9 +97,12 @@ public:
   }
 
   
-  
-  void setRotErr(float rotErr_){ this->rotErr += rotErr_; }
-  float getRotErr(){return rotErr;}
+  float rotErr = 0.0;
+  float corr = 0.0;
+  uint32_t lastTimeDetect = millis();
+
+  // void setRotErr(float rotErr_){ this->rotErr += rotErr_; }
+  // float getRotErr(){return counter;}
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
   void enc_tick() {
 
@@ -105,15 +111,32 @@ public:
     counter = 0;
     interrupts();
     
-    corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
+    if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (3000) ))
+    {
+      if(encoderParams.mirrHall)
+      {
+        rotErr += ( M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
+        rotErr = rotErr*1746;
+        Serial.print('\t' + String(1111111111));
+      }
+      else
+      {
+        rotErr += ( 2.0*M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
+        rotErr = rotErr*1746;
+        Serial.print('\t' + String(0000000000));
+      }
+      lastTimeDetect = millis();
+    }
+//*/
+    corr = constrain(this->rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
     counter_buf += corr;
     rotErr -= corr;
     
     
     tick += counter_buf; 
     phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));//encoderParams.tick_to_rad;
-    
-    w_moment_tick = ((counter_buf * 1.0) / encoderParams.ppr);
+    Serial.println('\t' + String(counter_buf));
+    // w_moment_tick = ((counter_buf * 1.0) / encoderParams.ppr);
     w_moment_rad_s = (phi - I) / encoderParams.T_sec;
     I += w_moment_rad_s * encoderParams.Ts_sec;
   }

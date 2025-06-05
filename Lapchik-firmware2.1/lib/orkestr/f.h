@@ -40,14 +40,14 @@ inline float Fl(float t, float ts, float phists, float dydx) {
 /// @param ts - период центрального отрезка(с.)
 /// @param phis - 2 PI
 /// @param phi0
-/// @return 
+
 inline float Ffull(float t, float tc, float ts, float phis, float phi0) {
 
     t = modc(t, tc);
     float out;
     float phists = phis/ts;
     if(t < -ts*float(0.5))
-    {
+    {   
         float dydx = (float(2*M_PI) - phis) / (tc - ts);
         out = Fl(t, ts, phists, dydx);
     }
@@ -62,6 +62,5 @@ inline float Ffull(float t, float tc, float ts, float phis, float phi0) {
     }
     return out + phi0;
 }
-
 
 /////////////////

@@ -1,6 +1,6 @@
 #pragma once
 #include "SLOVAR.h"
-#include "obekti.h"
+// #include "obekti.h"
 
 // ServoPrivod* priv[6]
 

@@ -28,12 +28,13 @@ private:
   float Preg(float err);
   
 public:
-  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc) {
+  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc)
+  {
     this->params = mconp;
     this->motor = motor;
     this->enc = enc;
   }
-  void setGoalPos(float goalPos_tick);
+  void setGoalPos(float goalPosPhi/*goalPos_tick*/);
   void setGoalSpeed(float goalSpeed);//rad/s
 };
 

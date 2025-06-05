@@ -17,13 +17,12 @@ void setup() {
     float phi0 = 0;
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
 
-    robot.calibr();
-    // robot.allEncZero();
-    
+    // robot.calibr();    
+    robot.allEncZero();
     
 }
 
-void encToRoundCalibr()
+/*void encToRoundCalibr()
 {
     static uint32_t lastTimeDetect[6] = {millis(), millis(), millis(), millis(), millis(), millis()};
     static int32_t encOld[6] = {Enc[0].get_tick(), Enc[1].get_tick(), Enc[2].get_tick(), Enc[3].get_tick(), Enc[4].get_tick(), Enc[5].get_tick()};
@@ -50,22 +49,22 @@ void encToRoundCalibr()
             lastTimeDetect[i] = millis();
         }
     }
-}
-//*/
+}//*/
+
 void loop(){
-    // halls.Upd();
+
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
-    encToRoundCalibr();
+    // encToRoundCalibr();
 
     
-    readPacket();
-    sm.setSpd( 5.0 );
-    sm.StateMachineUpd();
+    // readPacket();
+    // sm.setSpd( 5.0 );
+    // sm.StateMachineUpd();
     
-   
- Serial.println(String( Enc[1].getRotErr() ));
-    // robot.Foo(5.0);
-        
+    // robot.l2(M_PI/2.0);
+    Serial.println(String( modc(Enc[1].get_phi(), 2.0*M_PI) ));
+    robot.Foo(5.0);
+    // privod[1].setGoalSpeed(0.0);
 }

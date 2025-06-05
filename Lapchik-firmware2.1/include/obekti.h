@@ -6,6 +6,7 @@
 #include "Dvigatel.h"
 #include "regulatori.h"
 
+
 uint8_t get_AB_enc1()
 {
     return (((PINK) & 0b00000011) >> 0);
@@ -52,6 +53,8 @@ EncoderParams enc_params_2 {
     .get_AB = get_AB_enc2,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[1],
+    .mirrHall = 1
 };
 
 EncoderParams enc_params_1 {
@@ -63,6 +66,8 @@ EncoderParams enc_params_1 {
     .get_AB = get_AB_enc1,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[0],
+    .mirrHall = 1
 };
 
 EncoderParams enc_params_3 {
@@ -74,6 +79,8 @@ EncoderParams enc_params_3 {
     .get_AB = get_AB_enc3,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[2],
+    .mirrHall = 0
 };
 
 EncoderParams enc_params_4 {
@@ -85,6 +92,8 @@ EncoderParams enc_params_4 {
     .get_AB = get_AB_enc4,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[3],
+    .mirrHall = 0
 };
 
 EncoderParams enc_params_5 {
@@ -96,6 +105,8 @@ EncoderParams enc_params_5 {
     .get_AB = get_AB_enc5,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[4],
+    .mirrHall = 0
 };
 
 EncoderParams enc_params_6 {
@@ -107,6 +118,8 @@ EncoderParams enc_params_6 {
     .get_AB = get_AB_enc6,
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
+    .Hpin = hallPin[5],
+    .mirrHall = 0
 };
 
 
@@ -151,7 +164,7 @@ DvigatelParams dvigatel_params_1 {
     .motor_in_2 = 35,
     .motor_pwm = 5,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 DvigatelParams dvigatel_params_2 {
@@ -159,7 +172,7 @@ DvigatelParams dvigatel_params_2 {
     .motor_in_2 = 34,
     .motor_pwm = 4,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 DvigatelParams dvigatel_params_3 {
@@ -167,7 +180,7 @@ DvigatelParams dvigatel_params_3 {
     .motor_in_2 = 36,
     .motor_pwm = 6,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 DvigatelParams dvigatel_params_4 {
@@ -175,7 +188,7 @@ DvigatelParams dvigatel_params_4 {
     .motor_in_2 = 39,
     .motor_pwm = 7,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 DvigatelParams dvigatel_params_5 {
@@ -183,7 +196,7 @@ DvigatelParams dvigatel_params_5 {
     .motor_in_2 = 42,
     .motor_pwm = 8,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 DvigatelParams dvigatel_params_6 {
@@ -191,7 +204,7 @@ DvigatelParams dvigatel_params_6 {
     .motor_in_2 = 43,
     .motor_pwm = 9,
     .motor_dir = 1,
-    .supply_voltage = 12
+    .supply_voltage = SUPPLY_VOLTAGE
 };
 
 // Dvigatel dvigatel_1(dvigatel_params_2), 
@@ -209,8 +222,8 @@ Dvigatel Dv[6] = {
     Dvigatel(dvigatel_params_6)
 };
 
-#define KP_PI 1//0.06
-#define KI_PI 0.01//0.05//2.1//5
+#define KP_PI 1
+#define KI_PI 0.01
 #define KP_P 32
 #define KE 0.2
 
@@ -219,7 +232,7 @@ MotorControlParams mctrlp//структура общая
   .Ts_sec = Ts_s_IN_SEC,
   .kpPI = KP_PI,//0.0001,
   .ki = KI_PI,//00079,//0.00001,
-  .maxU = SUPPLY_VOLTAGE/2,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
   .kpP = KP_P,
   .maxVel = 16.0,
   .kalibrSpeed = 1
