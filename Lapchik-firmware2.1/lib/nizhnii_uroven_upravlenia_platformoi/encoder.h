@@ -3,6 +3,8 @@
 #include "HardwareSerial.h"
 #include "SLOVAR.h"
 
+#define MAX_TICK_CORR 250.0
+
 void phaseTick();
 
 struct EncoderParams
@@ -24,9 +26,10 @@ class Encoder {
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   float I = 0;
-  
+  volatile float rotErr = 0.0;
+  volatile float corr = 0.0;
 public:
-  int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
+  volatile int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
@@ -47,7 +50,7 @@ public:
     encoder_init();
   }
   ////////////////////////////////////////////////////////////////
-  void encZero(){counter = 0; tick = 0; phi = 0; I = 0;}
+  void encZero(){/*counter = 0;*/ tick = 0; phi = 0; I = 0;}
   ////////////////////////////////////////////////////////////////
   void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
@@ -90,19 +93,29 @@ public:
     return phi;
   }
 
+  
+  
+  void setRotErr(float rotErr_){ this->rotErr += rotErr_; }
+  float getRotErr(){return rotErr;}
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
   void enc_tick() {
-    
-    w_moment_tick = ((counter * 1.0) / encoderParams.ppr);
 
+    noInterrupts();
+    int16_t counter_buf = counter;
+    counter = 0;
+    interrupts();
     
-    tick += counter; 
-    phi += counter * ((2.0*M_PI)/(encoderParams.ppr));//encoderParams.tick_to_rad;
-
+    corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
+    counter_buf += corr;
+    rotErr -= corr;
+    
+    
+    tick += counter_buf; 
+    phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));//encoderParams.tick_to_rad;
+    
+    w_moment_tick = ((counter_buf * 1.0) / encoderParams.ppr);
     w_moment_rad_s = (phi - I) / encoderParams.T_sec;
     I += w_moment_rad_s * encoderParams.Ts_sec;
-
-    counter = 0;
   }
 
   

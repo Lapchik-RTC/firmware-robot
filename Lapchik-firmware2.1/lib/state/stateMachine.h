@@ -89,10 +89,10 @@ void StateMachine::StateMachineUpd()
     {
         //------
         case sleep:
-            if(sleepCalibr)            {
-                HallMagic(state);
-                sleepCalibr = 0;
-            }
+            // if(sleepCalibr)            {
+            //    HallMagic(state);
+            //     sleepCalibr = 0;
+            // }
             robot.Foo(0);
             break;
 

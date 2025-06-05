@@ -8,7 +8,7 @@ void setup() {
 
     Serial1.begin(19200);
 
-    // memset(&gamePad, 0, sizeof(gamePad));
+    memset(&gamePad, 0, sizeof(gamePad));
 
     
     float tc = 2.0*M_PI;
@@ -36,14 +36,20 @@ void encToRoundCalibr()
         {
             // kolvTickRate[i] = ( ((Enc[i].get_tick() - encOld[i]) * kT) + (kolvTickRate[i] * (1-kT)) );
             // encOld[i] = Enc[i].get_tick();
-
-            n[i]++;
-            kolvTickRate[i] = abs(Enc[i].get_tick())/n[i];
+            if(i > 1)
+            {
+                Enc[i].setRotErr( 0.0 - modc(Enc[i].get_phi(), 2.0*M_PI) );
+            }
+            else
+            {
+                Enc[i].setRotErr( M_PI - modc(Enc[i].get_phi(), 2.0*M_PI) );
+            }
+            // n[i]++;
+            // kolvTickRate[i] = abs(Enc[i].get_tick())/n[i];
+               Serial.println(String(1111111111));
             lastTimeDetect[i] = millis();
         }
     }
-    // Serial.println(String(digitalRead(HALL_PIN_1)) + " " + String(n) + " " + String(srT2R));
-    // privod[0].setGoalSpeed(3.5);
 }
 //*/
 void loop(){
@@ -53,11 +59,13 @@ void loop(){
     timer = micros();
     encToRoundCalibr();
 
-    // readPacket();
-    // sm.setSpd( 5.0 );
-    // sm.StateMachineUpd();
     
-    // Serial.println(digitalRead(hallPin[3]));
-    robot.Foo(5.0);
+    readPacket();
+    sm.setSpd( 5.0 );
+    sm.StateMachineUpd();
+    
+   
+ Serial.println(String( Enc[1].getRotErr() ));
+    // robot.Foo(5.0);
         
 }

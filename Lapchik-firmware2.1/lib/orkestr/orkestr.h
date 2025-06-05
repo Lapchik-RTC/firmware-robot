@@ -122,7 +122,7 @@ void Orkestr::Foo(float vel){
     float dphi5 = X;
     float dphi6 = XPi;
 
-    // Serial.print("GPos: " + String(X) + '\t');
+    Serial.print("GPos: " + String(X) + '\t');
 
     l3(dphi3);
     l5(dphi5);
