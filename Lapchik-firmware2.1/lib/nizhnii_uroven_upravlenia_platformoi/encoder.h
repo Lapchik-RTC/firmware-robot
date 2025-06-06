@@ -4,7 +4,7 @@
 #include "SLOVAR.h"
 #include "f.h"
 
-#define MAX_TICK_CORR 5.0
+#define MAX_TICK_CORR 18.0
 
 void phaseTick();
 
@@ -84,11 +84,11 @@ public:
   void isr_handler() {
     noInterrupts();
     uint16_t enc = encoderParams.get_AB();
-    
+    interrupts();
     counter += table[enc_old][enc];
     
     enc_old = enc;
-    interrupts();
+    
     // phaseTick();
   }
 
@@ -110,33 +110,33 @@ public:
     int16_t counter_buf = counter;
     counter = 0;
     interrupts();
-    
-    if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (3000) ))
-    {
-      if(encoderParams.mirrHall)
-      {
-        rotErr += ( M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
-        rotErr = rotErr*1746;
-        Serial.print('\t' + String(1111111111));
-      }
-      else
-      {
-        rotErr += ( 2.0*M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
-        rotErr = rotErr*1746;
-        Serial.print('\t' + String(0000000000));
-      }
-      lastTimeDetect = millis();
-    }
-//*/
-    corr = constrain(this->rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
-    counter_buf += corr;
-    rotErr -= corr;
-    
-    
+    ////////////////////////////////////
+    // if(NCalibrMode)
+    // {
+    //   if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1300) ))
+    //   {
+    //     if(encoderParams.mirrHall)
+    //     {
+    //       //rotErr += ( M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
+    //       rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
+    //       Serial.print('\t' + String(1111111111));
+    //     }
+    //     else
+    //     {
+    //       rotErr += ( encoderParams.ppr - modc(get_tick(), encoderParams.ppr) );
+    //       Serial.print('\t' + String(0000000000));
+    //     }
+    //     lastTimeDetect = millis();
+    //   }
+
+    //   corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
+    //   counter_buf += corr;
+    //   rotErr -= corr;
+    // }
+    ////////////////////////////////////
     tick += counter_buf; 
-    phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));//encoderParams.tick_to_rad;
-    Serial.println('\t' + String(counter_buf));
-    // w_moment_tick = ((counter_buf * 1.0) / encoderParams.ppr);
+    phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));
+    // Serial.println('\t' + String(counter_buf));
     w_moment_rad_s = (phi - I) / encoderParams.T_sec;
     I += w_moment_rad_s * encoderParams.Ts_sec;
   }

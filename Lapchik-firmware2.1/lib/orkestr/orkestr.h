@@ -112,7 +112,7 @@ void Orkestr::updatePhase(float t_, float t2_)
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
 
-    XPi = Ffull(t * abs(sgn(vel)), tc, ts, phiS, phi0/* + ((M_PI/6.0)* abs(sgn(vel)))*/);
+    XPi = Ffull(t* abs(sgn(vel)), tc, ts, phiS, phi0/* + ((M_PI/6.0)* abs(sgn(vel)))*/);
     X = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts, phiS, phi0);
     // XPi = X;
     float dphi1 = X;
@@ -122,14 +122,14 @@ void Orkestr::Foo(float vel){
     float dphi5 = X;
     float dphi6 = XPi;
 
-    // Serial.print("GPos: " + String(X) + '\t');
+    // Serial.print("GPos: " + String(XPi) + '\t');
 
-    // l3(dphi3);
-    // l5(dphi5);
-    // l1(dphi1);
-    // l4(dphi4);   
+    l3(dphi3);
+    l5(dphi5);
+    l1(dphi1);
+    l4(dphi4);   
     l2(dphi2);
-    // l6(dphi6);
+    l6(dphi6);
 }
 
 //////////////   Enc   //////////////
