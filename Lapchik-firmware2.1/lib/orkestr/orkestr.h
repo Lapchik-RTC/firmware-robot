@@ -66,7 +66,7 @@ class Orkestr
   
   void ladFoo(float vel);
   float X1, X2, X3;
-  float t, t2, tc, ts, phiS, phi0;
+  float t, t2, tc, ts, phiS, phi0, delta_ts, delta_phi0;
 
   private:
 
@@ -93,7 +93,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////   Foo   //////////////
-void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_)
+void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_, float delta_ts_ = 0.0, float delta_phi0_ = 0.0)
 {
     this->t = t_;
     this->t2 = t_;
@@ -101,6 +101,8 @@ void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_
     this->ts = ts_;
     this->phiS = phiS_;
     this->phi0 = phi0_;
+    this->delta_ts = delta_ts_;
+    this->delta_phi0 = delta_phi0_;
 }
 
 void Orkestr::updatePhase(float t_, float t2_)
@@ -114,13 +116,31 @@ void Orkestr::Foo(float vel){
 
     XPi = Ffull(t* abs(sgn(vel)), tc, ts, phiS, phi0/* + ((M_PI/6.0)* abs(sgn(vel)))*/);
     X = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts, phiS, phi0);
+    
+    // float XL = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
+    // float XR = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
+    // float XLPi = Ffull(t* abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
+    // float XRPi = Ffull(t* abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
+
     // XPi = X;
+
     float dphi1 = X;
-    float dphi2 = XPi;
     float dphi3 = XPi;
-    float dphi4 = X;
     float dphi5 = X;
+
+    float dphi2 = XPi;
+    float dphi4 = X;
     float dphi6 = XPi;
+
+    // // LEFT
+    // float dphi1 = XL;
+    // float dphi3 = XLPi;
+    // float dphi5 = XL;
+
+    // // RIGHT
+    // float dphi2 = XRPi;
+    // float dphi4 = XR;
+    // float dphi6 = XRPi;
 
     // Serial.print("GPos: " + String(XPi) + '\t');
 

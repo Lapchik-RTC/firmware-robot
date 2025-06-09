@@ -134,6 +134,7 @@ public:
     //   rotErr -= corr;
     // }
     ////////////////////////////////////
+    Serial.print(".");
     tick += counter_buf; 
     phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));
     // Serial.println('\t' + String(counter_buf));

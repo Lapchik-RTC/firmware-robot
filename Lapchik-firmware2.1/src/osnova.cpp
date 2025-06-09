@@ -23,7 +23,8 @@ void setup() {
     robot.allEncZero();
     
 }
-/*
+
+
 void encToRoundCalibr()
 {
     static uint32_t lastTimeDetect[6] = {millis(), millis(), millis(), millis(), millis(), millis()};
@@ -36,7 +37,8 @@ void encToRoundCalibr()
 
     // for(int i = 0; i < 6; i++)
     // {
-        if(digitalRead(hallPin[1]) == 0 && millis() - lastTimeDetect[1] > (500))
+        int m = 2;
+        if(digitalRead(hallPin[m]) == 0 && millis() - lastTimeDetect[m] > (500))
         {
             // kolvTickRate[1] = ( ((Enc[1].get_tick() - encOld[1]) * kT) + (kolvTickRate[1] * (1-kT)) );
             // encOld[i] = Enc[1].get_tick();
@@ -53,38 +55,47 @@ void encToRoundCalibr()
 
 
 
-
-            n[1]++;
-            if(n[1]==1)
+            n[m]++;
+            if(n[m]==1)
             {
-                statErr = Enc[1].get_tick();
-                statErrPhi = Enc[1].get_phi();
+                statErr = Enc[m].get_tick();
+                statErrPhi = Enc[m].get_phi();
             }
             else
             {
-                kolvTickRate[1] = (abs(Enc[1].get_tick()-statErr)/(n[1]-1));
-                Phi2R = (abs(Enc[1].get_phi()-statErrPhi)/(n[1]-1));
+                kolvTickRate[m] = (abs(Enc[m].get_tick()-statErr)/(n[m]-1));
+                Phi2R = (abs(Enc[m].get_phi()-statErrPhi)/(n[m]-1));
             }
 
 
 
             
-            lastTimeDetect[1] = millis();
+            lastTimeDetect[m] = millis();
         }
-        Serial.println("enc2rot: "+String(kolvTickRate[1])+"\tphi2rot: "+String(Phi2R));
+        Serial.println("enc2rot: "+String(kolvTickRate[m])+"\tphi2rot: "+String(Phi2R));
     // }
 }//*/
 
 void loop(){
 
     static uint64_t timer = micros();
-    while(micros() - timer < Ts_s);
+    
+    while(micros() - timer < Ts_s)
+    {
+
+    }
+    Serial.println();
+
     timer = micros();
-    // encToRoundCalibr();
-    static uint64_t ti = millis();
-    static float p = 0.0;
-    static float phi_ = 0.0, phiOld = 0.0, stph = 0.0;
-    static int n = 0, t = 0;
+    for(int i = 0; i < 6; i++)
+    {
+        Enc[i].enc_tick();
+    }
+    encToRoundCalibr();
+    // static uint64_t ti = millis();
+    // static float p = 0.0;
+    // static float phi_ = 0.0, phiOld = 0.0, stph = 0.0;
+    // static int n = 0, t = 0;
 
     // if(digitalRead(hallPin[3]) == 0 && (millis() - ti > (500)))
     // {
@@ -112,9 +123,9 @@ void loop(){
     //                 "\tphi: "+ String(Enc[1].get_phi())+
     //                 "\tp: " + String(p));
     // phiOld = Enc[1].get_phi();
-    // privod[1].setGoalSpeed(0.0);
+    privod[2].setGoalSpeed(5.0);
     
-    robot.Foo(6.0);
+    // robot.Foo(4.0);
 }
 
 
