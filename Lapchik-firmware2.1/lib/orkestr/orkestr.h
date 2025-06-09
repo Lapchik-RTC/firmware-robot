@@ -33,7 +33,7 @@ class Orkestr
 {
   public:
   
-  void setParams(float t, float tc, float ts, float phiS, float phi0);
+  void setParams(float t, float tc, float ts, float phiS, float phi0, float delta_ts = 0.0, float delta_phi0 = 0.0);
 
   /// @brief Foo params
   void setPhiAll(float nPhiL, float nPhiR);
@@ -51,7 +51,6 @@ class Orkestr
   /// @brief calibr
   void calibr();  
   void stendUp();
-  void stendUp2();
   void allEncZero();
 
   /// @brief Turn
@@ -82,12 +81,12 @@ class Orkestr
     bool endLad = 1;
   void updatePhase(float t_, float t2_);
 public:
-  void l1(float pos){privod[0].setGoalPos(pos);};
-  void l2(float pos){privod[1].setGoalPos(pos);};
-  void l3(float pos){privod[2].setGoalPos(pos);};
-  void l4(float pos){privod[3].setGoalPos(pos);};
-  void l5(float pos){privod[4].setGoalPos(pos);};
-  void l6(float pos){privod[5].setGoalPos(pos);};  
+  void l1(float pos){privod[0].setPos(pos);};
+  void l2(float pos){privod[1].setPos(pos);};
+  void l3(float pos){privod[2].setPos(pos);};
+  void l4(float pos){privod[3].setPos(pos);};
+  void l5(float pos){privod[4].setPos(pos);};
+  void l6(float pos){privod[5].setPos(pos);};  
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,148 +113,44 @@ void Orkestr::updatePhase(float t_, float t2_)
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
 
-    XPi = Ffull(t* abs(sgn(vel)), tc, ts, phiS, phi0/* + ((M_PI/6.0)* abs(sgn(vel)))*/);
-    X = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts, phiS, phi0);
+    XPi = Ffull(t, tc, ts, phiS, phi0);
+    X   = Ffull(t + M_PI, tc, ts, phiS, phi0);
+
+    privod[0].setPos(X);
+    privod[2].setPos(XPi);
+    privod[4].setPos(X);
     
-    // float XL = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
-    // float XR = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
-    // float XLPi = Ffull(t* abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
-    // float XRPi = Ffull(t* abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
-
-    // XPi = X;
-
-    float dphi1 = X;
-    float dphi3 = XPi;
-    float dphi5 = X;
-
-    float dphi2 = XPi;
-    float dphi4 = X;
-    float dphi6 = XPi;
-
-    // // LEFT
-    // float dphi1 = XL;
-    // float dphi3 = XLPi;
-    // float dphi5 = XL;
-
-    // // RIGHT
-    // float dphi2 = XRPi;
-    // float dphi4 = XR;
-    // float dphi6 = XRPi;
-
-    // Serial.print("GPos: " + String(XPi) + '\t');
-
-    l3(dphi3);
-    l5(dphi5);
-    l1(dphi1);
-    l4(dphi4);   
-    l2(dphi2);
-    l6(dphi6);
+    privod[1].setPos(XPi);
+    privod[3].setPos(X);   
+    privod[5].setPos(XPi);
 }
 
 //////////////   Enc   //////////////
 void Orkestr::allEncZero()
 {
-    // enc_1.encZero();
-    // enc_2.encZero();
-    // enc_3.encZero();
-    // enc_4.encZero();
-    // enc_5.encZero();
-    // enc_6.encZero();
     for(int i = 0; i < 6; i++)
     {
         Enc[i].encZero();
     }
 }
-//////////////   Pos   //////////////
-float* Orkestr::getPos()
-{
-    float* arrPos = new float[6];   
-    // arrPos[0] = modc(enc_1.get_phi(), 2.0*M_PI);
-    // arrPos[1] = modc(enc_2.get_phi(), 2.0*M_PI);
-    // arrPos[2] = modc(enc_3.get_phi(), 2.0*M_PI);
-    // arrPos[3] = modc(enc_4.get_phi(), 2.0*M_PI);
-    // arrPos[4] = modc(enc_5.get_phi(), 2.0*M_PI);    
-    // arrPos[5] = modc(enc_6.get_phi(), 2.0*M_PI);
-    for(int i = 0; i < 6; i++)
-    {
-        arrPos[i] = modc(Enc[i].get_phi(), 2.0*M_PI);
-    }
-    return arrPos;
-}
 
 //////////////   Calibr   //////////////
 void Orkestr::calibr()
 {   
-    // if(firstCalibr)
-    // {
-        int pVel = 1.2;
-        preKalibrTimer = millis();
-        while(millis() - preKalibrTimer < 1700)
-        {
-            // serv1.setGoalSpeed(pVel);
-            // serv2.setGoalSpeed(pVel);
-            // serv3.setGoalSpeed(pVel);
-            // serv4.setGoalSpeed(pVel);
-            // serv5.setGoalSpeed(pVel);
-            // serv6.setGoalSpeed(pVel);
-            for(int i = 0; i < 6; i++)
-            {
-                privod[i].setGoalSpeed(pVel);
-            }
-        }
-        // serv1.setGoalSpeed(pVel);
-        // serv2.setGoalSpeed(pVel);
-        // serv3.setGoalSpeed(pVel);
-        // serv4.setGoalSpeed(pVel);
-        // serv5.setGoalSpeed(pVel);
-        // serv6.setGoalSpeed(pVel);
+    int pVel = 1.2;
+    preKalibrTimer = millis();
+    while(millis() - preKalibrTimer < 1700)
+    {
         for(int i = 0; i < 6; i++)
         {
-            privod[i].setGoalSpeed(pVel);
+            privod[i].setSpeed(pVel);
         }
-
-       // firstCalibr = 0;
-    /*}
-    else
+    }
+    for(int i = 0; i < 6; i++)
     {
-        if(firstCalibr == 0){
+        privod[i].setSpeed(pVel);
+    }
 
-            preKalibrTimer = millis();
-            while(millis() - preKalibrTimer < 1000)
-            {
-                float antVel = -1.0;
-                serv1.setGoalSpeed(antVel);
-                serv2.setGoalSpeed(antVel);
-                serv3.setGoalSpeed(antVel);
-                serv4.setGoalSpeed(antVel);
-                serv5.setGoalSpeed(antVel);
-                serv6.setGoalSpeed(antVel);
-            }
-            preKalibrTimer = millis();
-            while(millis() - preKalibrTimer < 600)
-            {
-                serv1.setGoalPos(M_PI);
-                serv2.setGoalPos(M_PI);
-                serv3.setGoalPos(M_PI);
-                serv4.setGoalPos(M_PI);
-                serv5.setGoalPos(M_PI);
-                serv6.setGoalPos(M_PI);
-            }
-
-            preKalibrTimer = millis();
-            while(millis() - preKalibrTimer < 300)
-            {
-                float antVel = 1.0;
-                serv1.setGoalSpeed(antVel);
-                serv2.setGoalSpeed(antVel);
-                serv3.setGoalSpeed(antVel);
-                serv4.setGoalSpeed(antVel);
-                serv5.setGoalSpeed(antVel);
-                serv6.setGoalSpeed(antVel);
-            }
-        }
-    }*/
-    
     float vel = 3.0;
     int whaitTimeCalibr_ = 4000;
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
@@ -275,43 +170,25 @@ void Orkestr::calibr()
             ///  dv1  ///
             if(analogRead(csPin[i]) < trigCur[i] && (endCalibr[i] == false))
             {
-                privod[i].setGoalSpeed(vel);
+                privod[i].setSpeed(vel);
             }
             else
             {
                 if(endCalibr[i] == false)
                     Enc[i].encZero();
                 endCalibr[i] = true;
-                privod[i].setGoalPos(0);
+                privod[i].setPos(0);
             }
         }
     }
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
 
-
-    ////////////////////
-    //while (1); 
-    ////////////////////
-
     allEncZero();
-    stendUp2();
+    stendUp();
     allEncZero();
 }
 
 void Orkestr::stendUp()
-{
-    float startPos = M_PI*1.5;// + (M_PI/2.0) + (M_PI/30.0);
-    setPhiAll(startPos, startPos);
-    allEncZero();
-    // enc_1.encZero();
-    // enc_2.encZero();
-    // enc_3.encZero();
-    // enc_4.encZero();
-    // enc_5.encZero();
-    // enc_6.encZero();
-}
-
-void Orkestr::stendUp2()
 {
     float upSpd = 4.0;
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
@@ -330,27 +207,21 @@ void Orkestr::stendUp2()
         for(int i = 0; i < 6; i++)
         {
             if( (modc(Enc[i].get_phi(), 2.0*M_PI) <= M_PI/2.0) && (endCalibr[i] == false) )
-                privod[i].setGoalSpeed(upSpd);
+                privod[i].setSpeed(upSpd);
             else
             {
                 if(endCalibr[i] == false)
                     Enc[i].encZero();
                 endCalibr[i] = 1;
-                privod[i].setGoalPos(0);
+                privod[i].setPos(0);
             }
         }
     }
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
     for(int i = 0; i < 6; i++)
     {
-        privod[i].setGoalPos(0);
-    }
-    // serv1.setGoalPos(0);
-    // serv2.setGoalPos(0);
-    // serv3.setGoalPos(0);
-    // serv4.setGoalPos(0);
-    // serv5.setGoalPos(0);
-    // serv6.setGoalPos(0);    
+        privod[i].setPos(0);
+    } 
 }
 
 void Orkestr::setPhiAll(float nPhiL, float nPhiR)
@@ -369,12 +240,12 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
     )
     )
     {
-        privod[0].setGoalPos(nPhiR * _k);
-        privod[1].setGoalPos(-nPhiL);
-        privod[2].setGoalPos(-nPhiL);
-        privod[3].setGoalPos(nPhiR * _k);
-        privod[4].setGoalPos(nPhiR * _k);
-        privod[5].setGoalPos(-nPhiL);
+        privod[0].setPos(nPhiR * _k);
+        privod[1].setPos(-nPhiL);
+        privod[2].setPos(-nPhiL);
+        privod[3].setPos(nPhiR * _k);
+        privod[4].setPos(nPhiR * _k);
+        privod[5].setPos(-nPhiL);
     }
 }
 
@@ -383,70 +254,6 @@ void Orkestr::setPhiAll(float nPhiL, float nPhiR)
 //////////////   Other move   //////////////
 
 /////////////////////////////////////////////
-/*
-void Orkestr::ladFoo(float vel)
-{
-    updatePhase((vel * Ts_s_IN_SEC), (vel * Ts_s_IN_SEC));
-
-    X1 = Ffull(t, 2.0*M_PI, 1.3, 1.3, 0);    
-
-    if(endLad)
-    {
-       ladXChange = millis();
-       endLad = 0;
-    }
-    int k_milToS = 100;
-    
-    if( millis() - ladXChange <= ((vel * M_PI)*k_milToS) )
-    {
-       Enc[0].setGoalSpeed(-M_PI/6);
-       Enc[1].setGoalSpeed(-M_PI/6);
-       if(!( (millis() - ladXChange >  ((vel * M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 2.0*M_PI)*k_milToS)) ))
-       {
-           .setGoalPos(-M_PI/6);
-           .setGoalPos(-M_PI/6);
-       }
-       l5(X1);
-       l6(X1);
-    }
-    if( (millis() - ladXChange >  ((vel * M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 2.0*M_PI)*k_milToS)) )
-    {
-       if(! ( millis() - ladXChange <= ((vel * M_PI)*k_milToS) ) && !( (millis() - ladXChange > ((vel * 2.0*M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 3.0*M_PI)*k_milToS)) ))
-       {
-           serv1.setGoalPos(-M_PI/6);
-           serv2.setGoalPos(-M_PI/6);
-           serv5.setGoalPos(-M_PI/6);
-           serv6.setGoalPos(-M_PI/6);
-       }
-       l3(X1);
-       l4(X1);
-    }
-    if( (millis() - ladXChange > ((vel * 2.0*M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 3.0*M_PI)*k_milToS)*0.5) )
-    {
-       if(!( (millis() - ladXChange >  ((vel * M_PI)*k_milToS)*0.5 ) && (millis() - ladXChange <= ((vel * 2.0*M_PI)*k_milToS)) ))
-       {
-           serv3.setGoalPos(-M_PI/6);   
-           serv4.setGoalPos(-M_PI/6);
-       }
-       serv5.setGoalPos(-M_PI/6);
-       serv6.setGoalPos(-M_PI/6);
-       l1(X1);
-       l2(X1);
-    }
-    if(millis() - ladXChange > ((vel * 3.0*M_PI)*k_milToS)*0.5)
-    {   
-       serv1.setGoalPos(-M_PI/6);
-       serv2.setGoalPos(-M_PI/6);
-       serv3.setGoalPos(-M_PI/6);
-       serv4.setGoalPos(-M_PI/6);
-       serv5.setGoalPos(-M_PI/6);
-       serv6.setGoalPos(-M_PI/6);
-       endLad = 1;
-    }
-    
-}
-*/
-
 
 void Orkestr::ReversFoo(float velL, float velR){
     updatePhase(-(velR * Ts_s_IN_SEC), -(velL * Ts_s_IN_SEC));
@@ -523,47 +330,28 @@ void Orkestr::turnL(float vel)
     l3(L2);
     l6(R1);
 }
-/////////////////////////////////////////////
-
-//////////////   SHIFT MODE   ///////////////
-
-/////////////////////////////////////////////
-void Orkestr::ShiftTurnR(float vel)
-{
-    updatePhase(-(vel * Ts_s_IN_SEC), (vel * Ts_s_IN_SEC));
-    
-    X = Ffull( 0, tc, ts, phiS, phi0);
-
-    float _L = Ffull(t + M_PI, tc, ts, phiS, phi0/*+(M_PI/6.0)*/);
-    float _R = Ffull(t2, tc, ts, phiS, phi0/*+(M_PI/6.0)*/);
-  
-    l4(_R);
-    l3(_L);
-
-    l1(X);
-    l5(X);
-    l2(X);
-    l6(X);
-
-}
-
-void Orkestr::ShiftTurnL(float vel)
-{
-    updatePhase((vel * Ts_s_IN_SEC), -(vel * Ts_s_IN_SEC));
-    
-    X = Ffull( 0, tc, ts, phiS, phi0);
-
-    float _L = Ffull(t + M_PI, tc, ts, phiS, phi0/*+(M_PI/6.0)*/);
-    float _R = Ffull(t2, tc, ts, phiS, phi0/*+(M_PI/6.0)*/);
-  
-    l4(_R);
-    l3(_L);
-
-    l1(X);
-    l5(X);
-    l2(X);
-    l6(X);
-
-}
 
 Orkestr robot;
+
+
+/*SM TURN
+
+
+    // float XL = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
+    // float XR = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
+    // float XLPi = Ffull(t* abs(sgn(vel)), tc, ts + delta_ts, phiS, phi0 + delta_phi0);
+    // float XRPi = Ffull(t* abs(sgn(vel)), tc, ts - delta_ts, phiS, phi0 - delta_phi0);
+
+    
+    // // LEFT
+    // float dphi1 = XL;
+    // float dphi3 = XLPi;
+    // float dphi5 = XL;
+    
+    // // RIGHT
+    // float dphi2 = XRPi;
+    // float dphi4 = XR;
+    // float dphi6 = XRPi;
+    
+
+*/

@@ -1,8 +1,8 @@
 #pragma once
 // #define MAX_SPEED         8.0
 // #define MOTORS_KE         0.8   /*!< [V/rad/s] */
-#define Ts_s              4000.0
-#define Ts_s_IN_SEC       4000*0.000001
+#define Ts_s              2100.0
+#define Ts_s_IN_SEC       2100*0.000001
 // #define MOTORS_PI_KI      0.00001
 // #define MOTORS_PI_KP      0/*0.0001*/
 // #define MOTORS_PI_MAX_I   200.01
@@ -20,7 +20,7 @@
 // #define KOLVO_ENC_TICK_6 _TEST_KLV_ETC/*1748.0*/ // количество тиков датчика холла на 1 энкодере за 1 полный оборот
 
 //uint32_t kolvTickRate[6] = {1746, 1824, 1746, 1746, 1746, 1746};
-uint32_t kolvTickRate[6] = {1826, 1824, 1746, 1746, 1746, 1746};
+const uint32_t kolvTickRate[6] = {1825, 1824, 1824, 1826, 1746, 1825};
 
 // #define TICK_TO_RAD_1 ((2.0*M_PI)/(KOLVO_ENC_TICK_1)) // коэфф. пересчета в угол с учётом количества тиков 1 экодера на полный оборот
 // #define TICK_TO_RAD_2 ((2.0*M_PI)/(KOLVO_ENC_TICK_2)) // коэфф. пересчета в угол с учётом количества тиков 1 экодера на полный оборот
@@ -30,7 +30,7 @@ uint32_t kolvTickRate[6] = {1826, 1824, 1746, 1746, 1746, 1746};
 // #define TICK_TO_RAD_6 ((2.0*M_PI)/(KOLVO_ENC_TICK_6)) // коэфф. пересчета в угол с учётом количества тиков 1 экодера на полный оборот
 // #define TICK_TO_TICK 1
 #define W_MAX (2.0*M_PI)*7.33333333333 // 7.(3) -- об/сек для двигателей по документации
-#define SUPPLY_VOLTAGE 12 //12 // подаваемое напряжение~
+#define SUPPLY_VOLTAGE 24 //12 // подаваемое напряжение~
 
 ///////////////////////////////////////////////////
 #define CS_PIN_1      A4
@@ -55,5 +55,16 @@ byte trigCur[6] = {180, 180, 190, 180, 180, 180};
 // #define HALL_PIN_5    26
 // #define HALL_PIN_6    27
 byte hallPin[6] = {30, 31, 28, 29, 26, 27};
+
+// #define KP_PI 1
+// #define KI_PI 0.01
+// #define KP_P 32
+// #define KE 0.2
+
+#define KP_PI 1
+#define KI_PI 0.06
+#define KP_P 5
+#define KE 0.2
+
 
 float posStatic[6] = {0,0,0,0,0,0};

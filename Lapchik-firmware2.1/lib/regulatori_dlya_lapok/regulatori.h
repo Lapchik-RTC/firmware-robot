@@ -19,7 +19,6 @@ struct MotorControlParams//структура общая
 class ServoPrivod
 {
 private:
-  float realSpeed, realAngle;
   MotorControlParams params;
   Dvigatel *motor;
   Encoder *enc;
@@ -45,12 +44,17 @@ public:
     this->motor = motor;
     this->enc = enc;
   }
+
   void tick();
-  void setGoalPos(float goalPosPhi/*goalPos_tick*/);
-  void setGoalSpeed(float goalSpeed);//rad/s
+  void setPos(float goalPosPhi);
+  void setSpeed(float goalSpeed);
 };
 
 ///////////////// REGULATORI /////////////////
+float ServoPrivod::Preg(float err){
+  return constrain(err * params.kpP, -params.maxVel, params.maxVel);
+}
+
 float ServoPrivod::PIreg(float err)
 {
     float P = err * params.kpPI;
@@ -63,10 +67,21 @@ float ServoPrivod::PIreg(float err)
     return constrain(u, -params.maxU, params.maxU);
 }
 
-float ServoPrivod::Preg(float err){
-  return constrain(err * params.kpP, -params.maxVel, params.maxVel);
+
+/////////////////   SETTING   /////////////////
+void ServoPrivod::setSpeed(float goalSpd)
+{
+  controlMode = MODE_SPEED;
+  targetSpeed = goalSpd;
 }
 
+void ServoPrivod::setPos(float phi0){
+  controlMode = MODE_POS;
+  targetAngle = phi0;
+}
+
+
+/////////////////    TICK    /////////////////
 void ServoPrivod::tick()
 {
   enc->enc_tick();
@@ -75,7 +90,7 @@ void ServoPrivod::tick()
   {
     float phi = enc->get_phi();
     float phi_err = targetAngle - phi;
-    phi_err = fmod(phi_err, 2*M_PI);
+    // phi_err = fmod(phi_err, 2*M_PI);
     //if(perehodFix){
       phi_err = modc(phi_err, 2*M_PI);
     //}
@@ -85,30 +100,4 @@ void ServoPrivod::tick()
   float realSpd = enc->get_w_moment_rad();
   float u = PIreg(targetSpeed - realSpd);
   motor->update_voltage_in_V(u);
-}
-
-void ServoPrivod::setGoalSpeed(float goalSpd)
-{
-  controlMode = MODE_SPEED;
-  targetSpeed = goalSpd;
-
-  // enc->enc_tick();
-
-  // float realSpd = enc->get_w_moment_rad();
-  // float u = PIreg(goalSpd - realSpd);
-  // motor->update_voltage_in_V(u);
-}
-
-void ServoPrivod::setGoalPos(float phi0){
-  controlMode = MODE_POS;
-  targetAngle = phi0;
-  // float phi = enc->get_phi();
-  // float phi_err = phi0 - phi;
-  // phi_err = fmod(phi_err, 2*M_PI);
-  // //if(perehodFix){
-  //   phi_err = modc(phi_err, 2*M_PI);
-  // //}
-  // float w0 = Preg(phi_err);
-  
-  // setGoalSpeed(w0);
 }

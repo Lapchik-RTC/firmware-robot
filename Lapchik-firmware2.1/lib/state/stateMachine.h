@@ -62,11 +62,11 @@ void StateMachine::HallMagic(mState _sm)
                 timeSC = millis();
                 while ( halls[i].getCondition() == 1 && millis() - timeSC < 750)
                 {
-                    halls[i].myserv->setGoalSpeed(3.0);
+                    halls[i].myserv->setSpeed(3.0);
                 }
-                halls[i].myserv->setGoalSpeed(0);
+                halls[i].myserv->setSpeed(0);
                 halls[i].ecn->encZero();
-                halls[i].myserv->setGoalPos(0);
+                halls[i].myserv->setPos(0);
             }
         }
     }

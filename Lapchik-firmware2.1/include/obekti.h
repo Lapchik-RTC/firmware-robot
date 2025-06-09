@@ -222,16 +222,6 @@ Dvigatel Dv[6] = {
     Dvigatel(dvigatel_params_6)
 };
 
-// #define KP_PI 1
-// #define KI_PI 0.01
-// #define KP_P 32
-// #define KE 0.2
-
-#define KP_PI 1
-#define KI_PI 0.04
-#define KP_P 27
-#define KE 0.2
-
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,

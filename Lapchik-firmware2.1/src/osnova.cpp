@@ -19,12 +19,12 @@ void setup() {
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
 
     // robot.calibr();
-    NCalibrMode = 0;
-    robot.allEncZero();
+    NCalibrMode = 1;
+    // robot.allEncZero();
     
 }
 
-
+/*
 void encToRoundCalibr()
 {
     static uint32_t lastTimeDetect[6] = {millis(), millis(), millis(), millis(), millis(), millis()};
@@ -37,7 +37,7 @@ void encToRoundCalibr()
 
     // for(int i = 0; i < 6; i++)
     // {
-        int m = 2;
+        int m = 5;
         if(digitalRead(hallPin[m]) == 0 && millis() - lastTimeDetect[m] > (500))
         {
             // kolvTickRate[1] = ( ((Enc[1].get_tick() - encOld[1]) * kT) + (kolvTickRate[1] * (1-kT)) );
@@ -77,61 +77,20 @@ void encToRoundCalibr()
 }//*/
 
 void loop(){
-
     static uint64_t timer = micros();
-    
-    while(micros() - timer < Ts_s)
-    {
-
-    }
-    Serial.println();
-
+    while(micros() - timer < Ts_s);
     timer = micros();
+    
+    // for(int i = 0; i < 6; i++)
+    // {
+    //     privod[i].setSpeed(4.5);
+    // }
+    // Serial.println(digitalRead(26));
+    robot.Foo(7.5);
     for(int i = 0; i < 6; i++)
     {
-        Enc[i].enc_tick();
+        privod[i].tick();
     }
-    encToRoundCalibr();
-    // static uint64_t ti = millis();
-    // static float p = 0.0;
-    // static float phi_ = 0.0, phiOld = 0.0, stph = 0.0;
-    // static int n = 0, t = 0;
-
-    // if(digitalRead(hallPin[3]) == 0 && (millis() - ti > (500)))
-    // {
-    //     p+=2.0*M_PI;
-    //     t+=kolvTickRate[1];
-    //     n++;
-    //     ti = millis();
-    // }
-
-    // if(n==1)
-    // {
-    //     stph = Enc[1].get_phi();
-    // }
     
-    
-    // robot.Foo(7.0);
-    // while (Enc[1].get_phi()<p)
-    // {
-    //     privod[1].setGoalSpeed(0.7); 
-    // }
-    // phi_ = Enc[1].get_phi() - phiOld;
-    // Serial.println("t: " + String(t) +
-    //                 "\ttick: " + String(Enc[1].get_tick()) + 
 
-    //                 "\tphi: "+ String(Enc[1].get_phi())+
-    //                 "\tp: " + String(p));
-    // phiOld = Enc[1].get_phi();
-    privod[2].setGoalSpeed(5.0);
-    
-    // robot.Foo(4.0);
 }
-
-
-
-
-
-    // readPacket();
-    // sm.setSpd( 5.0 );
-    // sm.StateMachineUpd();

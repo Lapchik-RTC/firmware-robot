@@ -4,28 +4,27 @@
 #include "SLOVAR.h"
 #include "f.h"
 
-#define MAX_TICK_CORR 18.0
-
-void phaseTick();
+#define MAX_TICK_CORR 2
 
 struct EncoderParams
 { 
 public:
-  uint16_t enc_pin_a;       // пин энкодера
-  uint16_t enc_pin_b;       // пин энкодера
-  int8_t enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
-  float ppr;                // тики на оборот
-  float tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
-  uint8_t (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
-  float Ts_sec;             // Период квантования
-  float T_sec;              // Постоянная времени фильтра скорости
+  uint16_t  enc_pin_a;       // пин энкодера
+  uint16_t  enc_pin_b;       // пин энкодера
+  int8_t    enc_dir;         // условный указатель задавания положительного направления вращения вала двигателя, то есть +-1
+  float     ppr;                // тики на оборот
+  float     tick_to_rad;        // коэф. пересчёта для энкодера на данном моторе
+  uint8_t   (*get_AB)(void);  // ссылка на метод для обработки соответствующей пары битов порта
+  float     Ts_sec;             // Период квантования
+  float     T_sec;              // Постоянная времени фильтра скорости
 
-  byte Hpin;
-  bool mirrHall;
+  byte      Hpin;
+  bool      mirrHall;
 };
 
-class Encoder {
-  private:
+class Encoder
+{
+private:
   EncoderParams encoderParams;
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
@@ -34,12 +33,12 @@ class Encoder {
 public:
   volatile int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
+  
   float phi;                // угол поворота вала в радианах в данный момент
   float tick;               // угол поворота вала в тиках в данный момент
-  float tickOld = 0; 
+  
   float w_moment_rad_s;       // текущая скорость в рад/c
   float w_moment_tick;      // текущая скорость в тики/c
-  //uint16_t ppr;
 
   Encoder(EncoderParams encoderParams){
     this->encoderParams = encoderParams; 
@@ -52,9 +51,7 @@ public:
 
     encoder_init();
   }
-  ////////////////////////////////////////////////////////////////
-  void encZero(){counter = 0; tick = 0; phi = 0; I = 0;}
-  ////////////////////////////////////////////////////////////////
+
   void encoder_init() {
     noInterrupts(); // приостанавливаем прерывания
     // Инициализация пинов энкодера
@@ -79,81 +76,65 @@ public:
     table[0b10][0b00] = -encoderParams.enc_dir;
 
     interrupts();
-    }
+  }
 
   void isr_handler() {
     noInterrupts();
     uint16_t enc = encoderParams.get_AB();
     interrupts();
+
     counter += table[enc_old][enc];
-    
-    enc_old = enc;
-    
-    // phaseTick();
+    enc_old = enc;  
   }
-
-  float get_phi(){
-    return phi;
-  }
-
   
+  void encZero(){counter = 0; tick = 0; phi = 0; I = 0;}
+
+  float get_phi(){ return phi; }
+  float get_tick(){ return tick; }
+  float get_w_moment_rad(){ return w_moment_rad_s; }
+  float get_w_moment_tick(){ return w_moment_tick; }
+
+
+  /// @brief Функция обновления текущих параметров мотора: скорость, угол
+
   float rotErr = 0.0;
   float corr = 0.0;
   uint32_t lastTimeDetect = millis();
-
-  // void setRotErr(float rotErr_){ this->rotErr += rotErr_; }
-  // float getRotErr(){return counter;}
-  /// @brief Функция обновления текущих параметров мотора: скорость, угол
+  
   void enc_tick() {
 
     noInterrupts();
     int16_t counter_buf = counter;
     counter = 0;
     interrupts();
+    
     ////////////////////////////////////
-    // if(NCalibrMode)
-    // {
-    //   if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1300) ))
-    //   {
-    //     if(encoderParams.mirrHall)
-    //     {
-    //       //rotErr += ( M_PI - (modc(get_phi(), 2.0*M_PI)+M_PI) );
-    //       rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
-    //       Serial.print('\t' + String(1111111111));
-    //     }
-    //     else
-    //     {
-    //       rotErr += ( encoderParams.ppr - modc(get_tick(), encoderParams.ppr) );
-    //       Serial.print('\t' + String(0000000000));
-    //     }
-    //     lastTimeDetect = millis();
-    //   }
+    if(NCalibrMode)
+    {
+      if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1300) ))
+      {
+        if(encoderParams.mirrHall)
+        {
+          rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
+        }
+        else
+        {
+          if(encoderParams.mirrHall==0)
+            rotErr += ( 0.0 - modc(get_tick(), encoderParams.ppr) );
+        }
+        lastTimeDetect = millis();
+      }
 
-    //   corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
-    //   counter_buf += corr;
-    //   rotErr -= corr;
-    // }
+      corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
+      counter_buf += corr;
+      rotErr -= corr;
+     }//*/
     ////////////////////////////////////
-    Serial.print(".");
+    
     tick += counter_buf; 
     phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));
-    // Serial.println('\t' + String(counter_buf));
+    
     w_moment_rad_s = (phi - I) / encoderParams.T_sec;
     I += w_moment_rad_s * encoderParams.Ts_sec;
-  }
-
-  
-
-  float get_tick(){
-    return tick;
-  }
-
-  float get_w_moment_rad(){
-    //enc_tick();
-    return w_moment_rad_s;
-  }
-
-  float get_w_moment_tick(){
-    return w_moment_tick;
   }
 };
