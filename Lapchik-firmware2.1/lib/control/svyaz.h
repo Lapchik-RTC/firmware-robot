@@ -232,6 +232,18 @@ bool vpered() {
     }
   }
   
+  bool shift()
+  {
+    if( gamePad.LB )
+    {
+      
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+  }
   bool vlevo() {
     if(gamePad.RightThumbX <= -luft)
     {
@@ -243,9 +255,21 @@ bool vpered() {
     }
   }
 
-  bool rovnaysa()
+  bool ladmode()
   {
-    if( gamePad.B )
+    if( gamePad.Y )
+    {
+      
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+  }
+  bool delsec_N()
+  {
+    if( gamePad.X )
     {
       
         return 1;
