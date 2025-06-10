@@ -54,7 +54,7 @@ EncoderParams enc_params_2 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[1],
-    .mirrHall = 1
+    .tickWhanHall = kolvTickRate[1]*0.5
 };
 
 EncoderParams enc_params_1 {
@@ -67,7 +67,7 @@ EncoderParams enc_params_1 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[0],
-    .mirrHall = 1
+    .tickWhanHall = kolvTickRate[0]*0.5
 };
 
 EncoderParams enc_params_3 {
@@ -80,7 +80,7 @@ EncoderParams enc_params_3 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[2],
-    .mirrHall = 0
+    .tickWhanHall = 0//kolvTickRate[2]
 };
 
 EncoderParams enc_params_4 {
@@ -93,7 +93,7 @@ EncoderParams enc_params_4 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[3],
-    .mirrHall = 0
+    .tickWhanHall = 0//kolvTickRate[3]
 };
 
 EncoderParams enc_params_5 {
@@ -106,7 +106,7 @@ EncoderParams enc_params_5 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[4],
-    .mirrHall = 0
+    .tickWhanHall = 0//kolvTickRate[4]
 };
 
 EncoderParams enc_params_6 {
@@ -119,7 +119,7 @@ EncoderParams enc_params_6 {
     .Ts_sec = Ts_s_IN_SEC,
     .T_sec = Ts_s_IN_SEC,
     .Hpin = hallPin[5],
-    .mirrHall = 0
+    .tickWhanHall = 0//kolvTickRate[5]
 };
 
 
@@ -225,21 +225,76 @@ Dvigatel Dv[6] = {
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,
-  .kpPI = KP_PI,//0.0001,
-  .ki = KI_PI,//00079,//0.00001,
+  .kpPI = KP_PI0,//0.0001,
+  .ki = KI_PI0,//00079,//0.00001,
   .maxU = SUPPLY_VOLTAGE/*/2*/,
-  .kpP = KP_P,
+  .kpP = KP_P0,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
+MotorControlParams mctrlp1
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI1,//0.0001,
+  .ki = KI_PI1,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
+  .kpP = KP_P1,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
+MotorControlParams mctrlp2
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI2,//0.0001,
+  .ki = KI_PI2,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
+  .kpP = KP_P2,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
+MotorControlParams mctrlp3
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI3,//0.0001,
+  .ki = KI_PI3,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
+  .kpP = KP_P3,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
+MotorControlParams mctrlp4
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI4,//0.0001,
+  .ki = KI_PI4,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
+  .kpP = KP_P4,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
+MotorControlParams mctrlp5
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI5,//0.0001,
+  .ki = KI_PI5,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/*/2*/,
+  .kpP = KP_P5,
   .maxVel = 16.0,
   .kalibrSpeed = 1
 };
 
 ServoPrivod privod[6] = {
     ServoPrivod(mctrlp, &Dv[0], &Enc[0]),
-    ServoPrivod(mctrlp, &Dv[1], &Enc[1]),
-    ServoPrivod(mctrlp, &Dv[2], &Enc[2]),
-    ServoPrivod(mctrlp, &Dv[3], &Enc[3]),
-    ServoPrivod(mctrlp, &Dv[4], &Enc[4]),
-    ServoPrivod(mctrlp, &Dv[5], &Enc[5])
+    ServoPrivod(mctrlp1, &Dv[1], &Enc[1]),
+    ServoPrivod(mctrlp2, &Dv[2], &Enc[2]),
+    ServoPrivod(mctrlp3, &Dv[3], &Enc[3]),
+    ServoPrivod(mctrlp4, &Dv[4], &Enc[4]),
+    ServoPrivod(mctrlp5, &Dv[5], &Enc[5])
 };
 
 // ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);

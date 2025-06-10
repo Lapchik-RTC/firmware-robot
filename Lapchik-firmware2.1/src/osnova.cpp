@@ -23,7 +23,7 @@ void setup() {
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
 
     // robot.calibr();
-    NCalibrMode = 0;
+    NCalibrMode = 1;
     // robot.allEncZero();
     
 }
@@ -84,17 +84,60 @@ void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+
+    static uint32_t tt = millis();
+    static float p = 0.0;
+    int a = 3;
+    int b = 2;
+    if(p < 2.0*M_PI)
+    {
+        p += 0.01;
+        tt = millis();
+    }
+    else
+    {
+        if(millis() - tt > 1200)
+            p = 0.0;
+    }
+    // for(int i = 0; i < 6; i++)
+    // {
+        // privod[a].setPos(p);
+        // privod[a-2].setPos(p);
+        // privod[a+2].setPos(p);
+        // privod[b].setPos(p);
+        // privod[b-2].setPos(p);
+        // privod[b+2].setPos(p);
+        float sp = 7.5;
+        privod[5].setSpeed(sp);
+        privod[1].setSpeed(sp);
+        privod[2].setSpeed(sp);
+        privod[3].setSpeed(sp);
+        privod[4].setSpeed(sp);
+        privod[0].setSpeed(sp);
+
+        
+    // }
+
+    Serial.println(/*'\t'+String(p)*/);
+
+    // robot.Foo(3.0);
     
     // for(int i = 0; i < 6; i++)
     // {
-    //     privod[i].setSpeed(4.5);
+        privod[5].tick();
+        Serial.print(" | "); 
+        privod[1].tick();
+        Serial.print(" | "); 
+        privod[2].tick();
+        Serial.print(" | "); 
+
+        privod[3].tick();
+        Serial.print(" | "); 
+        privod[4].tick();
+        Serial.print(" | "); 
+        privod[0].tick();
+        Serial.print(" | "); 
     // }
-    // Serial.println(digitalRead(26));
-    robot.Foo(3.0);
-    for(int i = 0; i < 6; i++)
-    {
-        privod[i].tick();
-    }
     
 
 }

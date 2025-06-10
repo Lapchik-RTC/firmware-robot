@@ -123,7 +123,7 @@ void Orkestr::Foo(float vel){
     privod[1].setPos(XPi);
     privod[3].setPos(X);   
     privod[5].setPos(XPi);
-
+    
     // privod[0].setPos(Ffull(t + ( (Enc[0].getCorr()/kolvTickRate[0])*2.0*M_PI ), tc, ts, phiS, phi0)); 
     // privod[2].setPos(Ffull(t + ( (Enc[2].getCorr()/kolvTickRate[2])*2.0*M_PI )+M_PI, tc, ts, phiS, phi0));
     // privod[4].setPos(Ffull(t + ( (Enc[4].getCorr()/kolvTickRate[4])*2.0*M_PI ), tc, ts, phiS, phi0));
