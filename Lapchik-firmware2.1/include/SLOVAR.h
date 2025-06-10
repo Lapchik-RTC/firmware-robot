@@ -61,9 +61,9 @@ byte hallPin[6] = {30, 31, 28, 29, 26, 27};
 // #define KP_P 32
 // #define KE 0.2
 
-#define KP_PI 1
-#define KI_PI 0.06
-#define KP_P 5
+#define KP_PI 1.5
+#define KI_PI 0.07
+#define KP_P 27
 #define KE 0.2
 
 

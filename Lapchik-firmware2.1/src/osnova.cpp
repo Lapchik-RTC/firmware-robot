@@ -12,14 +12,18 @@ void setup() {
     memset(&gamePad, 0, sizeof(gamePad));
 
     
+    // float tc = 2.0*M_PI;
+    // float ts = 2.7;
+    // float phiS = 0.5;
+    // float phi0 = 0;
     float tc = 2.0*M_PI;
-    float ts = 2.7;
+    float ts = 3.9;
     float phiS = 0.5;
     float phi0 = 0;
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
 
     // robot.calibr();
-    NCalibrMode = 1;
+    NCalibrMode = 0;
     // robot.allEncZero();
     
 }
@@ -86,7 +90,7 @@ void loop(){
     //     privod[i].setSpeed(4.5);
     // }
     // Serial.println(digitalRead(26));
-    robot.Foo(7.5);
+    robot.Foo(3.0);
     for(int i = 0; i < 6; i++)
     {
         privod[i].tick();

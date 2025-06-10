@@ -93,14 +93,13 @@ public:
   float get_tick(){ return tick; }
   float get_w_moment_rad(){ return w_moment_rad_s; }
   float get_w_moment_tick(){ return w_moment_tick; }
-
+  float getCorr(){ return corr; }
 
   /// @brief Функция обновления текущих параметров мотора: скорость, угол
 
   float rotErr = 0.0;
   float corr = 0.0;
   uint32_t lastTimeDetect = millis();
-  
   void enc_tick() {
 
     noInterrupts();
@@ -115,7 +114,8 @@ public:
       {
         if(encoderParams.mirrHall)
         {
-          rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
+          // rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
+          rotErr += ( (M_PI - (modc(phi, 2.0*M_PI)))/2.0*M_PI )*encoderParams.ppr;
         }
         else
         {
@@ -126,7 +126,7 @@ public:
       }
 
       corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
-      counter_buf += corr;
+      // counter_buf += corr;
       rotErr -= corr;
      }//*/
     ////////////////////////////////////

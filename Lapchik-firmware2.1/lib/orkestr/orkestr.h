@@ -112,9 +112,9 @@ void Orkestr::updatePhase(float t_, float t2_)
 
 void Orkestr::Foo(float vel){
     updatePhase(vel * Ts_s_IN_SEC, vel * Ts_s_IN_SEC);
-
-    XPi = Ffull(t, tc, ts, phiS, phi0);
-    X   = Ffull(t + M_PI, tc, ts, phiS, phi0);
+    
+    X   = Ffull(t, tc, ts, phiS, phi0);
+    XPi = Ffull(t + M_PI, tc, ts, phiS, phi0);
 
     privod[0].setPos(X);
     privod[2].setPos(XPi);
@@ -123,6 +123,14 @@ void Orkestr::Foo(float vel){
     privod[1].setPos(XPi);
     privod[3].setPos(X);   
     privod[5].setPos(XPi);
+
+    // privod[0].setPos(Ffull(t + ( (Enc[0].getCorr()/kolvTickRate[0])*2.0*M_PI ), tc, ts, phiS, phi0)); 
+    // privod[2].setPos(Ffull(t + ( (Enc[2].getCorr()/kolvTickRate[2])*2.0*M_PI )+M_PI, tc, ts, phiS, phi0));
+    // privod[4].setPos(Ffull(t + ( (Enc[4].getCorr()/kolvTickRate[4])*2.0*M_PI ), tc, ts, phiS, phi0));
+    
+    // privod[1].setPos(Ffull(t + ( (Enc[1].getCorr()/kolvTickRate[1])*2.0*M_PI )+M_PI, tc, ts, phiS, phi0));
+    // privod[3].setPos(Ffull(t + ( (Enc[3].getCorr()/kolvTickRate[3])*2.0*M_PI ), tc, ts, phiS, phi0));   
+    // privod[5].setPos(Ffull(t + ( (Enc[5].getCorr()/kolvTickRate[5])*2.0*M_PI )+M_PI, tc, ts, phiS, phi0));
 }
 
 //////////////   Enc   //////////////
