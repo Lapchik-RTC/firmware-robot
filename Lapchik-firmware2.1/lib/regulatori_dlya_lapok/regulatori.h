@@ -99,6 +99,6 @@ void ServoPrivod::tick()
   float realSpd = enc->get_w_moment_rad();
   // Serial.print(realSpd);
   float u = PIreg(targetSpeed - realSpd);
-  Serial.print(u);
   motor->update_voltage_in_V(u);
+  Serial.print(" | "); 
 }

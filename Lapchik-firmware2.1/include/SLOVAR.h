@@ -66,28 +66,28 @@ byte hallPin[6] = {30, 31, 28, 29, 26, 27};
 // #define KE 0.2
 
 // #define KE 0.2
-#define KP_PI0 0.9
-#define KI_PI0 0.0
+#define KP_PI0 0.8
+#define KI_PI0 0.07
 #define  KP_P0 5
 
-#define KP_PI1 0.9
-#define KI_PI1 0.0
+#define KP_PI1 0.85
+#define KI_PI1 0.085
 #define  KP_P1 5
 
-#define KP_PI2 0.4
-#define KI_PI2 0.0
-#define  KP_P2 5
+#define KP_PI2      0.7
+#define KI_PI2      0.065
+#define  KP_P2      5
 
-#define KP_PI3 0.9
-#define KI_PI3 0.0
+#define KP_PI3 0.85
+#define KI_PI3 0.07
 #define  KP_P3 5
 
-#define KP_PI4 0.25
-#define KI_PI4 0.0
-#define  KP_P4 5
+#define KP_PI4      0.7
+#define KI_PI4      0.085
+#define  KP_P4      5
 
-#define KP_PI5 0.25
-#define KI_PI5 0.0
+#define KP_PI5 0.8
+#define KI_PI5 0.075
 #define  KP_P5 5
 
 float posStatic[6] = {0,0,0,0,0,0};

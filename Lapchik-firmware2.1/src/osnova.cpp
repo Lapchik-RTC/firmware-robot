@@ -84,6 +84,7 @@ void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
+    Serial.println();
 
     static uint32_t tt = millis();
     static float p = 0.0;
@@ -107,36 +108,28 @@ void loop(){
         // privod[b].setPos(p);
         // privod[b-2].setPos(p);
         // privod[b+2].setPos(p);
-        float sp = 7.5;
-        privod[5].setSpeed(sp);
+        float sp = 10.0;
+        privod[0].setSpeed(sp);
         privod[1].setSpeed(sp);
         privod[2].setSpeed(sp);
         privod[3].setSpeed(sp);
         privod[4].setSpeed(sp);
-        privod[0].setSpeed(sp);
+        privod[5].setSpeed(sp);
 
         
     // }
 
-    Serial.println(/*'\t'+String(p)*/);
 
     // robot.Foo(3.0);
     
     // for(int i = 0; i < 6; i++)
     // {
-        privod[5].tick();
-        Serial.print(" | "); 
+        // privod[0].tick();
         privod[1].tick();
-        Serial.print(" | "); 
-        privod[2].tick();
-        Serial.print(" | "); 
-
-        privod[3].tick();
-        Serial.print(" | "); 
-        privod[4].tick();
-        Serial.print(" | "); 
-        privod[0].tick();
-        Serial.print(" | "); 
+        // privod[2].tick();
+        // privod[3].tick();
+        // privod[4].tick();
+        privod[5].tick();
     // }
     
 

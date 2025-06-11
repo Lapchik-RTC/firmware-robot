@@ -29,7 +29,7 @@ private:
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   float I = 0;
-
+  
 public:
   volatile int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
@@ -127,5 +127,6 @@ public:
     
     w_moment_rad_s = (phi - I) / encoderParams.T_sec / 3.0;
     I += w_moment_rad_s * encoderParams.Ts_sec;
+    Serial.print(w_moment_rad_s);
   }
 };
