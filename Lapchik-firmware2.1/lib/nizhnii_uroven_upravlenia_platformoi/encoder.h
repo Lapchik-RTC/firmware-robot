@@ -127,6 +127,6 @@ public:
     
     w_moment_rad_s = (phi - I) / encoderParams.T_sec / 3.0;
     I += w_moment_rad_s * encoderParams.Ts_sec;
-    Serial.print(w_moment_rad_s);
+    Serial.print(modc(phi, 2.0*M_PI));
   }
 };

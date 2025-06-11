@@ -97,7 +97,7 @@ void loop(){
     }
     else
     {
-        if(millis() - tt > 1200)
+        if(millis() - tt > 1500)
             p = 0.0;
     }
     // for(int i = 0; i < 6; i++)
@@ -109,12 +109,12 @@ void loop(){
         // privod[b-2].setPos(p);
         // privod[b+2].setPos(p);
         float sp = 10.0;
-        privod[0].setSpeed(sp);
-        privod[1].setSpeed(sp);
-        privod[2].setSpeed(sp);
-        privod[3].setSpeed(sp);
-        privod[4].setSpeed(sp);
-        privod[5].setSpeed(sp);
+        privod[0].setPos(p);
+        privod[1].setPos(p);
+        privod[2].setPos(p);
+        privod[3].setPos(p);
+        privod[4].setPos(p);
+        privod[5].setPos(p);
 
         
     // }
@@ -124,12 +124,12 @@ void loop(){
     
     // for(int i = 0; i < 6; i++)
     // {
-        // privod[0].tick();
+        privod[0].tick();
         privod[1].tick();
         // privod[2].tick();
         // privod[3].tick();
         // privod[4].tick();
-        privod[5].tick();
+        // privod[5].tick();
     // }
     
 
