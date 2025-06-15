@@ -55,16 +55,39 @@ byte trigCur[6] = {180, 180, 190, 180, 180, 180};
 // #define HALL_PIN_5    26
 // #define HALL_PIN_6    27
 byte hallPin[6] = {30, 31, 28, 29, 26, 27};
-
 // #define KP_PI 1
 // #define KI_PI 0.01
 // #define KP_P 32
 // #define KE 0.2
 
-#define KP_PI 1.5
-#define KI_PI 0.07
-#define KP_P 27
-#define KE 0.2
+// #define KP_PI 1.5
+// #define KI_PI 0.00
+// #define KP_P 27
+// #define KE 0.2
 
+// #define KE 0.2
+#define KP_PI0 0.8
+#define KI_PI0 0.07
+#define  KP_P0 8/*4.5*/
+
+#define KP_PI1 0.85
+#define KI_PI1 0.085
+#define  KP_P1 8.5/*4*/
+
+#define KP_PI2      0.7
+#define KI_PI2      0.065
+#define  KP_P2      5
+
+#define KP_PI3 0.85
+#define KI_PI3 0.07
+#define  KP_P3 5
+
+#define KP_PI4      0.7
+#define KI_PI4      0.085
+#define  KP_P4      5
+
+#define KP_PI5 0.8
+#define KI_PI5 0.075
+#define  KP_P5 5
 
 float posStatic[6] = {0,0,0,0,0,0};

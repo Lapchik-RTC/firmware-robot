@@ -19,7 +19,7 @@ public:
   float     T_sec;              // Постоянная времени фильтра скорости
 
   byte      Hpin;
-  bool      mirrHall;
+  uint16_t  tickWhanHall;
 };
 
 class Encoder
@@ -29,7 +29,7 @@ private:
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   float I = 0;
-
+  
 public:
   volatile int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
   uint16_t enc_old;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
@@ -90,6 +90,7 @@ public:
   void encZero(){counter = 0; tick = 0; phi = 0; I = 0;}
 
   float get_phi(){ return phi; }
+  float get_mphi(){ return modc(phi, 2.0*M_PI); }
   float get_tick(){ return tick; }
   float get_w_moment_rad(){ return w_moment_rad_s; }
   float get_w_moment_tick(){ return w_moment_tick; }
@@ -110,31 +111,22 @@ public:
     ////////////////////////////////////
     if(NCalibrMode)
     {
-      if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1300) ))
+      if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1839) ))
       {
-        if(encoderParams.mirrHall)
-        {
-          // rotErr += ( encoderParams.ppr/2.0 - (modc(get_tick(), encoderParams.ppr)) );
-          rotErr += ( (M_PI - (modc(phi, 2.0*M_PI)))/2.0*M_PI )*encoderParams.ppr;
-        }
-        else
-        {
-          if(encoderParams.mirrHall==0)
-            rotErr += ( 0.0 - modc(get_tick(), encoderParams.ppr) );
-        }
+        rotErr += ( encoderParams.tickWhanHall - (modc(tick, encoderParams.ppr)) );
         lastTimeDetect = millis();
       }
-
       corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
-      // counter_buf += corr;
+      counter_buf += corr;
       rotErr -= corr;
-     }//*/
+     }
     ////////////////////////////////////
     
     tick += counter_buf; 
     phi += counter_buf * ((2.0*M_PI)/(encoderParams.ppr));
     
-    w_moment_rad_s = (phi - I) / encoderParams.T_sec;
+    w_moment_rad_s = (phi - I) / encoderParams.T_sec / 3.0;
     I += w_moment_rad_s * encoderParams.Ts_sec;
+    Serial.print(modc(phi, 2.0*M_PI));
   }
 };
