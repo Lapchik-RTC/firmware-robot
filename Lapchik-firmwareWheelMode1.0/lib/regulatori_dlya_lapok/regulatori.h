@@ -2,6 +2,7 @@
 #include<Arduino.h>
 #include"Dvigatel.h"
 #include"encoder.h"
+#include "svyaz.h"
 #include "f.h"
 
 struct MotorControlParams//структура общая
@@ -26,8 +27,10 @@ private:
   float PIreg(float err);
   float Preg(float err);
 
-  float targetSpeed = 0;
+  float targetSpeed = 0.0;
   float targetAngle = 0;
+
+  float uOld = 0.0;
 
   enum CONTROL_MODE
   {
@@ -59,12 +62,12 @@ float ServoPrivod::PIreg(float err)
 {
     float P = err * params.kpPI;
      
-    float u = P + I;
+    // float u = P + I;
 
-    if (u == constrain(u, -params.maxU, params.maxU) || (err * u) < 0)
-        I += err * params.Ts_sec * params.ki;
+    // if (u == constrain(u, -params.maxU, params.maxU) || (err * u) < 0)
+    //     I += err * params.Ts_sec * params.ki;
 
-    return constrain(u, -params.maxU, params.maxU);
+    return P;
 }
 
 
@@ -85,20 +88,33 @@ void ServoPrivod::setPos(float phi0){
 void ServoPrivod::tick()
 {
   enc->enc_tick();
-
-  if(controlMode == MODE_POS)
-  {
-    float phi = enc->get_mphi();
-    float phi_err = targetAngle - phi; 
-    // float phi_err = targetAngle - phi;
-    phi_err = modc(phi_err, 2*M_PI);
+  float k = 0.06;
+  // if(controlMode == MODE_POS)
+  // {
+  //   float phi = enc->get_mphi();
+  //   float phi_err = targetAngle - phi; 
+  //   // float phi_err = targetAngle - phi;
+  //   phi_err = modc(phi_err, 2*M_PI);
     
-    targetSpeed = Preg(phi_err);
-  }
+  //   targetSpeed = Preg(phi_err);
+  // }
   
   float realSpd = enc->get_w_moment_rad();
-  // Serial.print(realSpd);
-  float u = PIreg(targetSpeed - realSpd);
+
+  float u;
+  // if(targetSpeed > 0)
+  u = PIreg(targetSpeed - realSpd);
+  if(nazad() && u > 0)
+    u = uOld;
+  else
+  {
+    uOld = u;
+  }
+
+    // u = (u*k)+(uOld*(1.0-k));
+  // else
+  //   u = targetSpeed;
+  // Serial.println(String(targetSpeed - realSpd));
   motor->update_voltage_in_V(u);
-  Serial.print(" | "); 
+  
 }

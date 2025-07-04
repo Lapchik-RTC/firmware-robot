@@ -109,17 +109,17 @@ public:
     interrupts();
     
     ////////////////////////////////////
-    if(NCalibrMode)
-    {
-      if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1839) ))
-      {
-        rotErr += ( encoderParams.tickWhanHall - (modc(tick, encoderParams.ppr)) );
-        lastTimeDetect = millis();
-      }
-      corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
-      counter_buf += corr;
-      rotErr -= corr;
-     }
+    // if(NCalibrMode)
+    // {
+    //   if(digitalRead(encoderParams.Hpin) == 0 && ( millis() - lastTimeDetect > (1839) ))
+    //   {
+    //     rotErr += ( encoderParams.tickWhanHall - (modc(tick, encoderParams.ppr)) );
+    //     lastTimeDetect = millis();
+    //   }
+    //   corr = constrain(rotErr, -MAX_TICK_CORR, MAX_TICK_CORR);
+    //   counter_buf += corr;
+    //   rotErr -= corr;
+    //  }
     ////////////////////////////////////
     
     tick += counter_buf; 
@@ -127,6 +127,6 @@ public:
     
     w_moment_rad_s = (phi - I) / encoderParams.T_sec / 3.0;
     I += w_moment_rad_s * encoderParams.Ts_sec;
-    Serial.print(modc(phi, 2.0*M_PI));
+    // Serial.print(modc(phi, 2.0*M_PI));
   }
 };

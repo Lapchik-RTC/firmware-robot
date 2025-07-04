@@ -21,14 +21,18 @@ public:
     this->dvigatelParams = dvigatelParams;
     dvigatel_init();
   }
-  
+  float get_voltage_in_V()
+  {
+    return uOb;
+  }
   void dvigatel_init() {
     pinMode(this->dvigatelParams.motor_in_1, OUTPUT);
     pinMode(this->dvigatelParams.motor_in_2, OUTPUT);
     pinMode(this->dvigatelParams.motor_pwm,  OUTPUT);
   }
-
+float uOb;
   void update_voltage_in_V(float u) {
+    uOb = u;
     int16_t pwm = 255.0 * (u / dvigatelParams.supply_voltage) * 1.0/*dvigatelParams.motor_dir*/;
     pwm = constrain(pwm, -255.0, 255.0);
 

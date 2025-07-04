@@ -29,14 +29,17 @@ void loop(){
     timer = micros();
     readPacket();
     
-    static float spLim = 5.0;
-    if(nado_rabotat())
-    {
-        if(vpered()||vpravo()||vlevo()||nazad())
-        {
+    static float spLim = 11.0;
+    static float velL = 0.0;
+    static float velR = 0.0;
+
+    // if(nado_rabotat())
+    // {
+    //     if(vpered()||vpravo()||vlevo()||nazad())
+    //     {
             if(shift())
             {
-                spLim = 10.0;
+                spLim = 30.0;
             }
             else
             {
@@ -46,20 +49,36 @@ void loop(){
                 }
                 else
                 {
-                    spLim = 5.0;
+                    spLim = 11.0;
                 }
             }
-            float vert = map(gamePad.RightThumbY, -32768.0, 32768.0, -spLim, spLim);
-            float horz = map(gamePad.RightThumbX, -32768.0, 32768.0, -1.0, 1.0);
-            int16_t velL =  vert + ( spLim * horz );
-            int16_t velR = vert - ( spLim * horz );
+            float vert = map(gamePad.RightThumbY, -32767.0, 32767.0, -spLim, spLim);
+            float horz = map(gamePad.RightThumbX, -32767.0, 32767.0, -1.0, 1.0);
+            velL =  vert + ( spLim * horz );
+            velR = vert + ( spLim * -horz );
 
-            robot.wheel(velL, velR);
-        }
-    }
-    else
-    {
-        robot.wheel(0.0, 0.0);
-    }
+            // robot.wheel(velL, velR);
+            // Serial.println(String(velL) + " " + String(velR));
+            // Serial.println(String(Enc[0].()));
+    //     }
+    // }
+    // else
+    // {
+    //     // robot.wheel(0.0, 0.0);
+    //     if(!(vpered()||vpravo()||vlevo()||nazad()))
+    //     {
+    //         velL = 0.0;
+    //         velR = 0.0;
+    //     }
+    // }//*/
+    robot.wheel(velL, velR);
+    privod[0].tick();
+    privod[4].tick();
+    privod[5].tick();//*/
 
+
+    privod[2].tick();
+    // privod[1].tick();
+    // privod[3].tick();
+    // Serial.println();
 }

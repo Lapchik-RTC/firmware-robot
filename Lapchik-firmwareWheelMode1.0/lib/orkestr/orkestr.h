@@ -103,13 +103,6 @@ void Orkestr::wheel(float sideL, float sideR)
     privod[1].setSpeed(sideL);
     privod[3].setSpeed(sideL);
     privod[5].setSpeed(sideL);
-
-    privod[0].tick();
-    privod[2].tick();
-    privod[4].tick();
-    privod[1].tick();
-    privod[3].tick();
-    privod[5].tick();
 }
 
 //////////////   Foo   //////////////

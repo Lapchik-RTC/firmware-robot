@@ -225,11 +225,11 @@ Dvigatel Dv[6] = {
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,
-  .kpPI = 1,//0.0001,
+  .kpPI = 1.0,//0.0001,
   .ki = 0.01,//00079,//0.00001,
-  .maxU = SUPPLY_VOLTAGE/*/2*/,
-  .kpP = 32.0,
-  .maxVel = 16.0,
+  .maxU = 24.0/*/2*/,
+  .kpP = 15,//32.0,
+  .maxVel = 35.0,
   .kalibrSpeed = 1
 };
 
