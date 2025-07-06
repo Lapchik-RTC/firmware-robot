@@ -162,7 +162,8 @@ void printPacket() {
   }
 /////////////////////////   Проверка конкретных кнопок   /////////////////////////
 
-int luft = 20000;
+int luft = 3000;//20000;
+int luft2 = 3000;//20000;
 // enum RecState
 // {
 //   normal = 0,
@@ -222,7 +223,7 @@ bool vpered() {
 //   int invertThumbX = 1;
   
   bool vpravo() {
-    if( gamePad.RightThumbX >= luft)
+    if( gamePad.RightThumbX >= luft2)
     {
         return 1;
     }
@@ -258,7 +259,7 @@ bool vpered() {
 
 
   bool vlevo() {
-    if(gamePad.RightThumbX <= -luft)
+    if(gamePad.RightThumbX <= -luft2)
     {
         return 1;
     }

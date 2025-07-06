@@ -31,11 +31,15 @@ public:
     pinMode(this->dvigatelParams.motor_pwm,  OUTPUT);
   }
 float uOb;
-  void update_voltage_in_V(float u) {
-    uOb = u;
-    int16_t pwm = 255.0 * (u / dvigatelParams.supply_voltage) * 1.0/*dvigatelParams.motor_dir*/;
-    pwm = constrain(pwm, -255.0, 255.0);
 
+void update_voltage_in_V(float u) {
+  uOb = u;
+  
+  int16_t pwm = 255.0 * (u / dvigatelParams.supply_voltage) * 1.0/*dvigatelParams.motor_dir*/;
+    // if(pwm <= 50) pwm += 1;
+    
+    
+    pwm = constrain(pwm, -255, 255);
     if (pwm >= 0)
     {
       digitalWrite(this->dvigatelParams.motor_in_1, HIGH);

@@ -98,12 +98,15 @@ public:
 void Orkestr::wheel(float sideL, float sideR)
 {
     privod[0].setSpeed(sideR);
-    privod[2].setSpeed(sideR);
     privod[4].setSpeed(sideR);
+    
     privod[1].setSpeed(sideL);
-    privod[3].setSpeed(sideL);
     privod[5].setSpeed(sideL);
+    
+    privod[2].setSpeed(sideR);
+    privod[3].setSpeed(sideL);
 }
+
 
 //////////////   Foo   //////////////
 void Orkestr::setParams(float t_, float tc_, float ts_, float phiS_, float phi0_, float delta_ts_ = 0.0, float delta_phi0_ = 0.0)

@@ -39,13 +39,15 @@ private:
   };
 
   CONTROL_MODE controlMode = MODE_SPEED;
-  
+  int motorNum = 0;
 public:
-  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc)
+
+  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc, int _motorNum)
   {
     this->params = mconp;
     this->motor = motor;
     this->enc = enc;
+    this->motorNum = _motorNum;
   }
 
   void tick();
@@ -88,7 +90,7 @@ void ServoPrivod::setPos(float phi0){
 void ServoPrivod::tick()
 {
   enc->enc_tick();
-  float k = 0.06;
+  // float k = 0.06;
   // if(controlMode == MODE_POS)
   // {
   //   float phi = enc->get_mphi();
@@ -104,17 +106,58 @@ void ServoPrivod::tick()
   float u;
   // if(targetSpeed > 0)
   u = PIreg(targetSpeed - realSpd);
-  if(nazad() && u > 0)
+
+  if(( nazad() ) && u > 0)
     u = uOld;
+
   else
   {
     uOld = u;
   }
+  // if(( vpered() ) && u < 0)
+  //   u = uOld;
+
+  // else
+  // {
+  //   uOld = u;
+  // }
+  if(vpravo() && (motorNum == 0 || motorNum == 2 || motorNum == 4))
+  {
+      if(u > 0)
+      {
+        u = uOld;
+      }
+      else
+      {
+        uOld = u;
+      }
+
+  }
+  if(vlevo() && (motorNum == 1 || motorNum == 3 || motorNum == 5))
+  {
+    if(u > 0)
+    {
+      u = uOld;
+    }
+    else
+    {
+      uOld = u;
+    }
+  }
+//*/
+  
+    
+  // if(motorNum == 2 || motorNum == 3)
+  // {
+  //   u = targetSpeed;
+  // }
+
 
     // u = (u*k)+(uOld*(1.0-k));
   // else
   //   u = targetSpeed;
   // Serial.println(String(targetSpeed - realSpd));
+  // Serial.print(String(u) + " | ");
   motor->update_voltage_in_V(u);
   
 }

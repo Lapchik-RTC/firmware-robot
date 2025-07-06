@@ -225,8 +225,8 @@ Dvigatel Dv[6] = {
 MotorControlParams mctrlp//структура общая
 {
   .Ts_sec = Ts_s_IN_SEC,
-  .kpPI = 1.0,//0.0001,
-  .ki = 0.01,//00079,//0.00001,
+  .kpPI = 0.5,//0.0001,
+  .ki = 0.00,//00079,//0.00001,
   .maxU = 24.0/*/2*/,
   .kpP = 15,//32.0,
   .maxVel = 35.0,
@@ -289,12 +289,12 @@ MotorControlParams mctrlp//структура общая
 // };
 
 ServoPrivod privod[6] = {
-    ServoPrivod(mctrlp, &Dv[0], &Enc[0]),
-    ServoPrivod(mctrlp, &Dv[1], &Enc[1]),
-    ServoPrivod(mctrlp, &Dv[2], &Enc[2]),
-    ServoPrivod(mctrlp, &Dv[3], &Enc[3]),
-    ServoPrivod(mctrlp, &Dv[4], &Enc[4]),
-    ServoPrivod(mctrlp, &Dv[5], &Enc[5])
+    ServoPrivod(mctrlp, &Dv[0], &Enc[0], 0),
+    ServoPrivod(mctrlp, &Dv[1], &Enc[1], 1),
+    ServoPrivod(mctrlp, &Dv[2], &Enc[2], 2),
+    ServoPrivod(mctrlp, &Dv[3], &Enc[3], 3),
+    ServoPrivod(mctrlp, &Dv[4], &Enc[4], 4),
+    ServoPrivod(mctrlp, &Dv[5], &Enc[5], 5)
 };
 
 // ServoPrivod serv1(mctrlp, &dvigatel_1, &enc_1);
