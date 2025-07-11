@@ -29,8 +29,8 @@ void loop(){
     static uint64_t timer = micros();
     while(micros() - timer < Ts_s);
     timer = micros();
-    printPacket();
-    // readPacket();
+    // printPacket();
+    readPacket();
     
     static float spLim = 50.0;
     int16_t velL = 0.0;
@@ -114,13 +114,15 @@ void loop(){
     // if(nazad()) Serial.print("nazad   ");
     // if(vpered()) Serial.print("vpered   ");
     
-    
+    // Serial.println( String(gamePad.RightThumbX) + "   " + String(gamePad.RightTrigger));
     privod[0].tick();
     privod[2].tick();
     privod[4].tick();
     privod[5].tick();
     privod[1].tick();
     privod[3].tick();//*/
+
+
 /*for(int i = 0; i < 50;i++)
 {
     Dv[0].update_voltage_in_V(i);
