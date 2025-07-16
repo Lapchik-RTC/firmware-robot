@@ -13,13 +13,6 @@ void loop() {
     static uint64_t timer = micros();
     while(micros() - timer < Ts_us);
     timer = micros();
-
-    // Serial.println(Serv[3].getRealSpd());
-    for(int i = 0; i < 6; i++)
-        Serv[i].setPos(0.0);
-    
-    for(int i = 0; i < 6; i++)
-    {
-        Serv[i].tick();
-    }
+    Serv[3].setSpeed(3.0);
+    Serv[3].tick();
 }

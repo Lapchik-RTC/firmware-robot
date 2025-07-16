@@ -80,6 +80,6 @@
 #define SUPPLY_VOLTAGE 20.0
 #define T_s 1.0
 #define MAX_U 10.0
-#define REG_PI_KP 1.0
-#define REG_PI_KI 0.15
+#define REG_PI_KP 2.35
+#define REG_PI_KI 0.09
 #define REG_P_KP 1.0

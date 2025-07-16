@@ -100,15 +100,15 @@ void Motor::tick()
   tickEnc();
   if(controlMode == MODE_POS)
   {
-    float phi = modc(phi, 2.0*M_PI);
-    float phi_err = targetAngle - phi; 
+    float ph0 = modc(phi, 2.0*M_PI);
+    float phi_err = targetAngle - ph0; 
     // float phi_err = targetAngle - phi;
     phi_err = modc(phi_err, 2*M_PI);
     
-    targetSpeed = phi_err * mprm->p_kp;
+    targetSpeed = phi_err * mprm->p_kp; // P
   }
-  float u = piReg.tick(targetSpeed - w_rads);
-  setU(u);
+  Serial.println(w_rads);
+  setU( piReg.tick(targetSpeed - w_rads) );
   tickU();
 }
 
