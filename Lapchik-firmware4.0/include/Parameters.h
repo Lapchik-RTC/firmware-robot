@@ -63,7 +63,7 @@
 #define E4_INA 68
 #define E4_INB 69
 #define E4_DIR 1
-#define E4_PPR 1746
+#define E4_PPR 1830//1746
 
 #define E5_INA 10
 #define E5_INB 11
@@ -78,8 +78,9 @@
 ////////////////////////////////////////////////////////////////////
 
 #define SUPPLY_VOLTAGE 20.0
-#define T_s 1.0
-#define MAX_U 10.0
-#define REG_PI_KP 2.35
-#define REG_PI_KI 0.09
-#define REG_P_KP 1.0
+// #define T_s 1.0
+#define MAX_U 17.0
+#define MAX_ACC 9999
+#define REG_PI_KP 2.65//2.37
+#define REG_PI_KI 0.78//0.35
+#define REG_P_KP 2.0

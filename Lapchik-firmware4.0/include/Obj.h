@@ -13,8 +13,9 @@
 MotorDriversSet MdrvSet = {
     .supply_voltage = SUPPLY_VOLTAGE,
     .Ts = Ts_s,
-    .T_sec = 2.0*Ts_s,
-    .maxU = MAX_U
+    .T_sec = 4.0*Ts_s,
+    .maxU = MAX_U,
+    .maxAccel = MAX_ACC
 };
 MotorConnect Mconnp[6] = {
     {.motor_in_1 = M1_IN1, .motor_in_2 = M1_IN2, .motor_pwm = M1_PWM, .enc_pin_a = E1_INA, .enc_pin_b = E1_INB},

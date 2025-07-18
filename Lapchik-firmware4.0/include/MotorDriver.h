@@ -9,6 +9,7 @@ struct MotorDriversSet
   float      Ts;                // Период квантования
   float      T_sec;             // Постоянная времени фильтра скорости
   float      maxU;              // Максимальное напряжение на двигателе
+  float      maxAccel;
 };
 
 struct MotorConnect
@@ -44,10 +45,11 @@ class Motor
     int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
     FOD spdFilter;
+    RateLimiter accLimiter;
     volatile int16_t  counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию
     uint16_t          enc_old = 0.0;         // хранит значение энкодера в предыдущей итерации(в предыдущем тике)
     float             phi = 0.0;             // угол поворота вала в радианах в данный момент
-    float             pulses = 0.0;            // угол поворота вала в тиках в данный момент
+    int32_t           pulses = 0;            // угол поворота вала в тиках в данный момент 
     float             w_rads = 0.0;          // текущая скорость в рад/c
     
     enum CONTROL_MODE
@@ -73,6 +75,7 @@ class Motor
 
     float getAngle(){return phi;}
     float getRealSpd(){return w_rads;}
+    int32_t getEnc(){return pulses;}
 
     void tickU();
     void tickEnc();
@@ -87,7 +90,7 @@ class Motor
 void Motor::setSpeed(float goalSpd)
 {
   controlMode = MODE_SPEED;
-  targetSpeed = goalSpd;
+  targetSpeed = accLimiter.tick(goalSpd);
 }
 
 void Motor::setPos(float goalAngle){
@@ -107,7 +110,6 @@ void Motor::tick()
     
     targetSpeed = phi_err * mprm->p_kp; // P
   }
-  Serial.println(w_rads);
   setU( piReg.tick(targetSpeed - w_rads) );
   tickU();
 }
@@ -160,7 +162,8 @@ Motor::Motor(MotorDriversSet *_drvSet, MotorConnect *_mconnp, MotorParams *_mprm
  mconnp(_mconnp),
  mprm(_mprm),
  spdFilter(drvSet->Ts, drvSet->T_sec, true),
- piReg(drvSet->Ts, mprm->kp, mprm->ki, drvSet->maxU)
+ piReg(drvSet->Ts, mprm->kp, mprm->ki, drvSet->maxU),
+ accLimiter(drvSet->Ts, drvSet->maxAccel)
 {
   pinMode(mconnp->motor_in_1, 1);
   pinMode(mconnp->motor_in_2, 1);
