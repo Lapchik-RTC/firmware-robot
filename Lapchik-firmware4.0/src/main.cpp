@@ -41,8 +41,9 @@ void Foo(float speed)
     //         Serv[3].tick();
     //     }
     // }
-    Serial.println(Serv[3].getAngle());
+    // Serial.println(Serv[5].getAngle());
     Serv[3].setPos(X);
+    Serv[5].setPos(X);
 }
 
 void loop() {
@@ -56,13 +57,13 @@ void loop() {
     // if(testPos < 10.0*M_PI)
     // {
     //     testPos+=0.01;
-    //     Serv[3].setPos(testPos);
+    //     Serv[5].setPos(testPos);
     // }
     // else
     // {
-    //     Serv[3].setPos(testPos);
+    //     Serv[5].setPos(testPos);
     // }
-    // Serial.println(String(Serv[3].getEnc()) + "   " + String(testPos) + "   " + String(Serv[3].getAngle()));
-
+    // Serial.println(String(Serv[5].getEnc()) + "   " + String(testPos) + "   " + String(Serv[5].getAngle()));
     Serv[3].tick();
+    Serv[5].tick();
 }
