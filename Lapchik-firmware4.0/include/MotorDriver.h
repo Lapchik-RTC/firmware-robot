@@ -69,6 +69,8 @@ class Motor
 
     void isr_handler();
 
+    void zeroEnc();
+
     void setU(float _u){ this->u = _u; };
     void setSpeed(float goalSpeed);
     void setPos(float goalAngle);
@@ -128,6 +130,15 @@ void Motor::isr_handler() {
 
   counter += table[enc_old][enc];
   enc_old = enc;  
+}
+
+void Motor::zeroEnc()
+{
+  noInterrupts();
+  pulses = 0.0;
+  phi = 0.0;
+  enc_old = 0.0;
+  interrupts();
 }
 
 void Motor::tickEnc()

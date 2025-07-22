@@ -48,17 +48,17 @@
 #define E1_INA 62
 #define E1_INB 63
 #define E1_DIR -1
-#define E1_PPR 1746
+#define E1_PPR 1830//1746//
 
 #define E2_INA 64
 #define E2_INB 65
 #define E2_DIR -1
-#define E2_PPR 1746//1824
+#define E2_PPR 1830//1746//1824//
 
 #define E3_INA 66
 #define E3_INB 67
 #define E3_DIR 1
-#define E3_PPR 1746
+#define E3_PPR 1830//1746//
 
 #define E4_INA 68
 #define E4_INB 69
@@ -68,7 +68,7 @@
 #define E5_INA 10
 #define E5_INB 11
 #define E5_DIR 1
-#define E5_PPR 1746
+#define E5_PPR 1830//1746//
 
 #define E6_INA 14
 #define E6_INB 15

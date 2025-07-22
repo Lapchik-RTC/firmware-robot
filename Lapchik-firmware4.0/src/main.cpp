@@ -3,7 +3,7 @@
 #include "Obj.h"
 #include "f.h"
 #include "softCheck.h"
-
+#include "Pods.h"
 void setup() {
     Serial.begin(115200);
 
@@ -33,37 +33,61 @@ void Foo(float speed)
     t += speed*Ts_s;
     float X = Ffull( t, 2.0*M_PI, 3.9, 0.5, 0.0);
     
-    // if((Serv[3].getAngle()/M_PI) > 5.0)
-    // {
-    //     while(1)
-    //     {
-    //         Serv[3].setPos(t);
-    //         Serv[3].tick();
-    //     }
-    // }
-    // Serial.println(Serv[5].getAngle());
+    
     Serv[3].setPos(X);
     Serv[5].setPos(X);
 }
+
+void StendUp()
+{
+    uint32_t time_stendup = millis();
+    float dPos = M_PI*0.5;
+    while(millis() - time_stendup < 1500)
+    {
+        static bool ir[6] = {0,0,0,0,0,0};
+        for(int i = 0; i < 6; i++)
+        {
+            if(Serv[i].getAngle() > dPos+0.5 || Serv[i].getAngle() < dPos-0.5)
+                Serv[i].setPos(dPos);
+            else
+            {
+                if(!ir[i])
+                {
+                    Serv[i].zeroEnc();
+                    ir[i] = 1;
+                }
+                Serv[i].setPos(0.0);
+            }
+            Serv[i].tick();
+        }
+    }
+
+}
+
+
+Tripod trpL(&Serv[1], &Serv[2], &Serv[5]);
+Tripod trpR(&Serv[0], &Serv[3], &Serv[4]);
+float X = 0.0, Xpi = 0.0;
 
 void loop() {
     static uint64_t timer = micros();
     while(micros() - timer < Ts_us);
     timer = micros();
-    // SpeedRegSens_R_F_pers(3);
-    Foo(3.0);
 
-    // static float testPos = 0.0;
-    // if(testPos < 10.0*M_PI)
-    // {
-    //     testPos+=0.01;
-    //     Serv[5].setPos(testPos);
-    // }
-    // else
-    // {
-    //     Serv[5].setPos(testPos);
-    // }
-    // Serial.println(String(Serv[5].getEnc()) + "   " + String(testPos) + "   " + String(Serv[5].getAngle()));
-    Serv[3].tick();
-    Serv[5].tick();
+    float spd = 3.0;
+
+    StendUp();
+    while(1);
+    
+
+    /*t += spd*Ts_s;
+    X = Ffull( t, 2.0*M_PI, 3.9, 0.5, 0.0);
+    Xpi = Ffull( t + M_PI, 2.0*M_PI, 3.9, 0.5, 0.0);
+
+    trpL.setPos(X);
+    trpR.setPos(Xpi); 
+
+    trpL.tick();
+    trpR.tick();*/
+
 }
