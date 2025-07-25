@@ -3,6 +3,7 @@
 #include "Parameters.h"
 #include "MotorDriver.h"
 #include "EncFoo.h"
+#include "Pods.h"
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -42,6 +43,8 @@ Motor Serv[6] = {
     {&MdrvSet, &Mconnp[5], &Mprm[5]}
 };
 
+Tripod trpL(&Serv[1], &Serv[2], &Serv[5]);
+Tripod trpR(&Serv[0], &Serv[3], &Serv[4]);
 ////////////////////////////////////////////////////////////////////
 //
 ///////////////////////////   ENCODER   ////////////////////////////

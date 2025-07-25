@@ -83,7 +83,6 @@ class Motor
     void tickEnc();
     void tick();
 };
-
 ////////////////////////////////////////////////////////////////////
 //
 ////////////////////////   REGULATORI   ////////////////////////////
@@ -107,7 +106,7 @@ void Motor::tick()
   {
     float ph0 = modc(phi, 2.0*M_PI);
     float phi_err = targetAngle - ph0; 
-    // float phi_err = targetAngle - phi;
+
     phi_err = modc(phi_err, 2*M_PI);
     
     targetSpeed = phi_err * mprm->p_kp; // P
@@ -138,6 +137,10 @@ void Motor::zeroEnc()
   pulses = 0.0;
   phi = 0.0;
   enc_old = 0.0;
+  counter = 0;
+  targetSpeed = 0.0;
+  w_rads = 0.0;
+  targetAngle = phi;
   interrupts();
 }
 
@@ -165,6 +168,7 @@ void Motor::tickU()
   digitalWrite(mconnp->motor_in_1, (pwm > 0)*mprm->motor_dir);
   digitalWrite(mconnp->motor_in_2, (!(pwm > 0))*mprm->motor_dir);
   pwm = abs(pwm);
+  Serial.println("     " + String(pwm));
   analogWrite(mconnp->motor_pwm, min( pwm, 255 ));
 }
 

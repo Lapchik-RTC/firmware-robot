@@ -48,52 +48,6 @@ void Tripod::tick()
 
 ////////////////////////////////////////////////////////////////////
 //
-////////////////////////     HEXAPOD     ///////////////////////////
-//
-////////////////////////////////////////////////////////////////////
-class Hexapod
-{
-    public:
-    void setSpeed(float gSpd);
-    void setPos(float gAng);
-    void tick();
-};
-
-void Hexapod::setSpeed(float gSpd)
-{
-    Serv[0].setSpeed(gSpd);
-    Serv[1].setSpeed(gSpd);
-    Serv[2].setSpeed(gSpd);
-    Serv[3].setSpeed(gSpd);
-    Serv[4].setSpeed(gSpd);
-    Serv[5].setSpeed(gSpd);
-}
-
-void Hexapod::setPos(float gAng)
-{
-    Serv[0].setPos(gAng);
-    Serv[1].setPos(gAng);
-    Serv[2].setPos(gAng);
-    Serv[3].setPos(gAng);
-    Serv[4].setPos(gAng);
-    Serv[5].setPos(gAng);
-}
-
-void Hexapod::tick()
-{
-    Serv[0].tick();
-    Serv[1].tick();
-    Serv[2].tick();
-    Serv[3].tick();
-    Serv[4].tick();
-    Serv[5].tick();
-}
-
-
-
-
-////////////////////////////////////////////////////////////////////
-//
 ////////////////////////      PAIR      ////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////
@@ -128,3 +82,48 @@ void Duopod::tick()
     m1->tick();
     m2->tick();
 }
+
+
+
+////////////////////////////////////////////////////////////////////
+//
+////////////////////////     HEXAPOD     ///////////////////////////
+//
+////////////////////////////////////////////////////////////////////
+// class Hexapod
+// {
+//     public:
+//     void setSpeed(float gSpd);
+//     void setPos(float gAng);
+//     void tick();
+// };
+
+// void Hexapod::setSpeed(float gSpd)
+// {
+//     Serv[0].setSpeed(gSpd);
+//     Serv[1].setSpeed(gSpd);
+//     Serv[2].setSpeed(gSpd);
+//     Serv[3].setSpeed(gSpd);
+//     Serv[4].setSpeed(gSpd);
+//     Serv[5].setSpeed(gSpd);
+// }
+
+// void Hexapod::setPos(float gAng)
+// {
+//     Serv[0].setPos(gAng);
+//     Serv[1].setPos(gAng);
+//     Serv[2].setPos(gAng);
+//     Serv[3].setPos(gAng);
+//     Serv[4].setPos(gAng);
+//     Serv[5].setPos(gAng);
+// }
+
+// void Hexapod::tick()
+// {
+//     Serv[0].tick();
+//     Serv[1].tick();
+//     Serv[2].tick();
+//     Serv[3].tick();
+//     Serv[4].tick();
+//     Serv[5].tick();
+// }
