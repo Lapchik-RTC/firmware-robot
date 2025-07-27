@@ -81,6 +81,7 @@
 // #define T_s 1.0
 #define MAX_U 17.0
 #define MAX_ACC 9
-#define REG_PI_KP 2.18//2.65
-#define REG_PI_KI 0.5//0.78
-#define REG_P_KP 2.0//2.0
+#define REG_PI_KP 2.0//2.18//2.65
+#define REG_PI_KI 0.005//0.5//0.78
+#define REG_P_KP 1.6//3.5//2.0
+#define KPD 0.0

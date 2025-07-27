@@ -64,6 +64,8 @@ class Motor
 
     PIreg piReg;
 
+    float errOld = 0.0;
+
     public:
     Motor(MotorDriversSet *_drvSet, MotorConnect *_mconnp, MotorParams *_mprm);
 
@@ -104,12 +106,17 @@ void Motor::tick()
   tickEnc();
   if(controlMode == MODE_POS)
   {
-    float ph0 = modc(phi, 2.0*M_PI);
-    float phi_err = targetAngle - ph0; 
+    float phi0 = modc(phi, 2.0*M_PI);
+    float phi_err = targetAngle - phi0; 
 
     phi_err = modc(phi_err, 2*M_PI);
     
+    // targetSpeed = (phi_err * mprm->p_kp) + ( modc((errOld - phi0), 2.0*M_PI)*KPD );
     targetSpeed = phi_err * mprm->p_kp; // P
+
+
+    // errOld = phi0;
+    
   }
   setU( piReg.tick(targetSpeed - w_rads) );
   tickU();

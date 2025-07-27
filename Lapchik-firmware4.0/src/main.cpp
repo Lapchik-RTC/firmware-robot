@@ -72,7 +72,7 @@ void setup() {
 
 
     
-    rhex.setParams(0.0, 2.0*M_PI, 1.5, 0.4, 1.96);
+    rhex.setParams(0.0, 2.0*M_PI, 2.0, 0.3, 1.82/*1.75*/);
     // StendUp();
     
 }
@@ -83,16 +83,30 @@ void loop() {
     while(micros() - timer < Ts_us);
     timer = micros();
     
-    
-    // while (1);
+    bool testMode = 0;
 
-    Serial.println("LOOP");
-    rhex.ClassicWalk(2.0);
-    // rhex.tick();
-    for(int i = 0; i < 6; i++)
+    if(testMode)
     {
-        Serv[i].tick();
+        rhex.ClassicWalk(2.0);
+        // rhex.tick();
+        Serial.println("            " + String(Serv[1].getAngle()));
+        Serv[1].tick();
     }
+    else
+    {
+        rhex.ClassicWalk(2.5);
+        // for(int i = 0; i < 6; i++)
+        // {
+        //     Serv[i].tick();
+        // }
+        Serv[1].tick();
+        Serv[3].tick();
+        Serv[0].tick();
+        Serv[2].tick();
+        Serv[4].tick();
+        Serv[5].tick();
+    }
+    
     // Serv[1].tick();
     // Serv[3].tick();
     // Serv[5].tick();
