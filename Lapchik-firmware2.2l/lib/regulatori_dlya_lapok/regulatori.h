@@ -92,15 +92,15 @@ void ServoPrivod::tick()
   enc->enc_tick();
   if(controlMode == MODE_POS)
   {
-    float phi0 = modc(enc->get_phi(), 2.0*M_PI);
+    float phi0 = enc->get_phi();
     float phi_err = targetAngle - phi0;
     
     phi_err = fmod(phi_err, 2*M_PI);
     phi_err = modc(phi_err, 2*M_PI);
     targetSpeed = Preg(phi_err);
-    Serial.println( String(phi0) );
+    // Serial.println( String(phi0) );
   }
-  motor->update_voltage_in_V( PIreg(targetSpeed - realSpeed) );
+  motor->update_voltage_in_V( PIreg(targetSpeed - enc->get_w_moment_rad()) );
 }
 
 

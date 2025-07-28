@@ -16,7 +16,7 @@ void setup() {
     float phiS = 0.5;
     float phi0 = 0;
     robot.setParams(0/*M_PI*/, tc, ts, phiS, phi0);
-    // robot.calibr();
+    robot.calibr();
     robot.allEncZero();
     
     
@@ -30,21 +30,35 @@ void loop(){
 
     static float a = 0.0;
     static bool e = 1;
-    if(encod[1].get_phi() <= 10.0*M_PI)
-        robot.Foo(3.0);
-    else
-    {
-        if(e) a = encod[1].get_phi();
-        serv[1].setGoalPos(a);
-        
-    }
+    robot.Foo(3.0);
+    
+    // serv[0].setGoalPos(0.0);
+    // serv[1].setGoalPos(0.0);
+    // serv[2].setGoalPos(0.0);
+    // serv[3].setGoalPos(0.0);
+    // serv[4].setGoalPos(0.0);
+    // serv[5].setGoalPos(0.0);
+
+    // if(encod[3].get_phi() <= 20.0*M_PI)
+    // {
+    //     serv[n].setGoalSpeed(8.0);
+    // }
+    // else
+    // {
+    //     if(e)
+    //     {
+    //         e = 0;
+    //         a = encod[n].get_phi();
+    //     }
+        // serv[n].setGoalPos(a);
+    // }
     
 
     // Serial.print("          " + String(t_test)+ "          ");
-    // for(int i = 0; i < 6; i++)
-    // {
-        serv[1].tick();
-    // }
+    for(int i = 0; i < 6; i++)
+    {
+        serv[i].tick();
+    }
 
     // sm.setSpd( 8.0 );
     // sm.StateMachineUpd();

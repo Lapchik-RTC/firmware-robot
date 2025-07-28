@@ -244,10 +244,21 @@ MotorControlParams mctrlp//структура общая
   .kalibrSpeed = 1
 };
 
+MotorControlParams mctrlp3//структура общая
+{
+  .Ts_sec = Ts_s_IN_SEC,
+  .kpPI = KP_PI,//0.0001,
+  .ki = KI_PI,//00079,//0.00001,
+  .maxU = SUPPLY_VOLTAGE/2,
+  .kpP = KP_P,
+  .maxVel = 16.0,
+  .kalibrSpeed = 1
+};
+
 ServoPrivod serv[6] = {
     {mctrlp, &dvig[0], &encod[0]},
     {mctrlp, &dvig[1], &encod[1]},
-    {mctrlp, &dvig[2], &encod[2]},
+    {mctrlp3, &dvig[2], &encod[2]},
     {mctrlp, &dvig[3], &encod[3]},
     {mctrlp, &dvig[4], &encod[4]},
     {mctrlp, &dvig[5], &encod[5]}
