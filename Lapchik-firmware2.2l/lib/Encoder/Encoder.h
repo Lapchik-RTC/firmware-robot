@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "HardwareSerial.h"
+#include "Tau.h"
 // #include "SLOVAR.h"
 
 
@@ -23,6 +24,8 @@ private:
   int8_t table[4][4] = {0}; // создаём таблицу в виде двумерного массива
 
   float I = 0;
+
+  FOD spdFilter;
   
 public:
   int16_t counter;         // значение, на которое изменилось положение вала двигателя за 1 итерацию

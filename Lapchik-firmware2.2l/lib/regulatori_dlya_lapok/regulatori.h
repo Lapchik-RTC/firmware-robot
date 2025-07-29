@@ -32,6 +32,7 @@ private:
   float PIreg(float err);
   float Preg(float err);
   
+
   enum CONTROL_MODE
   {
     MODE_POS,
@@ -43,7 +44,7 @@ private:
   float targetAngle = 0.0;
 
 public:
-  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc) {
+  ServoPrivod(MotorControlParams mconp, Dvigatel *motor, Encoder *enc){
     this->params = mconp;
     this->motor = motor;
     this->enc = enc;

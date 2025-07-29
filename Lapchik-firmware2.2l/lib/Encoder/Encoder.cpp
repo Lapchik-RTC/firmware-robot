@@ -1,6 +1,6 @@
 #include "Encoder.h"
 
-Encoder::Encoder(EncoderParams encoderParams)
+Encoder::Encoder(EncoderParams encoderParams) : spdFilter(encoderParams.Ts_sec, 2.0*encoderParams.Ts_sec, true)
 {
     this->encoderParams = encoderParams; 
     this->counter = 0;
@@ -57,7 +57,11 @@ float Encoder::get_phi()
 {
   return phi;
 }
-
+/////////////////////////////////////
+//
+/////////////  TICK  ////////////////
+//
+/////////////////////////////////////
 void Encoder::enc_tick() {
   
   w_moment_tick = ((counter * 1.0) / encoderParams.ppr);
@@ -65,8 +69,12 @@ void Encoder::enc_tick() {
   tick += counter; 
   phi += counter * encoderParams.tick_to_rad;
 
-  w_moment_rad_s = (phi - I) / encoderParams.T_sec;
-  I += w_moment_rad_s * encoderParams.Ts_sec;
+  // w_moment_rad_s = (phi - I) / encoderParams.T_sec;
+  // I += w_moment_rad_s * encoderParams.Ts_sec;
+
+  //
+  w_moment_rad_s = spdFilter.tick(phi); 
+  //
   counter = 0;
 }
 
