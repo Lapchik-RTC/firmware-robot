@@ -103,6 +103,7 @@ void Orkestr::Foo(float vel, float delta_ts, float delta_phi0){
     // XPi = Ffull( (t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc + delta_ts, ts, phiS, phi0 + delta_phi0);
     
     //right
+
     X1Rpi  = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc - delta_ts, ts, phiS, phi0 - delta_phi0);
     X3R    = Ffull( t * abs(sgn(vel)),                             tc - delta_ts, ts, phiS, phi0 - delta_phi0);
     X5Rpi  = Ffull((t + ( M_PI * abs(sgn(vel)) )) * abs(sgn(vel)), tc - delta_ts, ts, phiS, phi0 - delta_phi0);
@@ -159,7 +160,7 @@ void Orkestr::calibr()
 {   
     int pVel = 1.2;
     preKalibrTimer = millis();
-    while(millis() - preKalibrTimer < 1700)
+    while(millis() - preKalibrTimer < 2200/*1700*/)
     {
         serv[0].setGoalSpeed(pVel);
         serv[1].setGoalSpeed(pVel);
@@ -304,14 +305,15 @@ void Orkestr::stendUp2()
     float upSpd = 4.0;
     for(int i = 0; i < 6; i++) endCalibr[i] = false;
     calibrTime = millis();
+    float goalP = M_PI/2.0 + (M_PI/10);
     while
     (
-        (( modc(encod[0].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(encod[1].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(encod[2].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(encod[3].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(encod[4].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) ||
-        ( modc(encod[5].get_phi(), 2.0*M_PI) <= M_PI/2.0 ) )&&
+        (( modc(encod[0].get_phi(), 2.0*M_PI) <= goalP ) ||
+        ( modc(encod[1].get_phi(), 2.0*M_PI) <= goalP ) ||
+        ( modc(encod[2].get_phi(), 2.0*M_PI) <= goalP ) ||
+        ( modc(encod[3].get_phi(), 2.0*M_PI) <= goalP ) ||
+        ( modc(encod[4].get_phi(), 2.0*M_PI) <= goalP ) ||
+        ( modc(encod[5].get_phi(), 2.0*M_PI) <= goalP ) )&&
         ( millis() - calibrTime <  1000)
     )
     {
